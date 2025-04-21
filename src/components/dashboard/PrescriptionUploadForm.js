@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useAuth } from '../../context/AuthContext';
+import API_BASE_URL from '../../api'; // <-- Add this import
 import '../../styles/Modal.css';
 
 function PrescriptionUploadForm({ onClose, onSuccess }) {
@@ -27,7 +28,7 @@ function PrescriptionUploadForm({ onClose, onSuccess }) {
 
     try {
       const token = localStorage.getItem('token');
-      await axios.post('http://localhost:5000/api/prescriptions/upload', formData, {
+      await axios.post(`${API_BASE_URL}/api/prescriptions/upload`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
           'Authorization': `Bearer ${token}`

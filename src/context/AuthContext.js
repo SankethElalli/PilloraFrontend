@@ -1,10 +1,6 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import axios from 'axios';
-
-// Add API base URL configuration
-const API_BASE_URL = process.env.REACT_APP_API_URL || window.location.hostname === 'localhost' 
-  ? 'https://localhost:5000'
-  : `https://${window.location.hostname}:5000`;
+import API_BASE_URL from '../api'; // <-- Import the shared API base URL
 
 const AuthContext = createContext();
 
