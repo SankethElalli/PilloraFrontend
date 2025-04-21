@@ -1,0 +1,216 @@
+.auth-container {
+  min-height: 100vh;
+  background: linear-gradient(to bottom right, #f8fafc, #f1f5f9);
+  padding: 2rem 1rem;
+}
+
+.auth-card {
+  background: white;
+  border-radius: 1rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  transition: all 0.3s ease;
+}
+
+.auth-card:hover {
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.form-label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #1e293b;
+  margin-bottom: 0.5rem;
+  text-align: left;
+  display: block;
+}
+
+.input-group {
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.input-group .form-control,
+.input-group .form-select {
+  border-radius: 0.5rem;
+  border: 1px solid #e5e7eb;
+  padding: 0.625rem 1rem;
+  font-size: 0.875rem;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  background-color: #fff;
+}
+
+.input-group .form-control:focus,
+.input-group .form-select:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
+  outline: none;
+}
+
+.input-group-text {
+  background: transparent;
+  border: none;
+  color: #6b7280;
+  position: absolute;
+  left: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+}
+
+.input-group .form-control {
+  padding-left: 2.5rem;
+}
+
+.btn-primary {
+  background: #2563eb;
+  border: none;
+  padding: 0.625rem 1.25rem;
+  font-weight: 500;
+  border-radius: 0.5rem;
+  transition: all 0.2s ease;
+}
+
+.btn-primary:hover {
+  background: #1d4ed8;
+  transform: translateY(-1px);
+}
+
+.auth-link {
+  color: #2563eb;
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.auth-link:hover {
+  color: #1d4ed8;
+  text-decoration: underline;
+}
+
+@keyframes formAppear {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.form-group {
+  animation: formAppear 0.3s ease;
+  animation-fill-mode: both;
+}
+
+.form-group:nth-child(n) {
+  animation-delay: calc(n * 0.1s);
+}
+
+.auth-form .form-group {
+  margin-bottom: 1.5rem;
+  text-align: left;
+}
+
+.auth-form .input-group {
+  border-radius: 0.5rem;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  transition: all 0.2s ease;
+}
+
+.auth-form .input-group:focus-within {
+  background: white;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
+}
+
+.auth-form .input-group-text {
+  background: transparent;
+  border: none;
+  color: #64748b;
+  padding-left: 1rem;
+}
+
+.auth-form .form-control.with-icon {
+  border: none;
+  background: transparent;
+  padding-left: 0.5rem;
+}
+
+.auth-form .form-control:focus {
+  box-shadow: none;
+  border-color: transparent;
+}
+
+.textarea-group .input-group-text {
+  align-items: flex-start;
+  padding-top: 0.75rem;
+}
+
+.auth-form textarea.form-control {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.form-control {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  border-radius: 0.5rem;
+  border: 2px solid #e2e8f0;
+  background-color: #f8fafc;
+  transition: all 0.2s ease;
+}
+
+.form-control:focus {
+  background-color: #fff;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
+  outline: none;
+}
+
+.auth-form .form-control {
+  border: 2px solid #e2e8f0;
+}
+
+.auth-form .form-control:focus {
+  border: 2px solid #2563eb;
+}
+
+textarea.form-control {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.auth-wrapper {
+  height: 100vh;
+  padding: 0;
+  display: flex;
+  align-items: flex-start;
+  margin-top: -80px; /* Increased negative margin */
+  overflow: hidden; /* Prevent scrolling */
+  position: fixed; /* Fix the position */
+  width: 100%;
+  top: 0;
+}
+
+@media (max-width: 768px) {
+  .auth-wrapper {
+    padding: 0;
+    margin-top: -90px; /* Even more negative margin for mobile */
+    position: fixed;
+    width: 100%;
+  }
+
+  .auth-wrapper .card {
+    width: 100%;
+    max-width: 400px;
+    margin: 0.5rem auto;
+  }
+
+  .card-body {
+    padding: 1rem !important; /* Further reduced padding */
+  }
+}

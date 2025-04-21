@@ -1,0 +1,115 @@
+.dashboard-sidebar {
+  width: var(--sidebar-width);
+  height: 100vh;
+  position: fixed;
+  left: 0;
+  top: 0;
+  background: #fff;
+  border-right: 1px solid rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  transition: all 0.3s ease;
+  z-index: 1000;
+  padding-top: var(--navbar-height);
+}
+
+.nav-menu {
+  list-style: none;
+  padding: 1.5rem;
+  margin: 0;
+  flex: 1;
+}
+
+.nav-item {
+  margin-bottom: 0.75rem;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  color: var(--secondary-color);
+  text-decoration: none;
+  border-radius: 12px;
+  transition: all 0.2s ease;
+  font-weight: 500;
+}
+
+.nav-link i {
+  font-size: 1.25rem;
+  margin-right: 1rem;
+  transition: all 0.2s ease;
+}
+
+.nav-link span {
+  font-weight: 500;
+  font-size: 0.95rem;
+}
+
+.nav-badge {
+  background: var(--primary-color);
+  color: white;
+  padding: 0.25rem 0.5rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  margin-left: auto;
+}
+
+.nav-link:hover {
+  color: var(--primary-color);
+  background: rgba(37, 99, 235, 0.04);
+}
+
+.nav-link:hover i {
+  transform: translateX(2px);
+}
+
+.nav-link.active,
+.nav-link.active:focus,
+.nav-link.active:visited {
+  color: var(--primary-color) !important;
+  background: rgba(37, 99, 235, 0.08) !important;
+  font-weight: 600 !important;
+  outline: none;
+  border: none;
+}
+
+.nav-link.active i {
+  color: var(--primary-color);
+}
+
+.sidebar-footer {
+  padding: 1.5rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.btn-logout {
+  width: 100%;
+  padding: 0.875rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  color: #ef4444;
+  background: rgba(239, 68, 68, 0.04);
+  border: none;
+  border-radius: 10px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.btn-logout:hover {
+  background: #ef4444;
+  color: #fff;
+}
+
+@media (max-width: 991.98px) {
+  .dashboard-sidebar {
+    transform: translateX(-100%);
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  }
+  
+  .dashboard-sidebar.show {
+    transform: translateX(0);
+  }
+}

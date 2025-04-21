@@ -1,0 +1,99 @@
+:root {
+  --primary-color: #0D7C66;
+  --secondary-color: #6c757d;
+  --light-bg: #f8f9fa;
+}
+
+/* Base styles */
+body {
+  padding-top: 76px;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Common elements */
+.btn {
+  padding: 12px 24px;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.card {
+  border: none;
+  border-radius: 12px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+/* Form elements */
+.form-control, .form-select {
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  padding: 12px;
+  transition: all 0.3s ease;
+}
+
+.form-control:focus {
+  box-shadow: none;
+  border-color: var(--primary-color);
+  transform: translateY(-2px);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .card:hover, 
+  .btn:hover,
+  .form-control:focus {
+    transform: none;
+  }
+
+  .form-control, 
+  .form-select, 
+  .btn {
+    font-size: 16px;
+  }
+
+  body {
+    padding-top: 60px; /* Reduce top padding on mobile */
+  }
+
+  .container {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+
+  /* Improve touch targets on mobile */
+  button,
+  .btn,
+  input,
+  select,
+  textarea {
+    min-height: 44px; /* Minimum touch target size */
+  }
+
+  /* Responsive text adjustments */
+  h1 { font-size: 2rem !important; }
+  h2 { font-size: 1.75rem !important; }
+  h3 { font-size: 1.5rem !important; }
+  h4 { font-size: 1.25rem !important; }
+
+  /* Responsive spacing */
+  .my-5 { margin: 2rem 0 !important; }
+  .py-5 { padding: 2rem 0 !important; }
+}
+
+/* Prevent horizontal scroll on mobile */
+.row {
+  margin-left: 0;
+  margin-right: 0;
+}
