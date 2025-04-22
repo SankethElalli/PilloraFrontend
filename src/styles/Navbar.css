@@ -72,14 +72,13 @@
 }
 
 .cart-btn {
-  color: #fff;
-  background: var(--primary-color);
+  color: #497D74;
+  background: #f5ecd5c8;
 }
 
 .cart-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(13, 124, 102, 0.2);
-  color: #fff;
+  box-shadow: 0 3px 15px #f5ecd5c8;
 }
 
 .action-badge {
@@ -101,7 +100,7 @@
 }
 
 .user-btn {
-  color: var(--primary-color);
+  color: #497D74;
   border: 2px solid transparent;
   width: 100%;
   height: 100%;
@@ -112,12 +111,10 @@
   transition: all 0.3s ease;
 }
 
-.user-btn:hover, 
-.user-btn[aria-expanded="true"] {
-  background: rgba(13, 124, 102, 0.08);
-  border-color: var(--primary-color);
+.user-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 3px 15px #f5ecd5c8;
 }
-
 /* Dropdown */
 .dropdown-menu {
   min-width: 250px !important;
