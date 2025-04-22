@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import '../styles/Auth.css';
+import API_BASE_URL from '../api';
 
 function CustomerRegister() {
   const navigate = useNavigate();
@@ -28,7 +29,7 @@ function CustomerRegister() {
     }
 
     try {
-      await axios.post('http://localhost:5000/api/customers/register', formData);
+      await axios.post(`${API_BASE_URL}/api/customers/register`, formData);
       toast.success('Registration successful!');
       navigate('/customer-login');
     } catch (error) {
