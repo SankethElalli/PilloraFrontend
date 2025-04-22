@@ -4,10 +4,15 @@
   padding: 2rem 1rem;
 }
 
+.auth-bg {
+  background: linear-gradient(135deg, #e0e7ff 0%, #f8fafc 100%);
+  min-height: 100vh;
+}
+
 .auth-card {
   background: white;
-  border-radius: 1rem;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  border-radius: 1.5rem !important;
+  box-shadow: 0 8px 32px rgba(16, 30, 54, 0.08);
   transition: all 0.3s ease;
 }
 
@@ -41,8 +46,8 @@
 
 .input-group .form-control:focus,
 .input-group .form-select:focus {
-  border-color: #2563eb;
-  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
+  border-color: #6366f1;
+  box-shadow: 0 0 0 2px #6366f133;
   outline: none;
 }
 
@@ -65,7 +70,8 @@
   background: #2563eb;
   border: none;
   padding: 0.625rem 1.25rem;
-  font-weight: 500;
+  font-weight: 600;
+  letter-spacing: 0.03em;
   border-radius: 0.5rem;
   transition: all 0.2s ease;
 }
@@ -196,6 +202,35 @@ textarea.form-control {
   top: 0;
 }
 
+.login-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.divider {
+  position: relative;
+  text-align: center;
+  height: 1.5rem;
+}
+
+.divider-text {
+  background: #fff;
+  padding: 0 1rem;
+  color: #64748b;
+  font-size: 0.95rem;
+  position: relative;
+  z-index: 2;
+}
+
+.divider:before {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; top: 50%;
+  border-top: 1px solid #e2e8f0;
+  z-index: 1;
+}
+
 @media (max-width: 768px) {
   .auth-wrapper {
     padding: 0;
@@ -213,4 +248,41 @@ textarea.form-control {
   .card-body {
     padding: 1rem !important; /* Further reduced padding */
   }
+}
+
+.login-wide-card {
+  max-width: 900px;
+  width: 100%;
+  margin: 2rem auto;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+@media (min-width: 768px) {
+  .login-wide-card {
+    flex-direction: row;
+    min-height: 480px;
+  }
+  .login-side-visual {
+    background: linear-gradient(120deg, #6366f1 0%, #60a5fa 100%);
+    color: #fff;
+    border-top-left-radius: 1.5rem;
+    border-bottom-left-radius: 1.5rem;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+  }
+}
+
+.navbar-nav .nav-link {
+  color: #fff !important;
+  transition: color 0.4s cubic-bezier(0.4,0,0.2,1), background 0.4s cubic-bezier(0.4,0,0.2,1);
+}
+
+.navbar-nav .nav-link:hover,
+.navbar-nav .nav-link:focus {
+  color: #000 !important;
+  background: #f5ecd566 !important;
+  transition: color 0.4s cubic-bezier(0.4,0,0.2,1), background 0.4s cubic-bezier(0.4,0,0.2,1);
 }
