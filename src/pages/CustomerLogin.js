@@ -2,10 +2,12 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useAuth } from '../context/AuthContext';
+import '../styles/Auth.css';
 
 function CustomerLogin() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const { login, isLoading } = useAuth();
   const navigate = useNavigate();
 
@@ -16,7 +18,6 @@ function CustomerLogin() {
         toast.error('Please enter both email and password');
         return;
       }
-      
       await login(email.trim(), password.trim());
       toast.success('Login successful');
       navigate('/customer-dashboard');
@@ -27,58 +28,129 @@ function CustomerLogin() {
   };
 
   return (
-    <div className="auth-wrapper">
-      <div className="container">
-        <div className="row min-vh-100 align-items-center justify-content-center">
-          <div className="col-12 col-md-8 col-lg-6 col-xl-5">
-            <div className="card border-0 shadow-sm mx-auto">
-              <div className="card-body p-4">
-                <h3 className="text-center mb-4">Customer Login</h3>
-                <form onSubmit={handleSubmit}>
-                  <div className="mb-4">
-                    <div className="input-group">
-                      <span className="input-group-text bg-light">
-                        <i className="bi bi-envelope"></i>
-                      </span>
-                      <input 
-                        type="email" 
-                        className="form-control" 
-                        placeholder="Email address" 
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        required 
-                      />
-                    </div>
-                  </div>
-                  <div className="mb-4">
-                    <div className="input-group">
-                      <span className="input-group-text bg-light">
-                        <i className="bi bi-lock"></i>
-                      </span>
-                      <input 
-                        type="password" 
-                        className="form-control" 
-                        placeholder="Password" 
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        required 
-                      />
-                    </div>
-                  </div>
-                  <button type="submit" className="btn btn-primary w-100 mb-3" disabled={isLoading}>
-                    <i className="bi bi-box-arrow-in-right me-2"></i>
-                    {isLoading ? 'Logging in...' : 'Login'}
-                  </button>
-                  <div className="text-center">
-                    <p className="mt-3 mb-0">
-                      New customer? <Link to="/customer-register" className="text-decoration-none">Register here</Link>
-                    </p>
-                  </div>
-                </form>
+    <div className="auth-bg d-flex align-items-center justify-content-center min-vh-100">
+      {/* Desktop card */}
+      <div className="auth-card login-wide-card shadow-lg rounded-4 p-0 d-none d-md-flex">
+        <div className="row g-0 flex-md-row flex-column w-100">
+          <div className="col-md-6 d-none d-md-flex align-items-center justify-content-center login-side-visual">
+            {/* Illustration or branding section for desktop */}
+            <div className="w-100 text-center px-4">
+              <i className="bi bi-person-circle text-primary" style={{ fontSize: '5rem' }}></i>
+              <h2 className="fw-bold mt-3 mb-2">Customer Login</h2>
+            </div>
+          </div>
+          <div className="col-md-6 col-12">
+            <div className="card-body p-4 p-md-5">
+              <div className="text-center mb-4 d-md-none">
+                <div className="login-logo mb-3">
+                  <i className="bi bi-person-circle text-primary" style={{ fontSize: '3rem' }}></i>
+                </div>
+                <h3 className="mb-2 fw-bold">Customer Login</h3>
+                <p className="text-muted mb-0" style={{ fontSize: '1rem' }}>Welcome back! Please login to your account.</p>
               </div>
+              <form onSubmit={handleSubmit}>
+                <div className="mb-4">
+                  <input 
+                    type="email" 
+                    className="form-control"
+                    placeholder="Email address"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                    autoFocus
+                  />
+                </div>
+                <div className="mb-4 position-relative">
+                  <input 
+                    type={showPassword ? "text" : "password"}
+                    className="form-control"
+                    placeholder="Password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                    style={{ paddingRight: "2.5rem" }}
+                  />
+                  <button
+                    type="button"
+                    className="btn btn-link position-absolute top-50 end-0 translate-middle-y px-2"
+                    style={{ textDecoration: "none", color: "#64748b" }}
+                    tabIndex={-1}
+                    onClick={() => setShowPassword((v) => !v)}
+                  >
+                    <i className={`bi ${showPassword ? "bi-eye-slash" : "bi-eye"}`}></i>
+                  </button>
+                </div>
+                <button type="submit" className="btn btn-primary w-100 mb-3" disabled={isLoading}>
+                  <i className="bi bi-box-arrow-in-right me-2"></i>
+                  {isLoading ? 'Logging in...' : 'Login'}
+                </button>
+                <div className="divider my-3 text-center">
+                  <span className="divider-text">or</span>
+                </div>
+                {/* Social login buttons can be added here in the future */}
+                <div className="text-center">
+                  <p className="mt-3 mb-0">
+                    New customer? <Link to="/customer-register" className="text-decoration-none fw-semibold">Register here</Link>
+                  </p>
+                </div>
+              </form>
             </div>
           </div>
         </div>
+      </div>
+      {/* Mobile card */}
+      <div className="mobile-auth-card d-md-none">
+        <div className="login-logo mb-3">
+          <i className="bi bi-person-circle text-primary" style={{ fontSize: '3rem' }}></i>
+        </div>
+        <h3 className="mb-2 fw-bold text-center">Customer Login</h3>
+        <p className="text-muted mb-4 text-center" style={{ fontSize: '1rem' }}>
+          Welcome back! Please login to your account.
+        </p>
+        <form onSubmit={handleSubmit}>
+          <div className="mb-4">
+            <input
+              className="form-control"
+              placeholder="Email address"
+              required
+              type="email"
+              value={email}
+              onChange={e => setEmail(e.target.value)}
+            />
+          </div>
+          <div className="mb-4 position-relative">
+            <input
+              className="form-control"
+              placeholder="Password"
+              required
+              type={showPassword ? "text" : "password"}
+              value={password}
+              onChange={e => setPassword(e.target.value)}
+              style={{ paddingRight: '2.5rem' }}
+            />
+            <button
+              type="button"
+              className="btn btn-link position-absolute top-50 end-0 translate-middle-y px-2"
+              tabIndex={-1}
+              style={{ textDecoration: 'none', color: '#64748b' }}
+              onClick={() => setShowPassword(v => !v)}
+            >
+              <i className={`bi ${showPassword ? "bi-eye-slash" : "bi-eye"}`}></i>
+            </button>
+          </div>
+          <button type="submit" className="btn btn-primary w-100 mb-3" disabled={isLoading}>
+            <i className="bi bi-box-arrow-in-right me-2"></i>
+            {isLoading ? 'Logging in...' : 'Login'}
+          </button>
+          <div className="divider my-3 text-center">
+            <span className="divider-text">or</span>
+          </div>
+          <div className="text-center">
+            <p className="mt-3 mb-0">
+              New customer? <a className="auth-link" href="/customer-register">Register here</a>
+            </p>
+          </div>
+        </form>
       </div>
     </div>
   );
