@@ -419,3 +419,33 @@ textarea.form-control {
 i.text-primary, .login-logo .text-primary {
   color: #c3ffe3 !important;
 }
+
+.btn-icon {
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: none;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #64748b;
+  transition: all 0.2s ease;
+  background: transparent;
+  cursor: pointer;
+}
+
+.btn-icon:hover {
+  background: #f1f5f9;
+  color: #0D7C66;
+  transform: translateY(-1px);
+}
+
+.btn-icon:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(13, 124, 102, 0.2);
+}
+
+.btn-icon i {
+  font-size: 1.1rem;
+}

@@ -1,24 +1,35 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
-function ProductForm({ onSubmit, onCancel }) {
+function ProductForm({ onSubmit, onCancel, product }) {
   const [formData, setFormData] = useState({
     name: '',
     description: '',
     price: '',
     stock: '',
     category: '',
-    image: '' // Changed from imageUrl to image
+    image: ''
   });
+
+  useEffect(() => {
+    if (product) {
+      setFormData({
+        name: product.name || '',
+        description: product.description || '',
+        price: product.price || '',
+        stock: product.stock || '',
+        category: product.category || '',
+        image: product.image || ''
+      });
+    }
+  }, [product]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Convert price and stock to numbers before submitting
-    const formattedData = {
-      ...formData,
-      price: Number(formData.price),
-      stock: Number(formData.stock)
-    };
-    onSubmit(formattedData);
+    if (product && product._id) {
+      onSubmit({ ...formData, _id: product._id });
+    } else {
+      onSubmit(formData);
+    }
   };
 
   const handleChange = (e) => {
@@ -117,7 +128,7 @@ function ProductForm({ onSubmit, onCancel }) {
         <label className="form-label">Image URL</label>
         <input
           type="url"
-          name="image"  // Changed from imageUrl to image
+          name="image"
           className="form-control"
           placeholder="https://"
           value={formData.image}

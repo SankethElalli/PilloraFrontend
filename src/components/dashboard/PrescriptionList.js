@@ -236,31 +236,47 @@ function PrescriptionList({ prescriptions = [], isVendor = false, onRefresh }) {
         title="Write Review"
       >
         {selectedPrescription && (
-          <div className="review-form">
-            <div className="mb-3">
-              <label className="form-label">Review Comments</label>
-              <textarea
-                className="form-control"
-                rows="4"
-                value={review}
-                onChange={(e) => setReview(e.target.value)}
-                placeholder="Write your review comments here..."
+          <div>
+            {/* Show prescription image at the top of the modal */}
+            <div className="prescription-image mb-4">
+              <img
+                src={`${API_BASE_URL}${selectedPrescription.documentUrl}`}
+                alt="Prescription"
+                style={{
+                  width: '100%',
+                  maxHeight: '40vh',
+                  objectFit: 'contain',
+                  borderRadius: '8px',
+                  border: '1px solid #dee2e6'
+                }}
               />
             </div>
-            <div className="d-flex justify-content-end gap-2">
-              <button 
-                className="btn btn-secondary"
-                onClick={() => setShowReviewModal(false)}
-              >
-                Cancel
-              </button>
-              <button 
-                className="btn btn-primary"
-                onClick={handleReviewSubmit}
-                disabled={!review.trim()}
-              >
-                Submit Review
-              </button>
+            <div className="review-form">
+              <div className="mb-3">
+                <label className="form-label">Review Comments</label>
+                <textarea
+                  className="form-control"
+                  rows="4"
+                  value={review}
+                  onChange={(e) => setReview(e.target.value)}
+                  placeholder="Write your review comments here..."
+                />
+              </div>
+              <div className="d-flex justify-content-end gap-2">
+                <button
+                  className="btn btn-secondary"
+                  onClick={() => setShowReviewModal(false)}
+                >
+                  Cancel
+                </button>
+                <button
+                  className="btn btn-primary"
+                  onClick={handleReviewSubmit}
+                  disabled={!review.trim()}
+                >
+                  Submit Review
+                </button>
+              </div>
             </div>
           </div>
         )}

@@ -20,6 +20,8 @@ function VendorDashboard() {
   const [orders, setOrders] = useState([]);
   const [prescriptions, setPrescriptions] = useState([]);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [editProduct, setEditProduct] = useState(null);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
   const fetchProducts = useCallback(async () => {
     try {
@@ -113,7 +115,20 @@ function VendorDashboard() {
   };
 
   const handleEditProduct = (product) => {
-    // TODO: Add edit functionality
+    setEditProduct(product);
+    setIsEditModalOpen(true);
+  };
+
+  const handleUpdateProduct = async (updatedProduct) => {
+    try {
+      const response = await axios.put(`${API_BASE_URL}/api/products/${updatedProduct._id}`, updatedProduct);
+      setProducts(products.map(p => p._id === updatedProduct._id ? response.data : p));
+      setIsEditModalOpen(false);
+      setEditProduct(null);
+    } catch (error) {
+      console.error('Error updating product:', error);
+      alert('Failed to update product. Please try again.');
+    }
   };
 
   const handleDeleteProduct = (productId) => {
@@ -188,6 +203,23 @@ function VendorDashboard() {
               <ProductForm 
                 onSubmit={handleAddProduct}
                 onCancel={() => setShowModal(false)}
+              />
+            </Modal>
+            <Modal
+              isOpen={isEditModalOpen}
+              onClose={() => {
+                setIsEditModalOpen(false);
+                setEditProduct(null);
+              }}
+              title="Edit Product"
+            >
+              <ProductForm
+                product={editProduct}
+                onSubmit={handleUpdateProduct}
+                onCancel={() => {
+                  setIsEditModalOpen(false);
+                  setEditProduct(null);
+                }}
               />
             </Modal>
           </div>

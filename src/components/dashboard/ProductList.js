@@ -72,17 +72,36 @@ function ProductList({ products, onEdit, onDelete }) {
               <td>{product.category}</td>
               <td className="price-cell">₹{product.price}</td>
               <td>
-                <span className={`stock-badge ${product.stock > 0 ? 'in-stock' : 'out-of-stock'}`}>
+                <span
+                  className={
+                    "stock-badge " +
+                    (product.stock > 10
+                      ? "in-stock"
+                      : product.stock > 0
+                      ? "low-stock"
+                      : "out-of-stock")
+                  }
+                >
                   {product.stock > 0 ? `${product.stock} in stock` : 'Out of stock'}
                 </span>
               </td>
               <td>
-                <div className="action-buttons">
-                  <button className="btn-icon" onClick={() => onEdit(product)} title="Edit">
-                    <i className="bi bi-pencil"></i>
-                  </button>
-                  <button className="btn-icon delete" onClick={() => onDelete(product._id)} title="Delete">
-                    <i className="bi bi-trash"></i>
+                <div className="action-buttons" style={{ justifyContent: 'center', alignItems: 'center', display: 'flex' }}>
+                  <button
+                    className="btn btn-primary"
+                    style={{
+                      minWidth: 80,
+                      margin: 0,
+                      padding: '0.5rem 1.25rem',
+                      display: 'inline-flex',
+                      justifyContent: 'center',
+                      alignItems: 'center'
+                    }}
+                    onClick={() => onEdit(product)}
+                    title="Edit Product"
+                    aria-label="Edit Product"
+                  >
+                    Edit
                   </button>
                 </div>
               </td>
