@@ -121,13 +121,51 @@ function VendorDashboard() {
 
   const handleUpdateProduct = async (updatedProduct) => {
     try {
-      const response = await axios.put(`${API_BASE_URL}/api/products/${updatedProduct._id}`, updatedProduct);
-      setProducts(products.map(p => p._id === updatedProduct._id ? response.data : p));
+      const token = localStorage.getItem('token');
+      // Remove _id from the body to avoid Mongoose immutable error
+      const { _id, ...productData } = updatedProduct;
+      // Try PATCH, fallback to PUT if PATCH fails
+      let response;
+      try {
+        response = await axios.patch(
+          `${API_BASE_URL}/api/products/${_id}`,
+          productData,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          }
+        );
+      } catch (patchError) {
+        // If PATCH route does not exist, try PUT
+        if (
+          patchError?.response?.status === 404 ||
+          (patchError?.response?.data && typeof patchError.response.data === 'string' && patchError.response.data.includes('Cannot PATCH'))
+        ) {
+          response = await axios.put(
+            `${API_BASE_URL}/api/products/${_id}`,
+            productData,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`
+              }
+            }
+          );
+        } else {
+          throw patchError;
+        }
+      }
+      setProducts(products.map(p => p._id === _id ? response.data : p));
       setIsEditModalOpen(false);
       setEditProduct(null);
     } catch (error) {
-      console.error('Error updating product:', error);
-      alert('Failed to update product. Please try again.');
+      // Show more details for debugging
+      console.error('Error updating product:', error?.response?.data || error);
+      alert(
+        error?.response?.data?.message
+          ? `Failed to update product: ${error.response.data.message}`
+          : 'Failed to update product. Please try again.'
+      );
     }
   };
 
@@ -195,12 +233,13 @@ function VendorDashboard() {
               )}
             </div>
 
-            <Modal 
-              isOpen={showModal} 
+            <Modal
+              isOpen={showModal}
               onClose={() => setShowModal(false)}
               title="Add New Product"
+              horizontal
             >
-              <ProductForm 
+              <ProductForm
                 onSubmit={handleAddProduct}
                 onCancel={() => setShowModal(false)}
               />
@@ -212,6 +251,7 @@ function VendorDashboard() {
                 setEditProduct(null);
               }}
               title="Edit Product"
+              horizontal
             >
               <ProductForm
                 product={editProduct}
@@ -222,6 +262,9 @@ function VendorDashboard() {
                 }}
               />
             </Modal>
+            {/* If you have other modals (e.g., order details, prescription), add horizontal prop as well */}
+            {/* Example: */}
+            {/* <Modal isOpen={someModalOpen} onClose={...} title="..." horizontal>...</Modal> */}
           </div>
         );
       case 'orders':
