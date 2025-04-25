@@ -3,9 +3,9 @@ import axios from 'axios';
 import { useCart } from '../context/CartContext';
 import { toast } from 'react-toastify';
 import '../styles/Products.css';
-import '../styles/ProductGrid.css'; // Use the new grid styles
+import '../styles/ProductGrid.css';
 import API_BASE_URL from '../api';
-import { useAuth } from '../context/AuthContext'; // <-- Add this import
+import { useAuth } from '../context/AuthContext';
 
 function Products() {
   const { addToCart } = useCart();
@@ -21,8 +21,6 @@ function Products() {
 
   useEffect(() => {
     fetchProducts();
-    // Re-fetch products when user logs in/out
-    // eslint-disable-next-line
   }, [user]);
 
   useEffect(() => {
@@ -213,7 +211,7 @@ function Products() {
                     className="product-img"
                     onError={(e) => {
                       e.target.onerror = null;
-                      e.target.src = '/default-product.png'; // Fallback image
+                      e.target.src = '/default-product.png';
                     }}
                   />
                 </div>

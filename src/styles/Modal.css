@@ -6,8 +6,8 @@
   bottom: 0;
   background-color: rgba(0, 0, 0, 0.25);
   z-index: 1050;
-  backdrop-filter: blur(2px); /* Add subtle blur effect */
-  pointer-events: auto; /* Enable click interactions */
+  backdrop-filter: blur(2px);
+  pointer-events: auto;
 }
 
 .modal-wrapper {
@@ -35,7 +35,7 @@
   padding: 0;
   animation: modalFade 0.2s ease-out;
   position: relative;
-  pointer-events: auto; /* Enable interactions with modal content */
+  pointer-events: auto;
   z-index: 1052;
 }
 
@@ -71,7 +71,6 @@
   padding: 1.5rem;
   background: #fff;
   padding: 1.5rem !important;
-  /* Ensures content is not flush with modal borders */
   box-sizing: border-box;
 }
 

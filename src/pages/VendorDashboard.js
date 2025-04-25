@@ -57,7 +57,7 @@ function VendorDashboard() {
           'Authorization': `Bearer ${localStorage.getItem('token')}`
         }
       });
-      // Ensure we have customer details
+      // Ensures we have customer details
       setPrescriptions(response.data.map(prescription => ({
         ...prescription,
         customerName: prescription.customerName || 'Unknown Customer',
@@ -122,9 +122,7 @@ function VendorDashboard() {
   const handleUpdateProduct = async (updatedProduct) => {
     try {
       const token = localStorage.getItem('token');
-      // Remove _id from the body to avoid Mongoose immutable error
       const { _id, ...productData } = updatedProduct;
-      // Try PATCH, fallback to PUT if PATCH fails
       let response;
       try {
         response = await axios.patch(
@@ -137,7 +135,6 @@ function VendorDashboard() {
           }
         );
       } catch (patchError) {
-        // If PATCH route does not exist, try PUT
         if (
           patchError?.response?.status === 404 ||
           (patchError?.response?.data && typeof patchError.response.data === 'string' && patchError.response.data.includes('Cannot PATCH'))
@@ -159,7 +156,6 @@ function VendorDashboard() {
       setIsEditModalOpen(false);
       setEditProduct(null);
     } catch (error) {
-      // Show more details for debugging
       console.error('Error updating product:', error?.response?.data || error);
       alert(
         error?.response?.data?.message

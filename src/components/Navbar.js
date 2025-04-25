@@ -17,7 +17,7 @@ function Navbar() {
   }, []);
 
   const handleNavigation = () => {
-    setIsOpen(false); // Close menu on navigation
+    setIsOpen(false);
   };
 
   return (

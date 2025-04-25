@@ -326,7 +326,7 @@
 
   .hero-buttons .btn {
     width: 100%;
-    margin: 0 !important; /* Override default margin */
+    margin: 0 !important;
     justify-content: center;
     display: flex;
     align-items: center;

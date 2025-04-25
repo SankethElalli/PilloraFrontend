@@ -3,8 +3,8 @@ import axios from 'axios';
 import Sidebar from '../components/dashboard/Sidebar';
 import OrderList from '../components/dashboard/OrderList';
 import PrescriptionList from '../components/dashboard/PrescriptionList';
-import Modal from '../components/Modal'; // Update this import
-import OrderModal from '../components/OrderModal'; // Make sure this path is correct
+import Modal from '../components/Modal';
+import OrderModal from '../components/OrderModal';
 import PrescriptionUploadForm from '../components/dashboard/PrescriptionUploadForm';
 import '../styles/Dashboard.css';
 import { useAuth } from '../context/AuthContext';
@@ -25,7 +25,7 @@ function CustomerDashboard() {
   const fetchOrders = useCallback(async () => {
     try {
       setIsLoading(true);
-      const token = localStorage.getItem('token'); // Get auth token
+      const token = localStorage.getItem('token');
       const response = await axios.get(`${API_BASE_URL}/api/orders`, {
         headers: {
           Authorization: `Bearer ${token}`

@@ -64,7 +64,7 @@ body {
   }
 
   body {
-    padding-top: 60px; /* Reduce top padding on mobile */
+    padding-top: 60px;
   }
 
   .container {
@@ -78,7 +78,7 @@ body {
   input,
   select,
   textarea {
-    min-height: 44px; /* Minimum touch target size */
+    min-height: 44px;
   }
 
   /* Responsive text adjustments */

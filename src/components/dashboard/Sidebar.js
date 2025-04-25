@@ -25,7 +25,6 @@ function Sidebar({ type = 'vendor', onSectionChange, menuItems, className, curre
     { title: 'Prescriptions', icon: 'bi bi-file-medical', id: 'prescriptions' }
   ] : menuItems;
 
-  // Use only the prop for active state
   const isActive = (id) => currentSection === id || location.hash === `#${id}`;
 
   return (

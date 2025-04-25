@@ -51,7 +51,6 @@ function PrescriptionList({ prescriptions = [], isVendor = false, onRefresh }) {
       toast.success('Review submitted successfully');
       setShowReviewModal(false);
       setReview('');
-      // Refresh the prescriptions list
       if (onRefresh) {
         onRefresh();
       }
@@ -61,7 +60,6 @@ function PrescriptionList({ prescriptions = [], isVendor = false, onRefresh }) {
     }
   };
 
-  // Update badge display logic
   const getStatusBadge = (status) => {
     const badges = {
       pending: 'bg-warning',
