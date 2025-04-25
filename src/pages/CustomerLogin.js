@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
 import { useAuth } from '../context/AuthContext';
 import '../styles/Auth.css';
 
@@ -15,15 +14,15 @@ function CustomerLogin() {
     e.preventDefault();
     try {
       if (!email.trim() || !password.trim()) {
-        toast.error('Please enter both email and password');
+        // toast.error('Please enter both email and password');
         return;
       }
       await login(email.trim(), password.trim());
-      toast.success('Login successful');
-      navigate('/customer-dashboard');
+      // toast.success('Login successful');
+      navigate('/'); // Redirect to home page after login
     } catch (error) {
       console.error('Login error:', error);
-      toast.error(error.message || 'Login failed. Please check your credentials and try again.');
+      // Removed: toast.error(error.message || 'Login failed. Please check your credentials and try again.');
     }
   };
 

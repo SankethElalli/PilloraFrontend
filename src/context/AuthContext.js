@@ -1,12 +1,12 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import axios from 'axios';
-import API_BASE_URL from '../api';
+import API_BASE_URL from '../api'; // <-- Import the shared API base URL
 
 const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true); // Changed to true initially
 
   // Check for existing token and user data on mount
   useEffect(() => {
@@ -40,6 +40,7 @@ export function AuthProvider({ children }) {
         throw new Error('Invalid credentials');
       }
 
+      // Store auth data with user type
       localStorage.setItem('token', token);
       localStorage.setItem('user', JSON.stringify({
         ...user,
@@ -62,7 +63,7 @@ export function AuthProvider({ children }) {
     localStorage.removeItem('user');
     delete axios.defaults.headers.common['Authorization'];
     setUser(null);
-    window.location.href = '/';
+    window.location.href = '/';  // Changed from customer-login to root
   };
 
   return (

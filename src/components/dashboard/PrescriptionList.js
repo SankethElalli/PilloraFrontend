@@ -51,6 +51,7 @@ function PrescriptionList({ prescriptions = [], isVendor = false, onRefresh }) {
       toast.success('Review submitted successfully');
       setShowReviewModal(false);
       setReview('');
+      // Refresh the prescriptions list
       if (onRefresh) {
         onRefresh();
       }
@@ -60,6 +61,7 @@ function PrescriptionList({ prescriptions = [], isVendor = false, onRefresh }) {
     }
   };
 
+  // Update badge display logic
   const getStatusBadge = (status) => {
     const badges = {
       pending: 'bg-warning',
@@ -211,6 +213,7 @@ function PrescriptionList({ prescriptions = [], isVendor = false, onRefresh }) {
         isOpen={showViewModal}
         onClose={() => setShowViewModal(false)}
         title="Prescription"
+        horizontal
       >
         {selectedPrescription && (
           <div className="prescription-image">
@@ -232,6 +235,7 @@ function PrescriptionList({ prescriptions = [], isVendor = false, onRefresh }) {
         isOpen={showReviewModal}
         onClose={() => setShowReviewModal(false)}
         title="Write Review"
+        horizontal
       >
         {selectedPrescription && (
           <div>
@@ -284,6 +288,7 @@ function PrescriptionList({ prescriptions = [], isVendor = false, onRefresh }) {
         isOpen={showReviewViewModal}
         onClose={() => setShowReviewViewModal(false)}
         title="Prescription Review"
+        horizontal
       >
         {selectedPrescription && (
           <div className="review-details">

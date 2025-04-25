@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
+import { useAuth } from '../context/AuthContext';
 import '../styles/Navbar.css';
 
 function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const { cart } = useCart();
+  const { user } = useAuth();
 
   const cartItemsCount = cart.reduce((total, item) => total + item.quantity, 0);
 
@@ -17,7 +19,7 @@ function Navbar() {
   }, []);
 
   const handleNavigation = () => {
-    setIsOpen(false);
+    setIsOpen(false); // Close menu on navigation
   };
 
   return (
@@ -66,6 +68,22 @@ function Navbar() {
                 </li>
               </ul>
             </div>
+            {/* Dashboard button for logged-in users */}
+            {user && (
+              <Link
+                to={user.isVendor ? "/vendor-dashboard" : "/customer-dashboard"}
+                className="nav-action user-btn dashboard-btn dashboard-animate"
+                onClick={handleNavigation}
+                title="Dashboard"
+                aria-label="Dashboard"
+              >
+                <span className="dashboard-btn-text">
+                  {user.isVendor
+                    ? (user.businessName || user.email || "Dashboard")
+                    : (user.name || user.email || "Dashboard")}
+                </span>
+              </Link>
+            )}
           </div>
         </div>
       </div>

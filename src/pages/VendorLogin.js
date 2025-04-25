@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
 import { useAuth } from '../context/AuthContext';
 import API_BASE_URL from '../api';
 import '../styles/Auth.css';
@@ -16,16 +15,12 @@ function VendorLogin() {
     e.preventDefault();
     try {
       if (!email.trim() || !password.trim()) {
-        toast.error('Please enter both email and password');
         return;
       }
-      // Ensure email is lowercased for backend consistency
       await login(email.trim().toLowerCase(), password.trim(), true);
-      toast.success('Login successful');
-      navigate('/vendor-dashboard');
+      navigate('/');
     } catch (error) {
       console.error('Login error:', error);
-      toast.error(error.response?.data?.message || 'Login failed. Please check your credentials.');
     }
   };
 
@@ -38,6 +33,9 @@ function VendorLogin() {
             <div className="w-100 text-center px-4">
               <i className="bi bi-shop text-primary" style={{ fontSize: '5rem' }}></i>
               <h2 className="fw-bold mt-3 mb-2">Vendor Login</h2>
+              <p className="text-muted mb-0" style={{ fontSize: '1.1rem' }}>
+                Sign in to manage your Pillora vendor account and orders.
+              </p>
             </div>
           </div>
           <div className="col-md-6 col-12">
