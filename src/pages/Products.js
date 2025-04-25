@@ -246,15 +246,17 @@ function Products() {
       {selectedProduct && (
         <div className="modal-overlay" onClick={handleCloseModal}>
           <div
-            className="modal-container"
-            style={{ maxWidth: 420, width: '95%' }}
+            className={`modal-container${window.innerWidth >= 992 ? ' product-modal-horizontal' : ''}`}
+            style={window.innerWidth < 992 ? { maxWidth: 420, width: '95%' } : undefined}
             onClick={e => e.stopPropagation()}
           >
-            <div className="modal-header" style={{ padding: '1.25rem 1.5rem', borderBottom: '1px solid #e2e8f0' }}>
-              <div className="modal-title">{selectedProduct.name}</div>
+            {/* Product name always on top */}
+            <div className="modal-header" style={window.innerWidth < 992 ? { padding: '1.25rem 1.5rem', borderBottom: '1px solid #e2e8f0' } : { borderBottom: 'none', padding: '2rem 2.5rem 1rem 2.5rem', justifyContent: 'center' }}>
+              <div className="modal-title" style={{ width: '100%', textAlign: 'center' }}>{selectedProduct.name}</div>
             </div>
-            <div className="modal-content" style={{ padding: '1.5rem' }}>
-              <div style={{ textAlign: 'center', marginBottom: '1rem' }}>
+            <div className="modal-content" style={window.innerWidth < 992 ? { padding: '1.5rem' } : { display: 'flex', flexDirection: 'row', gap: '2.5rem', alignItems: 'flex-start', padding: '2rem 2.5rem' }}>
+              {/* Image on the left */}
+              <div className="product-modal-image" style={window.innerWidth < 992 ? { textAlign: 'center', marginBottom: '1rem' } : { minWidth: 240, maxWidth: 260, textAlign: 'center' }}>
                 <img
                   src={selectedProduct.image.startsWith('http')
                     ? selectedProduct.image
@@ -265,23 +267,22 @@ function Products() {
                     maxHeight: '220px',
                     objectFit: 'contain',
                     borderRadius: '12px',
-                    background: '#f8fafc',
-                  }}
-                  onError={e => {
-                    e.target.onerror = null;
-                    e.target.src = '/default-product.png';
+                    background: '#f8fafc'
                   }}
                 />
               </div>
-              <div className="product-category" style={{ marginBottom: 8 }}>{selectedProduct.category}</div>
-              <div className="product-price" style={{ marginBottom: 12 }}>₹{selectedProduct.price.toFixed(2)}</div>
-              <div style={{ marginBottom: 12 }}>
-                <strong>Stock:</strong> {selectedProduct.stock > 0 ? `${selectedProduct.stock} available` : 'Out of stock'}
-              </div>
-              <div style={{ marginBottom: 16 }}>
-                <strong>Description:</strong>
-                <div style={{ color: '#334155', marginTop: 4 }}>
-                  {selectedProduct.description}
+              {/* Details on the right */}
+              <div style={window.innerWidth < 992 ? {} : { flex: 1, minWidth: 0 }}>
+                <div className="product-category" style={{ marginBottom: 8 }}>{selectedProduct.category}</div>
+                <div className="product-price" style={{ marginBottom: 12 }}>₹{selectedProduct.price.toFixed(2)}</div>
+                <div style={{ marginBottom: 12 }}>
+                  <strong>Stock:</strong> {selectedProduct.stock > 0 ? `${selectedProduct.stock} available` : 'Out of stock'}
+                </div>
+                <div style={{ marginBottom: 16, textAlign: 'left' }}>
+                  <strong>Description:</strong>
+                  <div style={{ color: '#334155', marginTop: 4, textAlign: 'left' }}>
+                    {selectedProduct.description}
+                  </div>
                 </div>
               </div>
             </div>
