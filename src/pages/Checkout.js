@@ -23,6 +23,7 @@ function Checkout() {
   });
   const [paypalError, setPaypalError] = useState(null);
   const [orderId, setOrderId] = useState(null);  // Add this state
+  const [showPaypalModal, setShowPaypalModal] = useState(false);
 
   const calculateSubtotal = () => {
     // Correct: sum of price * quantity for each item
@@ -225,35 +226,15 @@ function Checkout() {
                     </div>
                   </div>
                 </div>
-
+                {/* Show PayPal modal trigger button if PayPal is selected */}
                 {formData.paymentMethod === 'paypal' ? (
-                  <div className="mt-4">
-                    <PayPalButtons
-                      createOrder={(data, actions) => {
-                        const amount = calculateSubtotal();
-                        if (amount <= 0) {
-                          toast.error("Order amount must be greater than 0");
-                          return;
-                        }
-                        return actions.order.create({
-                          purchase_units: [
-                            {
-                              amount: {
-                                currency_code: "USD",
-                                value: amount.toFixed(2),
-                              },
-                              description: "Purchase from Pillora",
-                            },
-                          ],
-                        });
-                      }}
-                      onApprove={handlePaypalApprove}
-                      onError={(err) => {
-                        console.error("PayPal error:", err);
-                        toast.error("Payment failed. Please try again.");
-                      }}
-                    />
-                  </div>
+                  <button
+                    type="button"
+                    className="btn btn-primary w-100 mt-4"
+                    onClick={() => setShowPaypalModal(true)}
+                  >
+                    Pay Now
+                  </button>
                 ) : (
                   <button type="submit" className="btn btn-primary w-100 mt-4">
                     Place Order
@@ -293,6 +274,44 @@ function Checkout() {
         </div>
       </div>
 
+      {/* PayPal Modal */}
+      <Modal
+        isOpen={showPaypalModal}
+        onClose={() => setShowPaypalModal(false)}
+        title="Pay with PayPal"
+      >
+        <div className="paypal-buttons-wrapper py-3">
+          <PayPalButtons
+            createOrder={(data, actions) => {
+              const amount = calculateSubtotal();
+              if (amount <= 0) {
+                toast.error("Order amount must be greater than 0");
+                return;
+              }
+              return actions.order.create({
+                purchase_units: [
+                  {
+                    amount: {
+                      currency_code: "USD",
+                      value: amount.toFixed(2),
+                    },
+                    description: "Purchase from Pillora",
+                  },
+                ],
+              });
+            }}
+            onApprove={async (data, actions) => {
+              await handlePaypalApprove(data, actions);
+              setShowPaypalModal(false);
+            }}
+            onError={(err) => {
+              console.error("PayPal error:", err);
+              toast.error("Payment failed. Please try again.");
+            }}
+          />
+        </div>
+      </Modal>
+
       <Modal
         isOpen={showSuccessModal}
         onClose={handleModalClose}
@@ -301,14 +320,9 @@ function Checkout() {
         <div className="text-center py-4">
           <i className="bi bi-check-circle text-success" style={{ fontSize: '4rem' }}></i>
           <h4 className="mt-3">Thank You For Your Order!</h4>
-          <p className="mb-2">Your order number is: <strong>{orderNumber}</strong></p>
-          <div className="alert alert-info my-3" role="alert">
-            <i className="bi bi-envelope me-2"></i>
-            Order successful! Confirmation has been sent to your email address.
-            Please check your inbox.
-          </div>
+          <p className="mb-4">Your order number is: <strong>{orderNumber}</strong></p>
           <p className="text-muted mb-4">
-            Your order will be delivered within 24-48 hours.
+            You will receive an email confirmation with invoice shortly. Your order will be delivered within 24-48 hours.
           </p>
           <button className="btn btn-primary px-4" onClick={handleModalClose}>
             Go to My Orders
