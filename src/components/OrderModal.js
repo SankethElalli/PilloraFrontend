@@ -3,8 +3,9 @@ import axios from 'axios';
 import Modal from './dashboard/Modal';
 import { toast } from 'react-toastify';
 import API_BASE_URL from '../api';
+import '../styles/Modal.css';  // Add this import
 
-function OrderModal({ order, isOpen, onClose, onStatusUpdate, isCustomer = false, horizontal }) {
+function OrderModal({ order, isOpen, onClose, onStatusUpdate, isCustomer = false }) {
   const [status, setStatus] = useState(order?.status || 'pending');
   const [isLoading, setIsLoading] = useState(false);
 
@@ -13,6 +14,10 @@ function OrderModal({ order, isOpen, onClose, onStatusUpdate, isCustomer = false
   }, [order]);
 
   if (!order) return null;
+
+  // Responsive horizontal layout for desktop only
+  const isDesktop = typeof window !== "undefined" && window.innerWidth >= 992;
+  const horizontalLayout = isDesktop;
 
   const handleStatusUpdate = async () => {
     try {
@@ -56,52 +61,68 @@ function OrderModal({ order, isOpen, onClose, onStatusUpdate, isCustomer = false
     }
   };
 
-  // Responsive horizontal layout for desktop
-  const isDesktop = typeof window !== "undefined" && window.innerWidth >= 992;
-  const horizontalLayout = horizontal && isDesktop;
-
   return (
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      title={null}
-      horizontal={horizontal}
+      title={
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+          <div style={{ fontWeight: 700, fontSize: 20, color: '#1e293b', textAlign: 'left' }}>
+            Order #{order.orderNumber}
+          </div>
+          <div style={{ fontSize: 14, color: '#64748b', marginTop: 4 }}>
+            Placed on {new Date(order.createdAt).toLocaleDateString()}
+          </div>
+        </div>
+      }
+      horizontal={horizontalLayout}
     >
       <div className={horizontalLayout ? 'order-modal-horizontal-modal' : ''}>
-        {/* Left: Customer & Items */}
-        <div>
-          <div style={{ marginBottom: 24 }}>
-            <div style={{ fontWeight: 700, fontSize: 20, color: '#1e293b', marginBottom: 8 }}>
-              Order #{order.orderNumber}
-            </div>
-            <div style={{ fontSize: 14, color: '#64748b' }}>
-              Placed on {new Date(order.createdAt).toLocaleDateString()}
-            </div>
+        <div
+          style={
+            horizontalLayout
+              ? {
+                  display: 'flex',
+                  flexDirection: 'column',
+                  height: 'auto', // Changed from minHeight: 400
+                  maxHeight: '80vh',
+                  justifyContent: 'space-between',
+                  padding: '1rem 1.5rem', // Added padding
+                }
+              : {}
+          }
+        >
+          {/* Top: Order Info */}
+          <div
+            style={
+              horizontalLayout
+                ? {
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'flex-start',
+                    marginBottom: '1rem', // Added margin
+                  }
+                : { margin: '16px 0' }
+            }
+          >
+            <div style={{ fontWeight: 600, fontSize: 16, marginBottom: 8, alignSelf: 'center', textAlign: 'center' }}>Customer</div>
+            <div style={{ fontSize: 15, color: '#0f172a', marginBottom: 4, textAlign: 'left' }}>{order.customerName}</div>
+            <div style={{ fontSize: 14, color: '#64748b', marginBottom: 4, textAlign: 'left' }}>{order.customerEmail}</div>
+            <div style={{ fontSize: 14, color: '#64748b', textAlign: 'left' }}>{order.shippingAddress}</div>
           </div>
-          <div style={{ marginBottom: 32 }}>
-            <div style={{ fontWeight: 600, fontSize: 16, marginBottom: 8 }}>Customer</div>
-            <div style={{ fontSize: 15, color: '#0f172a', marginBottom: 4 }}>{order.customerName}</div>
-            <div style={{ fontSize: 14, color: '#64748b', marginBottom: 4 }}>{order.customerEmail}</div>
-            <div style={{ fontSize: 14, color: '#64748b' }}>{order.shippingAddress}</div>
-          </div>
-          <div>
-            <div style={{ fontWeight: 600, fontSize: 16, marginBottom: 8 }}>Items</div>
+          {/* Items section - reduced margins and padding */}
+          <div style={{ marginTop: '0.5rem' }}>
+            <div style={{ fontWeight: 600, fontSize: 14, marginBottom: 6 }}>Items</div>
             <div>
               {order.items.map((item, idx) => (
-                <div
-                  key={idx}
-                  style={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    fontSize: 15,
-                    marginBottom: 8,
-                  }}
-                >
-                  <span>
-                    {item.name} <span style={{ color: '#64748b' }}>× {item.quantity}</span>
+                <div key={idx} className="order-modal-item">
+                  <div className="order-modal-item-name">
+                    <span className="order-modal-item-text">{item.name}</span>
+                    <span className="order-modal-item-quantity">× {item.quantity}</span>
+                  </div>
+                  <span className="order-modal-item-price">
+                    ₹{(item.price * item.quantity).toFixed(2)}
                   </span>
-                  <span style={{ fontWeight: 600, color: '#0f172a' }}>₹{item.price * item.quantity}</span>
                 </div>
               ))}
             </div>
@@ -119,27 +140,26 @@ function OrderModal({ order, isOpen, onClose, onStatusUpdate, isCustomer = false
               <span>Total</span>
               <span>₹{order.totalAmount}</span>
             </div>
-          </div>
-
-          {/* Download Invoice button */}
-          <div className="mt-3">
-            <button
-              className="btn btn-outline-primary"
-              onClick={handleDownloadInvoice}
-            >
-              <i className="bi bi-download me-2"></i>
-              Download Invoice
-            </button>
+            {/* Download Invoice button */}
+            <div className="mt-3">
+              <button
+                className="btn btn-outline-primary"
+                onClick={handleDownloadInvoice}
+              >
+                <i className="bi bi-download me-2"></i>
+                Download Invoice
+              </button>
+            </div>
           </div>
         </div>
-        
-        {/* Right: Status and Actions */}
+
+        {/* Right: Status and Actions - adjusted padding */}
         <div
           style={
             horizontalLayout
               ? {
                   flex: 1,
-                  padding: '2.5rem 2.5rem 2rem 2rem',
+                  padding: '1rem 1.5rem',
                   borderTopRightRadius: 18,
                   borderBottomRightRadius: 18,
                   background: '#fff',
@@ -147,6 +167,7 @@ function OrderModal({ order, isOpen, onClose, onStatusUpdate, isCustomer = false
                   flexDirection: 'column',
                   justifyContent: 'flex-start',
                   minWidth: 0,
+                  maxHeight: '80vh',
                 }
               : { marginTop: 24 }
           }

@@ -6,8 +6,8 @@
   bottom: 0;
   background-color: rgba(0, 0, 0, 0.25);
   z-index: 1050;
-  backdrop-filter: blur(2px);
-  pointer-events: auto;
+  backdrop-filter: blur(2px); /* Add subtle blur effect */
+  pointer-events: auto; /* Enable click interactions */
 }
 
 .modal-wrapper {
@@ -35,7 +35,7 @@
   padding: 0;
   animation: modalFade 0.2s ease-out;
   position: relative;
-  pointer-events: auto;
+  pointer-events: auto; /* Enable interactions with modal content */
   z-index: 1052;
 }
 
@@ -71,6 +71,7 @@
   padding: 1.5rem;
   background: #fff;
   padding: 1.5rem !important;
+  /* Ensures content is not flush with modal borders */
   box-sizing: border-box;
 }
 
@@ -298,4 +299,63 @@
     padding: 1rem 0;
     text-align: center;
   }
+}
+
+/* Order Modal Specific Styles */
+.order-modal-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  margin-bottom: 6px;
+  width: 100%;
+}
+
+.order-modal-item-name {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.order-modal-item-text {
+  font-weight: 500;
+  color: #1e293b;
+  margin-right: 4px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.order-modal-item-quantity {
+  color: #64748b;
+  font-size: 12px;
+  flex-shrink: 0;
+}
+
+.order-modal-item-price {
+  font-weight: 600;
+  color: #0f172a;
+  font-size: 13px;
+  flex-shrink: 0;
+  margin-left: 8px;
+  white-space: nowrap;
+}
+
+.order-modal-section {
+  display: flex;
+  flex-direction: column;
+  height: auto;
+  max-height: 80vh;
+  justify-content: space-between;
+  padding: 1rem 1.5rem;
+}
+
+.order-modal-customer {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-bottom: 1rem;
 }
