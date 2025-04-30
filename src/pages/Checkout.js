@@ -6,6 +6,7 @@ import { toast } from 'react-toastify';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 import API_BASE_URL from '../api';
+import { PayPalButtons } from "@paypal/react-paypal-js";
 
 function Checkout() {
   const { user } = useAuth();
@@ -18,11 +19,16 @@ function Checkout() {
     email: user?.email || '',
     phone: user?.phone || '',
     address: user?.address || '',
-    paymentMethod: 'card'
+    paymentMethod: 'paypal' // Changed default to paypal
   });
+  const [paypalError, setPaypalError] = useState(null);
+  const [orderId, setOrderId] = useState(null);  // Add this state
 
   const calculateSubtotal = () => {
-    return cart.reduce((total, item) => total + item.price * item.quantity, 0);
+    // Assuming 1 INR = 0.012 USD (you should use a proper exchange rate service)
+    const inrAmount = cart.reduce((total, item) => total + item.price * item.quantity, 0);
+    const usdAmount = inrAmount * 0.012;
+    return usdAmount;
   };
 
   const handleInputChange = (e) => {
@@ -32,9 +38,9 @@ function Checkout() {
     });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handlePaypalApprove = async (data, actions) => {
     try {
+      const details = await actions.order.capture();
       const orderData = {
         orderNumber: `ORD${Date.now()}${Math.floor(Math.random() * 1000)}`,
         customerId: user._id,
@@ -48,17 +54,52 @@ function Checkout() {
         })),
         totalAmount: calculateSubtotal(),
         shippingAddress: formData.address,
-        paymentMethod: formData.paymentMethod
+        paymentMethod: 'paypal',
+        paypalOrderId: details.id,
+        paymentStatus: 'completed'
       };
 
       const response = await axios.post(`${API_BASE_URL}/api/orders`, orderData);
       if (response.data) {
+        setOrderId(response.data._id); // Store the order ID
         clearCart();
         setShowSuccessModal(true);
       }
     } catch (error) {
-      console.error('Order creation error:', error.response?.data || error);
-      toast.error('Failed to place order. Please try again.');
+      toast.error('Payment failed. Please try again.');
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const orderData = {
+      orderNumber: `ORD${Date.now()}${Math.floor(Math.random() * 1000)}`,
+      customerId: user._id,
+      customerName: formData.name,
+      customerEmail: formData.email,
+      items: cart.map(item => ({
+        productId: item._id,
+        name: item.name,
+        price: item.price,
+        quantity: item.quantity
+      })),
+      totalAmount: calculateSubtotal(),
+      shippingAddress: formData.address,
+      paymentMethod: formData.paymentMethod
+    };
+
+    // Only process form submit for COD
+    if (formData.paymentMethod === 'cod') {
+      try {
+        const response = await axios.post(`${API_BASE_URL}/api/orders`, orderData);
+        if (response.data) {
+          clearCart();
+          setShowSuccessModal(true);
+        }
+      } catch (error) {
+        console.error('Order creation error:', error.response?.data || error);
+        toast.error('Failed to place order. Please try again.');
+      }
     }
   };
 
@@ -68,6 +109,37 @@ function Checkout() {
       clearCart();
     }
     navigate('/customer-dashboard#orders');
+  };
+
+  const handleDownloadInvoice = async () => {
+    try {
+      console.log('Downloading invoice for order:', orderNumber); // Add this log
+      const response = await axios.get(
+        `${API_BASE_URL}/api/orders/${orderNumber}/invoice`,
+        {
+          responseType: 'blob',
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`
+          }
+        }
+      );
+
+      // Create blob link to download
+      const blob = new Blob([response.data], { type: 'application/pdf' });
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', `invoice-${orderNumber}.pdf`);
+      document.body.appendChild(link);
+      link.click();
+      
+      // Cleanup
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error('Error downloading invoice:', error);
+      toast.error('Failed to download invoice. Please try again.');
+    }
   };
 
   return (
@@ -134,13 +206,12 @@ function Checkout() {
                         <input
                           type="radio"
                           name="paymentMethod"
-                          value="card"
+                          value="paypal"
                           className="form-check-input"
-                          checked={formData.paymentMethod === 'card'}
+                          checked={formData.paymentMethod === 'paypal'}
                           onChange={handleInputChange}
-                          required
                         />
-                        <label className="form-check-label">Card Payment</label>
+                        <label className="form-check-label">PayPal</label>
                       </div>
                       <div className="form-check">
                         <input
@@ -157,9 +228,39 @@ function Checkout() {
                   </div>
                 </div>
 
-                <button type="submit" className="btn btn-primary w-100 mt-4">
-                  Place Order
-                </button>
+                {formData.paymentMethod === 'paypal' ? (
+                  <div className="mt-4">
+                    <PayPalButtons
+                      createOrder={(data, actions) => {
+                        const amount = calculateSubtotal();
+                        if (amount <= 0) {
+                          toast.error("Order amount must be greater than 0");
+                          return;
+                        }
+                        return actions.order.create({
+                          purchase_units: [
+                            {
+                              amount: {
+                                currency_code: "USD",
+                                value: amount.toFixed(2),
+                              },
+                              description: "Purchase from Pillora",
+                            },
+                          ],
+                        });
+                      }}
+                      onApprove={handlePaypalApprove}
+                      onError={(err) => {
+                        console.error("PayPal error:", err);
+                        toast.error("Payment failed. Please try again.");
+                      }}
+                    />
+                  </div>
+                ) : (
+                  <button type="submit" className="btn btn-primary w-100 mt-4">
+                    Place Order
+                  </button>
+                )}
               </form>
             </div>
           </div>
@@ -204,7 +305,7 @@ function Checkout() {
           <h4 className="mt-3">Thank You For Your Order!</h4>
           <p className="mb-4">Your order number is: <strong>{orderNumber}</strong></p>
           <p className="text-muted mb-4">
-            You will receive an email confirmation shortly. Your order will be delivered within 24-48 hours.
+            You will receive an email confirmation with invoice shortly. Your order will be delivered within 24-48 hours.
           </p>
           <button className="btn btn-primary px-4" onClick={handleModalClose}>
             Go to My Orders

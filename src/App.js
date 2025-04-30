@@ -19,64 +19,73 @@ import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
 import { AuthProvider } from './context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
+import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 
 function App() {
+  const initialOptions = {
+    "client-id": "test", // Replace with your PayPal client ID
+    currency: "USD",  // Changed from "INR" to "USD"
+    intent: "capture"
+  };
+  
   return (
-    <Router>
-      <AuthProvider>
-        <CartProvider>
-          <div className="App">
-            <Navbar />
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/products" element={<Products />} />
-              <Route path="/cart" element={<Cart />} />
-              <Route path="/about" element={<About />} />
-              <Route path="/contact" element={<Contact />} />
-              <Route path="/customer-login" element={<CustomerLogin />} />
-              <Route path="/vendor-login" element={<VendorLogin />} />
-              <Route
-                path="/vendor-dashboard"
-                element={
-                  <ProtectedRoute>
-                    <VendorDashboard />
-                  </ProtectedRoute>
-                }
+    <PayPalScriptProvider options={initialOptions}>
+      <Router>
+        <AuthProvider>
+          <CartProvider>
+            <div className="App">
+              <Navbar />
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/products" element={<Products />} />
+                <Route path="/cart" element={<Cart />} />
+                <Route path="/about" element={<About />} />
+                <Route path="/contact" element={<Contact />} />
+                <Route path="/customer-login" element={<CustomerLogin />} />
+                <Route path="/vendor-login" element={<VendorLogin />} />
+                <Route
+                  path="/vendor-dashboard"
+                  element={
+                    <ProtectedRoute>
+                      <VendorDashboard />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route 
+                  path="/customer-dashboard" 
+                  element={
+                    <ProtectedRoute>
+                      <CustomerDashboard />
+                    </ProtectedRoute>
+                  } 
+                />
+                <Route path="/customer-register" element={<CustomerRegister />} />
+                <Route path="/vendor-register" element={<VendorRegister />} />
+                <Route 
+                  path="/checkout" 
+                  element={
+                    <ProtectedRoute>
+                      <Checkout />
+                    </ProtectedRoute>
+                  } 
+                />
+              </Routes>
+              <ToastContainer 
+                position="top-right"
+                autoClose={2000}
+                hideProgressBar={false}
+                newestOnTop
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
               />
-              <Route 
-                path="/customer-dashboard" 
-                element={
-                  <ProtectedRoute>
-                    <CustomerDashboard />
-                  </ProtectedRoute>
-                } 
-              />
-              <Route path="/customer-register" element={<CustomerRegister />} />
-              <Route path="/vendor-register" element={<VendorRegister />} />
-              <Route 
-                path="/checkout" 
-                element={
-                  <ProtectedRoute>
-                    <Checkout />
-                  </ProtectedRoute>
-                } 
-              />
-            </Routes>
-            <ToastContainer 
-              position="top-right"
-              autoClose={2000}
-              hideProgressBar={false}
-              newestOnTop
-              closeOnClick
-              rtl={false}
-              pauseOnFocusLoss
-              draggable
-              pauseOnHover
-            />
-          </div>
-        </CartProvider>
-      </AuthProvider>
-    </Router>
+            </div>
+          </CartProvider>
+        </AuthProvider>
+      </Router>
+    </PayPalScriptProvider>
   );
 }
 
