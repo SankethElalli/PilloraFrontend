@@ -1,0 +1,197 @@
+.category-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); /* Adjusted for smaller items */
+  gap: 12px;
+  padding: 16px;
+  overflow-y: auto; /* Allow scrolling within the grid */
+  flex: 1; /* Ensure grid takes up remaining space in the modal */
+}
+
+.modal-container {
+    max-height: calc(70vh - 50px);
+    max-width: 800px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    border-radius: 16px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    position: relative;
+    top: -5%;
+    margin: 0 auto;
+}
+
+.modal-header {
+  padding: 16px;
+  border-bottom: 1px solid #e2e8f0;
+  background: #f8fafc;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1e293b;
+  text-align: center;
+}
+
+.modal-body {
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto; /* Allow scrolling for the modal body */
+  padding: 0;
+}
+
+.category-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  height: 120px; /* Reduced height for compact design */
+}
+
+.category-item:hover {
+  background: #fff;
+  border-color: #2563eb;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.1);
+}
+
+.category-item.active {
+  background: #eff6ff;
+  border-color: #2563eb;
+  color: #2563eb;
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.08);
+}
+
+.category-icon {
+  font-size: 28px; /* Adjusted for smaller items */
+  margin-bottom: 8px;
+  color: #64748b;
+  transition: color 0.2s ease;
+}
+
+.category-name {
+  font-size: 14px; /* Adjusted for smaller items */
+  font-weight: 500;
+  color: #1e293b;
+  text-align: center;
+  transition: color 0.2s ease;
+}
+
+.category-filter-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 10px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #1e293b;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 200px;
+}
+
+.category-filter-btn:hover {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+}
+
+.category-filter-btn.active {
+  background: #eff6ff; /* Light blue background for active state */
+  border-color: #2563eb; /* Blue border for active state */
+  color: #2563eb; /* Blue text for active state */
+  font-weight: 600; /* Slightly bolder text for emphasis */
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.1); /* Add subtle shadow for focus */
+}
+
+.category-filter-btn.active i {
+  color: #2563eb; /* Ensure the icon matches the text color */
+}
+
+.clear-filter {
+  display: inline-block;
+  color: #ef4444;
+  font-size: 13px;
+  font-weight: 500;
+  padding: 6px 25px;
+  border: 1px solid red;
+  border-radius: 6px;
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-left: 16px; /* Add spacing between the header and the button */
+}
+.clear-filter:hover {
+  background: #fef2f2; /* Light red background on hover */
+  border-color: #fca5a5; /* Subtle red border on hover */
+  color: #b91c1c; /* Darker red text on hover *//* Add a subtle shadow */
+  box-shadow: 0 2px 6px rgba(239, 68, 68, 0.2); /* Add a subtle shadow */
+}
+.clear-filter:active {
+  background: #fca5a5; /* Slightly darker red background on click */
+  color: #7f1d1d; /* Even darker red text on click */
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1); /* Inset shadow for pressed effect */
+}
+
+/* Mobile Styles */
+@media (max-width: 768px) {
+  .modal-container {
+    max-height: calc(100vh - 80px); /* Adjust for smaller screens */
+    max-width: 90vw; /* Ensure modal fits smaller screens */
+    top: 10%; /* Adjust top position for mobile */
+  }
+
+  .modal-header > div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    gap: 16px; /* Add spacing between elements */
+  }
+
+  .category-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    padding: 12px;
+  }
+
+  .category-item {
+    height: 100px; /* Further reduce height for mobile */
+    padding: 12px;
+  }
+
+  .category-icon {
+    font-size: 24px;
+    margin-bottom: 6px;
+  }
+
+  .category-name {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .category-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .category-item {
+    height: auto;
+    padding: 12px;
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: 12px;
+  }
+
+  .category-icon {
+    margin-bottom: 0;
+  }
+}

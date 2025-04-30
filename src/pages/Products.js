@@ -3,9 +3,10 @@ import axios from 'axios';
 import { useCart } from '../context/CartContext';
 import { toast } from 'react-toastify';
 import '../styles/Products.css';
-import '../styles/ProductGrid.css';
+import '../styles/ProductGrid.css'; // Use the new grid styles
 import API_BASE_URL from '../api';
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from '../context/AuthContext'; // <-- Add this import
+import CategoryFilterModal from '../components/CategoryFilterModal'; // Fix import path
 
 function Products() {
   const { addToCart } = useCart();
@@ -17,10 +18,13 @@ function Products() {
   const [sortBy, setSortBy] = useState('name');
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [showHeader, setShowHeader] = useState(true);
+  const [showCategoryModal, setShowCategoryModal] = useState(false);
   const lastScrollY = useRef(window.scrollY);
 
   useEffect(() => {
     fetchProducts();
+    // Re-fetch products when user logs in/out
+    // eslint-disable-next-line
   }, [user]);
 
   useEffect(() => {
@@ -144,28 +148,19 @@ function Products() {
                 </div>
               </div>
               <div className="filter-box">
-                <select 
-                  className="filter-select"
-                  value={selectedCategory}
-                  onChange={handleCategoryChange}
+                <button 
+                  className={`category-filter-btn ${selectedCategory ? 'active' : ''}`}
+                  onClick={() => setShowCategoryModal(true)}
                 >
-                  <option value="">All Categories</option>
-                  <option value="Personal Care">Personal Care</option>
-                  <option value="Women Care">Women Care</option>
-                  <option value="Baby Care">Baby Care</option>
-                  <option value="Diabetes Care">Diabetes Care</option>
-                  <option value="Cardiac Care">Cardiac Care</option>
-                  <option value="Stomach Care">Stomach Care</option>
-                  <option value="Pain Relief">Pain Relief</option>
-                  <option value="Liver Care">Liver Care</option>
-                  <option value="Oral Care">Oral Care</option>
-                  <option value="Respiratory">Respiratory</option>
-                  <option value="Sexual Health">Sexual Health</option>
-                  <option value="Elderly Care">Elderly Care</option>
-                  <option value="Cold & Immunity">Cold & Immunity</option>
-                  <option value="Ayurveda">Ayurveda</option>
-                  <option value="Health Devices">Health Devices</option>
-                </select>
+                  <i className="bi bi-funnel"></i>
+                  {selectedCategory || 'All Categories'}
+                </button>
+                <CategoryFilterModal
+                  isOpen={showCategoryModal}
+                  onClose={() => setShowCategoryModal(false)}
+                  selectedCategory={selectedCategory}
+                  onSelectCategory={setSelectedCategory}
+                />
               </div>
               <div className="filter-box">
                 <select 
@@ -211,7 +206,7 @@ function Products() {
                     className="product-img"
                     onError={(e) => {
                       e.target.onerror = null;
-                      e.target.src = '/default-product.png';
+                      e.target.src = '/default-product.png'; // Fallback image
                     }}
                   />
                 </div>

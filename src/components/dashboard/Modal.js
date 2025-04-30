@@ -6,10 +6,10 @@ function Modal({ isOpen, onClose, title, children, horizontal }) {
   const isDesktop = typeof window !== "undefined" && window.innerWidth >= 992;
   const containerClass =
     "modal-container" +
-    (horizontal && isDesktop ? " vendor-modal-horizontal" : "");
+    (horizontal && isDesktop ? " product-modal-horizontal" : "");
 
   return (
-    <div className="modal-overlay">
+    <div className="modal-overlay" onClick={e => { if (e.target === e.currentTarget) onClose(); }}>
       <div className={containerClass}>
         <div className="modal-header">
           <h2 className="modal-title">{title}</h2>
