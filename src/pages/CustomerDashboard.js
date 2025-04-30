@@ -6,7 +6,7 @@ import PrescriptionList from '../components/dashboard/PrescriptionList';
 import Modal from '../components/Modal';
 import OrderModal from '../components/OrderModal';
 import PrescriptionUploadForm from '../components/dashboard/PrescriptionUploadForm';
-import '../styles/Dashboard.css';
+import '../styles/CustomerDashboard.css';
 import { useAuth } from '../context/AuthContext';
 import { toast } from 'react-toastify';
 import API_BASE_URL from '../api';
@@ -110,39 +110,61 @@ function CustomerDashboard() {
     setSidebarOpen(false);
   };
 
+  const renderDashboardStats = () => (
+    <div className="stats-grid">
+      <div className="stat-card">
+        <div className="stat-label">Total Orders</div>
+        <div className="stat-value">{orders.length}</div>
+        <div className="stat-trend trend-up">
+          <i className="bi bi-arrow-up"></i>
+          <span>12% from last month</span>
+        </div>
+      </div>
+      <div className="stat-card">
+        <div className="stat-label">Active Orders</div>
+        <div className="stat-value">
+          {orders.filter(order => ['pending', 'processing'].includes(order.status)).length}
+        </div>
+      </div>
+      <div className="stat-card">
+        <div className="stat-label">Prescriptions</div>
+        <div className="stat-value">{prescriptions.length}</div>
+      </div>
+    </div>
+  );
+
   const renderContent = () => {
     switch (activeSection) {
       case 'orders':
         return (
           <>
-            <div className="dashboard-header">
-              <div>
-                <h1 className="text-2xl font-semibold text-gray-800">My Orders</h1>
-              </div>
+            <div className="dashboard-welcome">
+              <h1 className="welcome-heading">Welcome back, {user.name}!</h1>
+              <p className="welcome-subtitle">Track your orders and prescriptions</p>
             </div>
-            <div className="dashboard-content">
-              {isLoading ? (
-                <div className="text-center py-4">
-                  <div className="spinner-border text-primary" role="status">
-                    <span className="visually-hidden">Loading...</span>
-                  </div>
+            {renderDashboardStats()}
+            <div className="content-grid">
+              <div className="section-card">
+                <div className="section-header">
+                  <h2 className="section-title">Recent Orders</h2>
                 </div>
-              ) : (
-                <OrderList 
-                  orders={orders} 
-                  isCustomer={true}
-                  onViewDetails={handleViewOrder} 
-                />
-              )}
-              {selectedOrder && (
-                <OrderModal
-                  order={selectedOrder}
-                  isOpen={showOrderModal}
-                  onClose={() => setShowOrderModal(false)}
-                  onStatusUpdate={handleOrderUpdate}
-                  isCustomer={true}
-                />
-              )}
+                {isLoading ? (
+                  <div className="loader">Loading...</div>
+                ) : (
+                  <OrderList 
+                    orders={orders} 
+                    isCustomer={true}
+                    onViewDetails={handleViewOrder} 
+                  />
+                )}
+              </div>
+              
+              <div className="section-card">
+                <div className="section-header">
+                  <h2 className="section-title">Order Status</h2>
+                </div>
+                {/* Add order status summary/chart here */}
+              </div>
             </div>
           </>
         );
