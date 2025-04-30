@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import Modal from './dashboard/Modal';  // Update the import path to match your project structure
+import Modal from './dashboard/Modal';
 import { toast } from 'react-toastify';
 import API_BASE_URL from '../api';
 
@@ -121,7 +121,7 @@ function OrderModal({ order, isOpen, onClose, onStatusUpdate, isCustomer = false
             </div>
           </div>
 
-          {/* Add Download Invoice button */}
+          {/* Download Invoice button */}
           <div className="mt-3">
             <button
               className="btn btn-outline-primary"
