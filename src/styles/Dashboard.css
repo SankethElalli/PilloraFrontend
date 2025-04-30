@@ -8,11 +8,13 @@
   --card-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
 }
 
+/* Remove default body padding for dashboard */
 .dashboard-container {
   padding-top: 0;
   display: flex;
   min-height: 100vh;
   background: #f3f4f6;
+  overflow-x: hidden;
 }
 
 .dashboard-sidebar {
@@ -32,6 +34,7 @@
   background: #f8f9fa;
   min-height: calc(100vh - 73px);
   transition: all 0.3s ease;
+  overflow-x: hidden;
 }
 
 .dashboard-header {
@@ -50,6 +53,7 @@
   padding: 2rem;
   border-radius: 16px;
   box-shadow: var(--card-shadow);
+  overflow-x: hidden;
 }
 
 /* Product List Styling */
@@ -505,6 +509,7 @@ textarea.form-control {
   padding: 1.5rem;
   overflow-y: auto;
   max-height: calc(90vh - 140px);
+  overflow-x: hidden;
 }
 
 /* Responsive Design */
@@ -516,7 +521,7 @@ textarea.form-control {
 
   .dashboard-sidebar {
     position: fixed;
-    top: 76px;
+    top: 76px; /* Height of navbar */
     left: -100%;
     width: 280px;
     height: calc(100vh - 76px);
@@ -532,7 +537,7 @@ textarea.form-control {
   }
 
   .nav-menu {
-    padding: 1.5rem 1rem;
+    padding: 1.5rem 1rem;  /* Increased top padding to compensate for removed header */
   }
 
   .nav-link {
@@ -584,6 +589,7 @@ textarea.form-control {
     transition: opacity 0.3s ease, visibility 0.3s ease;
   }
 
+  /* Hide sidebar toggle when navbar is expanded */
   .navbar-collapse.show ~ .dashboard-container .mobile-sidebar-toggle,
   .navbar-collapse.collapsing ~ .dashboard-container .mobile-sidebar-toggle {
     opacity: 0;
@@ -591,6 +597,7 @@ textarea.form-control {
     pointer-events: none;
   }
 
+  /* Ensure navbar menu appears above sidebar toggle */
   .navbar-collapse {
     z-index: 1030;
   }
@@ -634,10 +641,12 @@ textarea.form-control {
     padding: 0.75rem;
   }
 
+  /* Stack form elements on mobile */
   .form-group {
     margin-bottom: 1rem;
   }
 
+  /* Improve modal display on mobile */
   .modal-container {
     max-width: 100%;
     margin: 0.5rem;
@@ -829,7 +838,7 @@ textarea.form-control {
 
   /* Vendor specific mobile styles */
   .product-table {
-    display: none;
+    display: none; /* Hide table view on mobile */
   }
 
   .product-cards {
@@ -982,7 +991,7 @@ textarea.form-control {
 
   .item-image-wrapper {
     width: 100%;
-    height: 140px;
+    height: 140px;  /* Reduced height */
     border-radius: 6px;
   }
 
@@ -1658,994 +1667,53 @@ textarea.form-control {
   }
 }
 
+/* Horizontal Order Modal for Desktop */
 @media (min-width: 992px) {
-  .prescription-section {
-    padding: 2rem;
-    background: white;
-    border-radius: 16px;
-    box-shadow: var(--card-shadow);
-  }
-
-  .prescription-table {
+  .order-modal-horizontal-modal {
+    min-width: 800px;
+    max-width: 1000px;
     width: 100%;
-    border-collapse: separate;
-    border-spacing: 0 0.75rem;
-  }
-
-  .prescription-table thead tr {
-    background: transparent;
-  }
-
-  .prescription-table th {
-    padding: 1rem 1.5rem;
-    font-weight: 600;
-    color: var(--secondary-color);
-    text-transform: uppercase;
-    font-size: 0.875rem;
-    letter-spacing: 0.05em;
-    text-align: left;
-  }
-
-  .prescription-table tbody tr {
-    background: white;
-    box-shadow: var(--card-shadow);
-    transition: all 0.2s ease;
-  }
-
-  .prescription-table tbody tr:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  }
-
-  .prescription-table td {
-    padding: 1.25rem 1.5rem;
-    vertical-align: middle;
-  }
-
-  .prescription-table tr td:first-child {
-    border-top-left-radius: 12px;
-    border-bottom-left-radius: 12px;
-  }
-
-  .prescription-table tr td:last-child {
-    border-top-right-radius: 12px;
-    border-bottom-right-radius: 12px;
-  }
-
-  .prescription-cell {
     display: flex;
-    align-items: center;
-    gap: 1.25rem;
-    min-width: 300px;
-  }
-
-  .customer-avatar {
-    width: 48px;
-    height: 48px;
-    border-radius: 10px;
-    background: #f1f5f9;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--primary-color);
-    font-weight: 600;
-    font-size: 1.125rem;
-  }
-
-  .prescription-info {
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-  }
-
-  .customer-name {
-    font-weight: 600;
-    color: #0f172a;
-    font-size: 0.9375rem;
-  }
-
-  .prescription-id {
-    font-size: 0.75rem;
-    color: #64748b;
-  }
-
-  .status-badge {
-    padding: 0.5rem 1rem;
-    border-radius: 8px;
-    font-size: 0.75rem;
-    font-weight: 500;
-    text-align: center;
-    min-width: 100px;
-  }
-
-  .status-badge.pending {
-    background: #fff7ed;
-    color: #c2410c;
-  }
-
-  .status-badge.approved {
-    background: #ecfdf5;
-    color: #047857;
-  }
-
-  .status-badge.rejected {
-    background: #fef2f2;
-    color: #b91c1c;
-  }
-
-  .action-cell {
-    display: flex;
-    gap: 0.75rem;
-    justify-content: flex-end;
-  }
-
-  .btn-icon {
-    width: 36px;
-    height: 36px;
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #64748b;
-    transition: all 0.2s ease;
-    background: transparent;
-    border: none;
-    cursor: pointer;
-  }
-
-  .btn-icon:hover {
-    background: #f1f5f9;
-    color: #0f172a;
-  }
-
-  .btn-icon.review {
-    color: var(--primary-color);
-  }
-
-  .btn-icon.review:hover {
-    background: #eff6ff;
-    color: var(--primary-color);
-  }
-
-  .prescription-time {
-    font-size: 0.875rem;
-    color: #64748b;
-    white-space: nowrap;
-  }
-}
-
-@media (min-width: 992px) {
-  .prescription-section {
-    padding: 2rem;
-    background: white;
-    border-radius: 16px;
-    box-shadow: var(--card-shadow);
-  }
-
-  .order-cards {
-    display: block;
-    max-width: 100%;
-    padding: 0;
-  }
-
-  .table-responsive {
-    margin: 0;
-    background: white;
-    border-radius: 12px;
-    padding: 1.5rem;
-    box-shadow: var(--card-shadow);
-  }
-
-  .prescription-table {
-    width: 100%;
-    border-collapse: separate;
-    border-spacing: 0 0.75rem;
-  }
-
-  .prescription-table thead tr {
-    background: transparent;
-  }
-
-  .prescription-table th {
-    padding: 1rem 1.5rem;
-    font-weight: 600;
-    color: var(--secondary-color);
-    text-transform: uppercase;
-    font-size: 0.875rem;
-    letter-spacing: 0.05em;
-    text-align: left;
-    border: none;
-  }
-
-  .prescription-table td {
-    padding: 1.25rem 1.5rem;
-    background: white;
-    border: none;
-    vertical-align: middle;
-  }
-
-  .prescription-table tbody tr {
-    box-shadow: var(--card-shadow);
-    transition: all 0.2s ease;
-  }
-
-  .prescription-table tbody tr:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  }
-
-  .prescription-table tr td:first-child {
-    border-top-left-radius: 12px;
-    border-bottom-left-radius: 12px;
-  }
-
-  .prescription-table tr td:last-child {
-    border-top-right-radius: 12px;
-    border-bottom-right-radius: 12px;
-  }
-
-  /* Hide mobile-specific elements */
-  .order-card {
-    display: none;
-  }
-
-  .prescription-cell {
-    display: flex;
-    align-items: center;
-    gap: 1.25rem;
-    min-width: 300px;
-  }
-
-  .customer-info {
-    display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    flex-wrap: nowrap;         /* Prevent wrapping to keep horizontal */
     background: none;
     padding: 0;
-    margin: 0;
-    box-shadow: none;
+    overflow: visible;         /* Allow content to expand horizontally */
   }
-
-  .customer-name {
-    font-weight: 600;
-    color: #0f172a;
-    font-size: 0.9375rem;
-    margin: 0;
+  .order-modal-horizontal-modal > div:first-child,
+  .order-modal-horizontal-modal > div:last-child {
+    overflow: visible;         /* Ensure no scrollbars, allow content to show */
+    flex-shrink: 0;            /* Prevent shrinking */
   }
-
-  .customer-email {
-    font-size: 0.875rem;
-    color: #64748b;
-  }
-
-  .status-badge {
-    display: inline-flex;
-    align-items: center;
-    padding: 0.5rem 1rem;
-    border-radius: 6px;
-    font-size: 0.75rem;
-    font-weight: 500;
-    white-space: nowrap;
-  }
-
-  .action-buttons {
-    display: flex;
-    gap: 0.75rem;
-    justify-content: flex-end;
-  }
-
-  .btn-icon {
-    width: 36px;
-    height: 36px;
-    padding: 0;
-    border-radius: 6px;
-  }
-}
-
-@media (min-width: 992px) {
-  .prescription-section {
-    padding: 2rem;
-    background: white;
-    border-radius: 16px;
-    box-shadow: var(--card-shadow);
-  }
-
-  /* Remove card styles and show table for desktop */
-  .order-cards {
-    display: block;
-    padding: 0;
-    margin: 0;
-  }
-
-  .prescription-list-table {
-    width: 100%;
-    border-collapse: separate;
-    border-spacing: 0 0.75rem;
-  }
-
-  .prescription-list-table th {
-    padding: 1rem 1.5rem;
-    color: var(--secondary-color);
-    font-size: 0.875rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    text-align: left;
-    background: transparent;
-    border: none;
-  }
-
-  .prescription-list-table td {
-    padding: 1.25rem 1.5rem;
-    background: white;
-    border: none;
-    vertical-align: middle;
-  }
-
-  .prescription-list-table tr {
-    transition: all 0.2s ease;
-  }
-
-  .prescription-list-table tbody tr {
-    background: white;
-    box-shadow: var(--card-shadow);
-  }
-
-  .prescription-list-table tbody tr:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  }
-
-  .prescription-list-table tr td:first-child {
-    border-top-left-radius: 12px;
-    border-bottom-left-radius: 12px;
-  }
-
-  .prescription-list-table tr td:last-child {
-    border-top-right-radius: 12px;
-    border-bottom-right-radius: 12px;
-  }
-
-  /* Style for status badges in table */
-  .prescription-list-table .status-badge {
-    padding: 0.5rem 1rem;
-    border-radius: 6px;
-    font-size: 0.75rem;
-    font-weight: 500;
-  }
-
-  /* Table action buttons */
-  .prescription-list-table .action-buttons {
-    display: flex;
-    gap: 0.75rem;
-    justify-content: flex-end;
-  }
-
-  .prescription-list-table .btn {
-    padding: 0.625rem 1rem;
-    font-size: 0.875rem;
-    border-radius: 6px;
-  }
-
-  .order-card {
-    display: none;
-  }
-
-  /* Customer info cell styling */
-  .customer-info-cell {
+  .order-modal-horizontal-modal > div:first-child {
+    min-width: 340px;
+    max-width: 370px;
+    border-right: 1px solid #e2e8f0;
+    background: #f8fafc;
+    padding: 2.5rem 2rem 2rem 2.5rem;
+    border-top-left-radius: 18px;
+    border-bottom-left-radius: 18px;
+    height: 100%;
     display: flex;
     flex-direction: column;
-    gap: 0.25rem;
+    justify-content: flex-start;
   }
-
-  .customer-name {
-    font-weight: 600;
-    color: #0f172a;
-    font-size: 0.9375rem;
-  }
-
-  .customer-email {
-    color: #64748b;
-    font-size: 0.875rem;
-  }
-}
-
-@media (min-width: 992px) {
-  /* Hide card view on desktop */
-  .order-card {
-    display: none;
-  }
-
-  .order-cards {
-    background: white;
-    border-radius: 12px;
-    padding: 1.5rem;
-    box-shadow: var(--card-shadow);
-  }
-
-  /* Show table view on desktop */
-  .prescription-table {
-    width: 100%;
-    border-collapse: separate;
-    border-spacing: 0 0.75rem;
-    margin: 0;
-  }
-
-  .prescription-table thead tr {
-    background: transparent;
-  }
-
-  .prescription-table th {
-    padding: 1rem 1.5rem;
-    font-weight: 600;
-    color: var(--secondary-color);
-    text-transform: uppercase;
-    font-size: 0.875rem;
-    letter-spacing: 0.05em;
-    border: none;
-  }
-
-  .prescription-table td {
-    padding: 1.25rem 1.5rem;
-    background: white;
-    border: none;
-    vertical-align: middle;
-  }
-
-  .prescription-table tbody tr {
-    box-shadow: var(--card-shadow);
-    transition: all 0.2s ease;
-  }
-
-  .prescription-table tbody tr:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  }
-
-  .prescription-table tr td:first-child {
-    border-top-left-radius: 12px;
-    border-bottom-left-radius: 12px;
-  }
-
-  .prescription-table tr td:last-child {
-    border-top-right-radius: 12px;
-    border-bottom-right-radius: 12px;
-  }
-}
-
-@media (min-width: 992px) {
-  .prescription-section {
-    padding: 2rem;
-    background: white;
-    border-radius: 16px;
-    box-shadow: var(--card-shadow);
-  }
-
-  /* Card to Table transition */
-  .order-card {
-    display: none;
-  }
-
-  .order-cards {
-    background: white;
-    border-radius: 12px;
-    padding: 1.5rem;
-    box-shadow: var(--card-shadow);
-  }
-
-  /* Table Layout */
-  .prescription-table {
-    width: 100%;
-    border-collapse: separate;
-    border-spacing: 0 0.75rem;
-    margin: 0;
-  }
-
-  .prescription-table thead tr {
-    background: transparent;
-  }
-
-  .prescription-table th {
-    padding: 1rem 1.5rem;
-    font-weight: 600;
-    color: var(--secondary-color);
-    text-transform: uppercase;
-    font-size: 0.875rem;
-    letter-spacing: 0.05em;
-    text-align: left;
-    border: none;
-  }
-
-  .prescription-table td {
-    padding: 1.25rem 1.5rem;
-    background: white;
-    border: none;
-    vertical-align: middle;
-  }
-
-  .prescription-table tbody tr {
-    background: white;
-    box-shadow: var(--card-shadow);
-    transition: all 0.2s ease;
-  }
-
-  .prescription-table tbody tr:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  }
-
-  .prescription-table tr td:first-child {
-    border-top-left-radius: 12px;
-    border-bottom-left-radius: 12px;
-  }
-
-  .prescription-table tr td:last-child {
-    border-top-right-radius: 12px;
-    border-bottom-right-radius: 12px;
-  }
-
-  /* Table cell content */
-  .prescription-cell {
-    display: flex;
-    align-items: center;
-    gap: 1.25rem;
-    min-width: 300px;
-  }
-
-  .customer-info {
+  .order-modal-horizontal-modal > div:last-child {
+    flex: 1;
+    padding: 2.5rem 2.5rem 2rem 2rem;
+    border-top-right-radius: 18px;
+    border-bottom-right-radius: 18px;
+    background: #fff;
+    height: 100%;
     display: flex;
     flex-direction: column;
-    gap: 0.25rem;
-    padding: 1rem 1.25rem;
+    justify-content: flex-start;
+    min-width: 0;
   }
-
-  .status-badge {
-    display: inline-flex;
-    align-items: center;
-    padding: 0.5rem 1rem;
-    border-radius: 6px;
-    font-size: 0.75rem;
-    font-weight: 500;
-    white-space: nowrap;
-  }
-
-  .action-buttons {
-    display: flex;
-    gap: 0.75rem;
-    justify-content: flex-end;
-  }
-
-  .btn-icon {
-    width: 36px;
-    height: 36px;
+  .modal-container.order-modal-horizontal-modal .modal-content {
     padding: 0;
-    border-radius: 6px;
+    height: 100%;
+    background: none;
+    overflow: visible;         /* No scrollbars, allow horizontal expansion */
   }
-}
-
-@media (min-width: 992px) {
-  .prescription-section {
-    padding: 2rem;
-    background: white;
-    border-radius: 16px;
-    box-shadow: var(--card-shadow);
-  }
-
-  /* Remove card styles and show table for desktop */
-  .order-cards {
-    display: block;
-    padding: 0;
-    margin: 0;
-  }
-
-  .prescription-list-table {
-    width: 100%;
-    border-collapse: separate;
-    border-spacing: 0 0.75rem;
-  }
-
-  .prescription-list-table th {
-    padding: 1rem 1.5rem;
-    color: var(--secondary-color);
-    font-size: 0.875rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    text-align: left;
-    background: transparent;
-    border: none;
-  }
-
-  .prescription-list-table td {
-    padding: 1.25rem 1.5rem;
-    background: white;
-    border: none;
-    vertical-align: middle;
-  }
-
-  .prescription-list-table tr {
-    transition: all 0.2s ease;
-  }
-
-  .prescription-list-table tbody tr {
-    background: white;
-    box-shadow: var(--card-shadow);
-  }
-
-  .prescription-list-table tbody tr:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  }
-
-  .prescription-list-table tr td:first-child {
-    border-top-left-radius: 12px;
-    border-bottom-left-radius: 12px;
-  }
-
-  .prescription-list-table tr td:last-child {
-    border-top-right-radius: 12px;
-    border-bottom-right-radius: 12px;
-  }
-
-  /* Style for status badges in table */
-  .prescription-list-table .status-badge {
-    padding: 0.5rem 1rem;
-    border-radius: 6px;
-    font-size: 0.75rem;
-    font-weight: 500;
-  }
-
-  /* Table action buttons */
-  .prescription-list-table .action-buttons {
-    display: flex;
-    gap: 0.75rem;
-    justify-content: flex-end;
-  }
-
-  .prescription-list-table .btn {
-    padding: 0.625rem 1rem;
-    font-size: 0.875rem;
-    border-radius: 6px;
-  }
-
-  /* Hide card view on desktop */
-  .order-card {
-    display: none;
-  }
-
-  /* Customer info cell styling */
-  .customer-info-cell {
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-  }
-
-  .customer-name {
-    font-weight: 600;
-    color: #0f172a;
-    font-size: 0.9375rem;
-  }
-
-  .customer-email {
-    color: #64748b;
-    font-size: 0.875rem;
-  }
-}
-
-@media (min-width: 992px) {
-  /* Hide card view on desktop */
-  .order-card {
-    display: none;
-  }
-
-  .order-cards {
-    background: white;
-    border-radius: 12px;
-    padding: 1.5rem;
-    box-shadow: var(--card-shadow);
-  }
-
-  /* Show table view on desktop */
-  .prescription-table {
-    width: 100%;
-    border-collapse: separate;
-    border-spacing: 0 0.75rem;
-    margin: 0;
-  }
-
-  .prescription-table thead tr {
-    background: transparent;
-  }
-
-  .prescription-table th {
-    padding: 1rem 1.5rem;
-    font-weight: 600;
-    color: var(--secondary-color);
-    text-transform: uppercase;
-    font-size: 0.875rem;
-    letter-spacing: 0.05em;
-    border: none;
-  }
-
-  .prescription-table td {
-    padding: 1.25rem 1.5rem;
-    background: white;
-    border: none;
-    vertical-align: middle;
-  }
-
-  .prescription-table tbody tr {
-    box-shadow: var(--card-shadow);
-    transition: all 0.2s ease;
-  }
-
-  .prescription-table tbody tr:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  }
-
-  .prescription-table tr td:first-child {
-    border-top-left-radius: 12px;
-    border-bottom-left-radius: 12px;
-  }
-
-  .prescription-table tr td:last-child {
-    border-top-right-radius: 12px;
-    border-bottom-right-radius: 12px;
-  }
-}
-
-@media (min-width: 992px) {
-  .prescription-section {
-    padding: 2rem;
-    background: white;
-    border-radius: 16px;
-    box-shadow: var(--card-shadow);
-  }
-
-  /* Card to Table transition */
-  .order-card {
-    display: none;
-  }
-
-  .order-cards {
-    background: white;
-    border-radius: 12px;
-    padding: 1.5rem;
-    box-shadow: var(--card-shadow);
-  }
-
-  /* Table Layout */
-  .prescription-table {
-    width: 100%;
-    border-collapse: separate;
-    border-spacing: 0 0.75rem;
-    margin: 0;
-  }
-
-  .prescription-table thead tr {
-    background: transparent;
-  }
-
-  .prescription-table th {
-    padding: 1rem 1.5rem;
-    font-weight: 600;
-    color: var(--secondary-color);
-    text-transform: uppercase;
-    font-size: 0.875rem;
-    letter-spacing: 0.05em;
-    text-align: left;
-    border: none;
-  }
-
-  .prescription-table td {
-    padding: 1.25rem 1.5rem;
-    background: white;
-    border: none;
-    vertical-align: middle;
-  }
-
-  .prescription-table tbody tr {
-    background: white;
-    box-shadow: var(--card-shadow);
-    transition: all 0.2s ease;
-  }
-
-  .prescription-table tbody tr:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  }
-
-  .prescription-table tr td:first-child {
-    border-top-left-radius: 12px;
-    border-bottom-left-radius: 12px;
-  }
-
-  .prescription-table tr td:last-child {
-    border-top-right-radius: 12px;
-    border-bottom-right-radius: 12px;
-  }
-
-  /* Table cell content */
-  .prescription-cell {
-    display: flex;
-    align-items: center;
-    gap: 1.25rem;
-    min-width: 300px;
-  }
-
-  .customer-info {
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-    padding: 1rem 1.25rem;
-  }
-
-  .status-badge {
-    display: inline-flex;
-    align-items: center;
-    padding: 0.5rem 1rem;
-    border-radius: 6px;
-    font-size: 0.75rem;
-    font-weight: 500;
-    white-space: nowrap;
-  }
-
-  .action-buttons {
-    display: flex;
-    gap: 0.75rem;
-    justify-content: flex-end;
-  }
-
-  .btn-icon {
-    width: 36px;
-    height: 36px;
-    padding: 0;
-    border-radius: 6px;
-  }
-}
-
-@media (min-width: 992px) {
-  .prescription-table .status-badge {
-    padding: 0.5rem 1rem;
-    font-size: 0.75rem;
-    font-weight: 500;
-    text-transform: capitalize;
-    border-radius: 6px;
-    display: inline;
-    align-items: center;
-  }
-
-  .prescription-table .status-badge.bg-warning {
-    background: #fff5e9;
-    color: #ffffff;
-  }
-}
-
-.order-items-grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  margin: 0.5rem 0;
-}
-
-.order-item-compact {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  background: #f8fafc;
-  padding: 0.25rem 0.5rem;
-  border-radius: 6px;
-  max-width: calc(50% - 0.25rem);
-  flex: 1 1 auto;
-}
-
-.item-thumb {
-  width: 32px;
-  height: 32px;
-  border-radius: 4px;
-  object-fit: cover;
-  background: white;
-}
-
-.item-thumb-placeholder {
-  width: 32px;
-  height: 32px;
-  border-radius: 4px;
-  background: #e2e8f0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #94a3b8;
-}
-
-.item-info-compact {
-  min-width: 0;
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
-  font-size: 0.875rem;
-}
-
-.item-quantity {
-  color: #64748b;
-  font-weight: 500;
-  white-space: nowrap;
-}
-
-.item-name {
-  color: #334155;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.order-items-grid-compact {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 0.5rem;
-  margin: 0.5rem 0;
-}
-
-.order-item-mini {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem;
-  background: #f8fafc;
-  border-radius: 8px;
-  border: 1px solid #e2e8f0;
-}
-
-.item-thumb-mini {
-  width: 40px;
-  height: 40px;
-  border-radius: 6px;
-  object-fit: contain;
-  background: white;
-  padding: 0.25rem;
-}
-
-.item-thumb-placeholder-mini {
-  width: 40px;
-  height: 40px;
-  border-radius: 6px;
-  background: #e2e8f0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #94a3b8;
-}
-
-.item-info-mini {
-  flex: 1;
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-}
-
-.item-name-mini {
-  font-size: 0.8125rem;
-  font-weight: 500;
-  color: #1e293b;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.item-meta-mini {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  font-size: 0.75rem;
-}
-
-.item-quantity-mini {
-  color: #64748b;
-  font-weight: 500;
-}
-
-.item-price-mini {
-  color: #0f172a;
-  font-weight: 600;
 }
