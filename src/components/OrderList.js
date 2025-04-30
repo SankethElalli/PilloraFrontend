@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import OrderModal from './OrderModal';
+import '../styles/OrderList.css';
 
 function OrderList({ orders, onOrdersUpdate }) {
   const [selectedOrder, setSelectedOrder] = useState(null);
@@ -13,30 +14,34 @@ function OrderList({ orders, onOrdersUpdate }) {
   return (
     <>
       <div className="table-responsive">
-        <table className="table">
+        <table className="table order-list-table">
           <thead>
             <tr>
               <th>Order #</th>
               <th>Customer</th>
               <th>Amount</th>
               <th>Status</th>
+              <th>Date</th>
               <th>Actions</th>
             </tr>
           </thead>
           <tbody>
             {orders.map((order) => (
               <tr key={order._id}>
-                <td>{order.orderNumber}</td>
-                <td>{order.customerName}</td>
-                <td>₹{order.totalAmount}</td>
-                <td>
-                  <span className={`badge bg-${getStatusColor(order.status)}`}>
+                <td className="order-list-cell">{order.orderNumber}</td>
+                <td className="order-list-cell">{order.customerName}</td>
+                <td className="order-list-cell">₹{order.totalAmount}</td>
+                <td className="order-list-cell">
+                  <span className={`badge bg-${getStatusColor(order.status)} order-list-status`}>
                     {order.status}
                   </span>
                 </td>
-                <td>
+                <td className="order-list-cell">
+                  {new Date(order.createdAt).toLocaleDateString()}
+                </td>
+                <td className="order-list-cell">
                   <button 
-                    className="btn btn-sm btn-outline-primary"
+                    className="btn btn-sm btn-outline-primary order-list-button"
                     onClick={() => handleViewDetails(order)}
                   >
                     View Details
