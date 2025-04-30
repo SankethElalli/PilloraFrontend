@@ -140,16 +140,6 @@ function OrderModal({ order, isOpen, onClose, onStatusUpdate, isCustomer = false
               <span>Total</span>
               <span>₹{order.totalAmount}</span>
             </div>
-            {/* Download Invoice button */}
-            <div className="mt-3">
-              <button
-                className="btn btn-outline-primary"
-                onClick={handleDownloadInvoice}
-              >
-                <i className="bi bi-download me-2"></i>
-                Download Invoice
-              </button>
-            </div>
           </div>
         </div>
 
