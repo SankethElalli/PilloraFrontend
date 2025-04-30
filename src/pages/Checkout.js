@@ -25,10 +25,8 @@ function Checkout() {
   const [orderId, setOrderId] = useState(null);  // Add this state
 
   const calculateSubtotal = () => {
-    // Assuming 1 INR = 0.012 USD (you should use a proper exchange rate service)
-    const inrAmount = cart.reduce((total, item) => total + item.price * item.quantity, 0);
-    const usdAmount = inrAmount * 0.012;
-    return usdAmount;
+    // Correct: sum of price * quantity for each item
+    return cart.reduce((total, item) => total + (item.price * item.quantity), 0);
   };
 
   const handleInputChange = (e) => {
