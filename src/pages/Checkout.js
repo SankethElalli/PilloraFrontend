@@ -301,9 +301,14 @@ function Checkout() {
         <div className="text-center py-4">
           <i className="bi bi-check-circle text-success" style={{ fontSize: '4rem' }}></i>
           <h4 className="mt-3">Thank You For Your Order!</h4>
-          <p className="mb-4">Your order number is: <strong>{orderNumber}</strong></p>
+          <p className="mb-2">Your order number is: <strong>{orderNumber}</strong></p>
+          <div className="alert alert-info my-3" role="alert">
+            <i className="bi bi-envelope me-2"></i>
+            Order successful! Confirmation has been sent to your email address.
+            Please check your inbox.
+          </div>
           <p className="text-muted mb-4">
-            You will receive an email confirmation with invoice shortly. Your order will be delivered within 24-48 hours.
+            Your order will be delivered within 24-48 hours.
           </p>
           <button className="btn btn-primary px-4" onClick={handleModalClose}>
             Go to My Orders
