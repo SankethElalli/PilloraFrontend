@@ -53,7 +53,7 @@
 
 .category-item:hover {
   background: #fff;
-  border-color: #2563eb;
+  border-color: #497D74;
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(37, 99, 235, 0.1);
 }
@@ -68,7 +68,7 @@
 .category-icon {
   font-size: 28px; /* Adjusted for smaller items */
   margin-bottom: 8px;
-  color: #64748b;
+  color: #497D74;
   transition: color 0.2s ease;
 }
 
@@ -105,15 +105,58 @@
 }
 
 .category-filter-btn.active {
-  background: #eff6ff; /* Light blue background for active state */
-  border-color: #2563eb; /* Blue border for active state */
-  color: #2563eb; /* Blue text for active state */
-  font-weight: 600; /* Slightly bolder text for emphasis */
-  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.1); /* Add subtle shadow for focus */
+  background: #eff6ff;
+  border-color: #497D74;
+  color: #497D74;
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.1);
 }
 
 .category-filter-btn.active i {
-  color: #2563eb; /* Ensure the icon matches the text color */
+  color: #497D74;
+}
+
+.sort-filter-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 10px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #1e293b;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 220px;
+  margin-bottom: 6px; /* Add spacing between sort options */
+}
+
+.sort-filter-btn:hover {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+}
+
+.sort-filter-btn.active {
+  background: #eff6ff;
+  border-color: #497D74;
+  color: #497D74;
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.1);
+}
+
+.sort-filter-btn .sort-icon {
+  font-size: 16px;
+  color: #497D74;
+  transition: color 0.2s;
+}
+
+.sort-filter-btn.active .sort-icon {
+  color: #497D74;
 }
 
 .clear-filter {
@@ -141,40 +184,73 @@
   box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1); /* Inset shadow for pressed effect */
 }
 
-/* Mobile Styles */
+/* Sort Modal Content Styling */
+.sort-modal-content {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 20px 24px 18px 24px;
+  background: #f8fafc;
+  border-radius: 12px;
+  margin: 18px 12px 12px 12px;
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.04);
+}
+
+.sort-modal-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 16px;
+  padding: 20px 24px 18px 24px;
+  background: #f8fafc;
+  border-radius: 12px;
+  margin: 18px 12px 12px 12px;
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.04);
+}
+
+/* Optional: Add a heading style for the sort modal */
+.sort-modal-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #1e293b;
+  margin-bottom: 8px;
+  padding-left: 2px;
+}
+
+.filters-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 18px;
+  width: 100%;
+}
+
+.search-box {
+  flex: 1 1 220px;
+  min-width: 180px;
+  max-width: 320px;
+}
+
+.filter-box {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  min-width: 160px;
+}
+
+/* Responsive adjustments */
 @media (max-width: 768px) {
-  .modal-container {
-    max-height: calc(100vh - 80px); /* Adjust for smaller screens */
-    max-width: 90vw; /* Ensure modal fits smaller screens */
-    top: 10%; /* Adjust top position for mobile */
-  }
-
-  .modal-header > div {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    gap: 16px; /* Add spacing between elements */
-  }
-
-  .category-grid {
-    grid-template-columns: repeat(2, 1fr);
+  .filters-row {
+    flex-direction: column;
+    align-items: stretch;
     gap: 12px;
-    padding: 12px;
+    margin-bottom: 14px;
   }
-
-  .category-item {
-    height: 100px; /* Further reduce height for mobile */
-    padding: 12px;
-  }
-
-  .category-icon {
-    font-size: 24px;
-    margin-bottom: 6px;
-  }
-
-  .category-name {
-    font-size: 12px;
+  .search-box,
+  .filter-box {
+    width: 100%;
+    max-width: none;
+    min-width: 0;
   }
 }
 

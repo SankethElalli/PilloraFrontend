@@ -7,6 +7,7 @@ import '../styles/ProductGrid.css'; // Use the new grid styles
 import API_BASE_URL from '../api';
 import { useAuth } from '../context/AuthContext'; // <-- Add this import
 import CategoryFilterModal from '../components/CategoryFilterModal'; // Fix import path
+import Modal from '../components/Modal'; // Ensure Modal is imported
 
 function Products() {
   const { addToCart } = useCart();
@@ -19,6 +20,7 @@ function Products() {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [showHeader, setShowHeader] = useState(true);
   const [showCategoryModal, setShowCategoryModal] = useState(false);
+  const [showSortModal, setShowSortModal] = useState(false);
   const lastScrollY = useRef(window.scrollY);
 
   useEffect(() => {
@@ -163,15 +165,49 @@ function Products() {
                 />
               </div>
               <div className="filter-box">
-                <select 
-                  className="filter-select"
-                  value={sortBy}
-                  onChange={handleSortChange}
+                <button
+                  className={`sort-filter-btn${sortBy ? ' active' : ''}`}
+                  onClick={() => setShowSortModal(true)}
+                  type="button"
                 >
-                  <option value="name">Sort by Name</option>
-                  <option value="price-low">Price: Low to High</option>
-                  <option value="price-high">Price: High to Low</option>
-                </select>
+                  <i className="bi bi-arrow-down-up sort-icon"></i>
+                  {sortBy === 'name'
+                    ? 'Sort by Name'
+                    : sortBy === 'price-low'
+                    ? 'Price: Low to High'
+                    : sortBy === 'price-high'
+                    ? 'Price: High to Low'
+                    : 'Sort'}
+                </button>
+                <Modal
+                  isOpen={showSortModal}
+                  onClose={() => setShowSortModal(false)}
+                  title="Sort Products"
+                >
+                  <div className="sort-modal-grid">
+                    <button
+                      className={`sort-filter-btn${sortBy === 'name' ? ' active' : ''}`}
+                      onClick={() => { setSortBy('name'); setShowSortModal(false); }}
+                      type="button"
+                    >
+                      Sort by Name
+                    </button>
+                    <button
+                      className={`sort-filter-btn${sortBy === 'price-low' ? ' active' : ''}`}
+                      onClick={() => { setSortBy('price-low'); setShowSortModal(false); }}
+                      type="button"
+                    >
+                      Price: Low to High
+                    </button>
+                    <button
+                      className={`sort-filter-btn${sortBy === 'price-high' ? ' active' : ''}`}
+                      onClick={() => { setSortBy('price-high'); setShowSortModal(false); }}
+                      type="button"
+                    >
+                      Price: High to Low
+                    </button>
+                  </div>
+                </Modal>
               </div>
             </div>
           </div>

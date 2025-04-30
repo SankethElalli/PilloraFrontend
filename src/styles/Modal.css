@@ -1,46 +1,32 @@
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background-color: rgba(0, 0, 0, 0.25);
+  background-color: rgba(0, 0, 0, 0.4); /* Darker overlay for better focus */
   z-index: 1050;
-  backdrop-filter: blur(2px);
+  backdrop-filter: blur(4px); /* Slight blur for a modern look */
   display: flex;
   align-items: center;
   justify-content: center;
   min-height: 100vh;
   overflow-y: auto;
-  padding: 2rem 0;
+  padding: 2rem;
 }
 
-.modal-container {
+.modal-container,
+.modal-container.product-modal-horizontal {
   background-color: #fff;
-  border-radius: 18px;
-  box-shadow: 0 8px 32px rgba(37,99,235,0.13), 0 2px 8px rgba(0,0,0,0.08);
+  border-radius: 16px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15), 0 4px 12px rgba(0, 0, 0, 0.1);
   width: 100%;
-  max-width: 420px;
-  max-height: 95vh;
-  overflow-y: auto;
-  margin: 0;
+  max-width: 600px; /* Increased width for better content fit */
+  max-height: 90vh;
+  overflow: visible; /* Prevent scrolling on modal itself */
+  margin: 0 auto;
   padding: 0;
-  animation: modalFade 0.2s ease-out;
+  animation: modalFade 0.3s ease-out;
   position: relative;
-  pointer-events: auto;
-  z-index: 1052;
   display: flex;
   flex-direction: column;
-}
-
-@media (max-width: 600px) {
-  .modal-overlay {
-    padding: 0.5rem 0;
-    align-items: flex-start;
-  }
-  .modal-container {
-    max-width: 98vw;
-    border-radius: 12px;
-    margin: 0 auto;
-    min-height: unset;
-  }
 }
 
 @keyframes modalFade {
@@ -58,320 +44,133 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1.25rem 1.5rem 1.25rem 1.5rem;
+  padding: 1.5rem;
   border-bottom: 1px solid #e2e8f0;
   background: #f8fafc;
 }
 
 .modal-title {
   margin: 0;
-  font-size: 1.25rem;
+  font-size: 1.5rem;
   font-weight: 700;
   color: #1e293b;
-  letter-spacing: -0.01em;
 }
 
-.modal-body {
+.modal-body,
+.modal-content {
   padding: 1.5rem;
   background: #fff;
-  padding: 1.5rem !important;
-  /* Ensures content is not flush with modal borders */
   box-sizing: border-box;
+  overflow: visible; /* Prevent scrolling on modal body/content */
 }
 
-/* Custom styles for order details */
-.order-details h6 {
-  color: #495057;
-  font-weight: 600;
-  margin-bottom: 1rem;
-}
-
-.order-details .badge {
-  padding: 0.5rem 1rem;
-  font-size: 0.875rem;
-}
-
-.order-item {
-  padding: 0.75rem 0;
-  border-bottom: 1px solid #eee;
-}
-
-.order-item:last-child {
-  border-bottom: none;
-}
-
-.order-total {
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: #333;
-}
-
-/* Modern, pretty prescription form styles */
-.prescription-form {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-  padding: 0.5rem 0;
-  margin: 0.5rem 0 0.5rem 0;
-}
-
-.prescription-form .form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 0.4rem;
-  margin-bottom: 1.25rem;
-}
-
-.prescription-form .form-label {
-  font-size: 1rem;
-  font-weight: 600;
-  color: #1e293b;
-  margin-bottom: 0.2rem;
-}
-
-.prescription-form .form-control[type="file"] {
-  padding: 0.6rem 1rem;
-  font-size: 1rem;
-  border-radius: 8px;
-  border: 1.5px solid #e2e8f0;
-  background: #f8fafc;
-  transition: border-color 0.2s, background 0.2s;
-  margin-bottom: 0.15rem;
-}
-
-.prescription-form .form-control[type="file"]:focus {
-  border-color: #2563eb;
-  background: #fff;
-  outline: none;
-}
-
-.prescription-form textarea.form-control {
-  min-height: 90px;
-  resize: vertical;
-  border-radius: 8px;
-  border: 1.5px solid #e2e8f0;
-  background: #f8fafc;
-  font-size: 1rem;
-  padding: 0.75rem 1rem;
-  transition: border-color 0.2s, background 0.2s;
-}
-
-.prescription-form textarea.form-control:focus {
-  border-color: #2563eb;
-  background: #fff;
-  outline: none;
-}
-
-.prescription-form .text-muted {
-  font-size: 0.88rem;
-  color: #64748b !important;
-  margin-top: 0.1rem;
-}
-
-.prescription-form .form-actions {
+.modal-footer {
+  padding: 1.5rem;
+  border-top: 1px solid #e2e8f0;
   display: flex;
   justify-content: flex-end;
-  gap: 0.75rem;
-  margin-top: 0.5rem;
-  padding-top: 0.5rem;
-  border-top: 1px solid #e2e8f0;
+  gap: 1rem;
 }
 
-.form-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 0.75rem;
-  margin-top: 1rem;
-  padding-top: 1rem;
-  border-top: 1px solid #e2e8f0;
-}
-
-.btn {
-  padding: 0.65rem 1.25rem;
-  font-size: 1rem;
-  font-weight: 600;
-  border-radius: 8px;
-  transition: all 0.15s ease;
-  border: none;
-}
-
-.btn-primary {
-  background: #2563eb;
-  color: #fff;
-}
-
-.btn-primary:hover, .btn-primary:focus {
-  background: #1d4ed8;
-  color: #fff;
-}
-
-.btn-secondary {
-  background: #f8fafc;
-  color: #2563eb;
-  border: 1.5px solid #e2e8f0;
-}
-
-.btn-secondary:hover, .btn-secondary:focus {
-  background: #e0e7ef;
+.filter-select {
+  display: inline-block;
+  font-size: 14px;
+  font-weight: 500;
   color: #1e293b;
+  padding: 8px 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background: #f8fafc;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 180px;
+}
+
+.filter-select:hover {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+}
+
+.filter-select:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+}
+
+.filter-select:active {
+  background: #e2e8f0;
+  border-color: #2563eb;
 }
 
 @media (max-width: 600px) {
   .modal-container {
-    max-width: 98vw;
-    margin: 0;                /* CHANGE: Remove margin for mobile */
+    max-width: 95vw;
     border-radius: 12px;
+    margin: 0 auto;
   }
-  .modal-header, .modal-body {
+  .modal-header, .modal-body, .modal-footer {
     padding: 1rem;
-  }
-  .form-actions {
-    flex-direction: column;
-    gap: 0.5rem;
-    padding-top: 0.5rem;
-  }
-  .btn {
-    width: 100%;
-    font-size: 1rem;
-  }
-  .prescription-form {
-    gap: 1rem;
-  }
-  .prescription-form .form-actions {
-    flex-direction: column;
-    gap: 0.5rem;
-    padding-top: 0.3rem;
-  }
-  .btn {
-    width: 100%;
-    font-size: 1rem;
   }
 }
 
 @media (min-width: 992px) {
-  .modal-container.product-modal-horizontal,
-  .modal-container.vendor-modal-horizontal {
-    max-width: 720px; /* Adjusted for better fit */
-    width: 100%;
-    min-height: 300px;
+  .modal-container.product-modal-horizontal {
     display: flex;
-    flex-direction: row;
-    padding: 0;
+    flex-direction: column;
+    max-width: 800px;
     border-radius: 16px;
     overflow: hidden;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
-  }
-  .modal-container.product-modal-horizontal .modal-header,
-  .modal-container.vendor-modal-horizontal .modal-header {
-    flex: 0 0 200px; /* Sidebar width */
-    border-bottom: none;
-    border-right: 1px solid #e2e8f0;
-    background: #f8fafc;
-    padding: 1.5rem; /* Consistent padding */
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: flex-start;
-    border-top-left-radius: 16px;
-    border-bottom-left-radius: 16px;
-  }
-  .modal-container.product-modal-horizontal .modal-title,
-  .modal-container.vendor-modal-horizontal .modal-title {
-    font-size: 1.2rem;
-    font-weight: 600;
-    color: #1e293b;
-    margin-bottom: 1rem;
-    text-align: left;
-    width: 100%;
-  }
-  .modal-container.product-modal-horizontal .modal-close,
-  .modal-container.vendor-modal-horizontal .modal-close {
-    align-self: flex-end;
-    margin-top: auto;
-  }
-  .modal-container.product-modal-horizontal .modal-content,
-  .modal-container.vendor-modal-horizontal .modal-content {
-    flex: 1;
-    padding: 1.5rem; /* Reduced padding for compact design */
-    border-top-right-radius: 16px;
-    border-bottom-right-radius: 16px;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15), 0 4px 12px rgba(0, 0, 0, 0.1);
     background: #fff;
+    padding: 0;
+  }
+
+  .modal-container.product-modal-horizontal .modal-header {
+    border-bottom: 1px solid #e2e8f0;
+    padding: 2rem 2.5rem 1rem 2.5rem;
+    justify-content: center;
     display: flex;
-    flex-direction: column;
+    align-items: center;
+    background: #f8fafc;
+  }
+
+  .modal-container.product-modal-horizontal .modal-title {
+    width: 100%;
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1e293b;
+  }
+
+  .modal-container.product-modal-horizontal .modal-content {
+    display: flex;
+    flex-direction: row;
+    gap: 2.5rem;
+    align-items: flex-start;
+    padding: 2rem 2.5rem;
+    background: #fff;
+  }
+
+  .product-description-scroll {
+    max-height: 220px;
     overflow-y: auto;
+    padding-right: 2px;
+  }
+
+  .product-modal-image {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 3rem 0;
+    width: 100%;
+    text-align: center;
+    box-sizing: border-box;
   }
 }
 
-/* For mobile, ensure modal remains responsive */
+/* Responsive: reduce padding on small screens */
 @media (max-width: 991.98px) {
-  .modal-container {
-    max-width: 95vw;
-    margin: 0 auto;
-    border-radius: 12px;
+  .product-modal-image {
+    padding: 1rem 0;
   }
-  .modal-header {
-    padding: 1rem;
-  }
-  .modal-content {
-    padding: 1rem;
-  }
-}
-
-/* Order Modal Specific Styles */
-.order-modal-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 8px;
-  font-size: 13px;
-  margin-bottom: 6px;
-  width: 100%;
-}
-
-.order-modal-item-name {
-  display: flex;
-  align-items: center;
-  min-width: 0;
-  overflow: hidden;
-}
-
-.order-modal-item-text {
-  font-weight: 500;
-  color: #1e293b;
-  margin-right: 4px;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;
-}
-
-.order-modal-item-quantity {
-  color: #64748b;
-  font-size: 12px;
-  flex-shrink: 0;
-}
-
-.order-modal-item-price {
-  font-weight: 600;
-  color: #0f172a;
-  font-size: 13px;
-  flex-shrink: 0;
-  margin-left: 8px;
-  white-space: nowrap;
-}
-
-.order-modal-section {
-  display: flex;
-  flex-direction: column;
-  height: auto;
-  max-height: 80vh;
-  justify-content: space-between;
-  padding: 1rem 1.5rem;
-}
-
-.order-modal-customer {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  margin-bottom: 1rem;
 }
