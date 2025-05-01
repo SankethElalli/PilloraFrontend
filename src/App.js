@@ -23,8 +23,8 @@ import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 
 function App() {
   const initialOptions = {
-    "client-id": "test", // Replace with your PayPal client ID
-    currency: "USD",  // Changed from "INR" to "USD"
+    "client-id": "test",
+    currency: "USD",
     intent: "capture"
   };
   

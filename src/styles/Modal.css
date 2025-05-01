@@ -1,9 +1,9 @@
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background-color: rgba(0, 0, 0, 0.4); /* Darker overlay for better focus */
+  background-color: rgba(0, 0, 0, 0.4);
   z-index: 1050;
-  backdrop-filter: blur(4px); /* Slight blur for a modern look */
+  backdrop-filter: blur(4px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -18,9 +18,9 @@
   border-radius: 16px;
   box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15), 0 4px 12px rgba(0, 0, 0, 0.1);
   width: 100%;
-  max-width: 600px; /* Increased width for better content fit */
+  max-width: 600px;
   max-height: 90vh;
-  overflow: visible; /* Prevent scrolling on modal itself */
+  overflow: visible;
   margin: 0 auto;
   padding: 0;
   animation: modalFade 0.3s ease-out;
@@ -61,7 +61,7 @@
   padding: 1.5rem;
   background: #fff;
   box-sizing: border-box;
-  overflow: visible; /* Prevent scrolling on modal body/content */
+  overflow: visible;
 }
 
 .modal-footer {

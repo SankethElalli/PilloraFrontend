@@ -57,7 +57,7 @@ function VendorDashboard() {
           'Authorization': `Bearer ${localStorage.getItem('token')}`
         }
       });
-      // Ensures we have customer details
+
       setPrescriptions(response.data.map(prescription => ({
         ...prescription,
         customerName: prescription.customerName || 'Unknown Customer',
@@ -166,7 +166,6 @@ function VendorDashboard() {
   };
 
   const handleDeleteProduct = (productId) => {
-    // TODO: Add API call to delete product
     setProducts(products.filter(p => p._id !== productId));
   };
 
@@ -181,7 +180,7 @@ function VendorDashboard() {
         order._id === updatedOrder._id ? updatedOrder : order
       )
     );
-    // Refresh orders list to ensure we have latest data
+
     fetchOrders();
   };
 
@@ -258,9 +257,6 @@ function VendorDashboard() {
                 }}
               />
             </Modal>
-            {/* If you have other modals (e.g., order details, prescription), add horizontal prop as well */}
-            {/* Example: */}
-            {/* <Modal isOpen={someModalOpen} onClose={...} title="..." horizontal>...</Modal> */}
           </div>
         );
       case 'orders':

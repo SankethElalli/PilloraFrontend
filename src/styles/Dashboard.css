@@ -8,7 +8,6 @@
   --card-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
 }
 
-/* Remove default body padding for dashboard */
 .dashboard-container {
   padding-top: 0;
   display: flex;
@@ -521,7 +520,7 @@ textarea.form-control {
 
   .dashboard-sidebar {
     position: fixed;
-    top: 76px; /* Height of navbar */
+    top: 76px;
     left: -100%;
     width: 280px;
     height: calc(100vh - 76px);
@@ -537,7 +536,7 @@ textarea.form-control {
   }
 
   .nav-menu {
-    padding: 1.5rem 1rem;  /* Increased top padding to compensate for removed header */
+    padding: 1.5rem 1rem;
   }
 
   .nav-link {
@@ -589,7 +588,6 @@ textarea.form-control {
     transition: opacity 0.3s ease, visibility 0.3s ease;
   }
 
-  /* Hide sidebar toggle when navbar is expanded */
   .navbar-collapse.show ~ .dashboard-container .mobile-sidebar-toggle,
   .navbar-collapse.collapsing ~ .dashboard-container .mobile-sidebar-toggle {
     opacity: 0;
@@ -597,7 +595,6 @@ textarea.form-control {
     pointer-events: none;
   }
 
-  /* Ensure navbar menu appears above sidebar toggle */
   .navbar-collapse {
     z-index: 1030;
   }
@@ -641,12 +638,10 @@ textarea.form-control {
     padding: 0.75rem;
   }
 
-  /* Stack form elements on mobile */
   .form-group {
     margin-bottom: 1rem;
   }
 
-  /* Improve modal display on mobile */
   .modal-container {
     max-width: 100%;
     margin: 0.5rem;
@@ -838,7 +833,7 @@ textarea.form-control {
 
   /* Vendor specific mobile styles */
   .product-table {
-    display: none; /* Hide table view on mobile */
+    display: none;
   }
 
   .product-cards {
@@ -991,7 +986,7 @@ textarea.form-control {
 
   .item-image-wrapper {
     width: 100%;
-    height: 140px;  /* Reduced height */
+    height: 140px;
     border-radius: 6px;
   }
 
@@ -1675,15 +1670,15 @@ textarea.form-control {
     width: 100%;
     display: flex;
     flex-direction: row;
-    flex-wrap: nowrap;         /* Prevent wrapping to keep horizontal */
+    flex-wrap: nowrap;
     background: none;
     padding: 0;
-    overflow: visible;         /* Allow content to expand horizontally */
+    overflow: visible;
   }
   .order-modal-horizontal-modal > div:first-child,
   .order-modal-horizontal-modal > div:last-child {
-    overflow: visible;         /* Ensure no scrollbars, allow content to show */
-    flex-shrink: 0;            /* Prevent shrinking */
+    overflow: visible;
+    flex-shrink: 0; 
   }
   .order-modal-horizontal-modal > div:first-child {
     min-width: 340px;
@@ -1714,6 +1709,6 @@ textarea.form-control {
     padding: 0;
     height: 100%;
     background: none;
-    overflow: visible;         /* No scrollbars, allow horizontal expansion */
+    overflow: visible;
   }
 }

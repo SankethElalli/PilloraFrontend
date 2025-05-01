@@ -84,10 +84,10 @@ function OrderModal({ order, isOpen, onClose, onStatusUpdate, isCustomer = false
               ? {
                   display: 'flex',
                   flexDirection: 'column',
-                  height: 'auto', // Changed from minHeight: 400
+                  height: 'auto',
                   maxHeight: '80vh',
                   justifyContent: 'space-between',
-                  padding: '1rem 1.5rem', // Added padding
+                  padding: '1rem 1.5rem',
                 }
               : {}
           }
@@ -100,7 +100,7 @@ function OrderModal({ order, isOpen, onClose, onStatusUpdate, isCustomer = false
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'flex-start',
-                    marginBottom: '1rem', // Added margin
+                    marginBottom: '1rem',
                   }
                 : { margin: '16px 0' }
             }

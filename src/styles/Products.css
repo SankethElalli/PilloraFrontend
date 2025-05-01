@@ -156,7 +156,7 @@
 
 .product-image-wrapper {
   position: relative;
-  padding-top: 75%; /* 4:3 Aspect Ratio */
+  padding-top: 75%;
   background: #f8fafc;
 }
 

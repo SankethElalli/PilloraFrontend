@@ -14,15 +14,12 @@ function CustomerLogin() {
     e.preventDefault();
     try {
       if (!email.trim() || !password.trim()) {
-        // toast.error('Please enter both email and password');
         return;
       }
       await login(email.trim(), password.trim());
-      // toast.success('Login successful');
-      navigate('/'); // Redirect to home page after login
+      navigate('/');
     } catch (error) {
       console.error('Login error:', error);
-      // Removed: toast.error(error.message || 'Login failed. Please check your credentials and try again.');
     }
   };
 

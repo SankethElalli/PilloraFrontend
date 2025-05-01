@@ -14,7 +14,6 @@ function Cart() {
   };
 
   const handleUpdateQuantity = (productId, quantity, productName) => {
-    // Ensure quantity is a valid number and at least 1
     const newQuantity = Math.max(1, parseInt(quantity) || 1);
     updateQuantity(productId, newQuantity);
     toast.info(`Updated ${productName} quantity`);

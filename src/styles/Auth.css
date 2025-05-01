@@ -375,7 +375,6 @@ textarea.form-control {
     text-decoration: underline;
   }
 
-  /* Hide desktop card on mobile if both exist */
   .auth-card {
     display: none !important;
   }

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useAuth } from '../../context/AuthContext';
-import API_BASE_URL from '../../api'; // <-- Add this import
+import API_BASE_URL from '../../api';
 import '../../styles/Modal.css';
 
 function PrescriptionUploadForm({ onClose, onSuccess }) {
@@ -23,8 +23,8 @@ function PrescriptionUploadForm({ onClose, onSuccess }) {
     formData.append('prescription', file);
     formData.append('description', description);
     formData.append('userId', user._id);
-    formData.append('customerName', user.name || 'Unknown Customer');  // Ensure name is provided
-    formData.append('customerEmail', user.email || 'No Email');  // Ensure email is provided
+    formData.append('customerName', user.name || 'Unknown Customer');
+    formData.append('customerEmail', user.email || 'No Email');
 
     try {
       const token = localStorage.getItem('token');

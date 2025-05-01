@@ -19,10 +19,10 @@ function Checkout() {
     email: user?.email || '',
     phone: user?.phone || '',
     address: user?.address || '',
-    paymentMethod: 'paypal' // Changed default to paypal
+    paymentMethod: 'paypal'
   });
   const [paypalError, setPaypalError] = useState(null);
-  const [orderId, setOrderId] = useState(null);  // Add this state
+  const [orderId, setOrderId] = useState(null);
   const [showPaypalModal, setShowPaypalModal] = useState(false);
 
   const calculateSubtotal = () => {
@@ -60,7 +60,7 @@ function Checkout() {
 
       const response = await axios.post(`${API_BASE_URL}/api/orders`, orderData);
       if (response.data) {
-        setOrderId(response.data._id); // Store the order ID
+        setOrderId(response.data._id);
         clearCart();
         setShowSuccessModal(true);
       }
@@ -132,7 +132,6 @@ function Checkout() {
       document.body.appendChild(link);
       link.click();
       
-      // Cleanup
       document.body.removeChild(link);
       window.URL.revokeObjectURL(url);
     } catch (error) {

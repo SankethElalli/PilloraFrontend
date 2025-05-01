@@ -1,12 +1,12 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import axios from 'axios';
-import API_BASE_URL from '../api'; // <-- Import the shared API base URL
+import API_BASE_URL from '../api';
 
 const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
-  const [isLoading, setIsLoading] = useState(true); // Changed to true initially
+  const [isLoading, setIsLoading] = useState(true);
 
   // Check for existing token and user data on mount
   useEffect(() => {
@@ -63,7 +63,7 @@ export function AuthProvider({ children }) {
     localStorage.removeItem('user');
     delete axios.defaults.headers.common['Authorization'];
     setUser(null);
-    window.location.href = '/';  // Changed from customer-login to root
+    window.location.href = '/';
   };
 
   return (

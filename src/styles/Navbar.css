@@ -17,14 +17,6 @@
   font-size: 2rem !important;
   font-weight: 800;
   color: cornsilk !important;
-  /* Add a stronger blurred black border to the text */
-  text-shadow:
-  0 0 0px #000,
-  0 0 30px #000,
-  0px 0px 0 #000,
-  0px 0px 0 #000,
-  0px  0px 0 #000,
-  0px  0px 0 #000
 }
 
 .navbar-brand i {
@@ -127,8 +119,8 @@
 /* Dropdown */
 .dropdown-menu {
   min-width: 230px !important;
-  margin-top: 0.8rem !important; /* Increased from 1.2rem */
-  transform: translateY(10px) !important; /* Added to move down */
+  margin-top: 0.8rem !important;
+  transform: translateY(10px) !important;
   padding: 0rem !important;
   background: #ffffff;
   border: none;
@@ -216,10 +208,9 @@
 
   .navbar-collapse {
     position: fixed;
-    top: 60px; /* Match the body padding-top */
+    top: 60px;
     left: 0;
     right: 0;
-    /* Make transparent with black blur */
     background: rgba(0,0,0,85%);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
@@ -247,7 +238,6 @@
   .nav-link {
     padding: 0.75rem 1rem !important;
     border-radius: 8px;
-    /* Optional: make nav links more visible on dark background */
     color: #fff !important;
   }
 
@@ -274,8 +264,8 @@
 
   .dropdown-menu {
     width: 100% !important;
-    margin: 0.75rem 0 !important; /* Adjusted margin for mobile */
-    transform: none !important; /* Remove transform on mobile */
+    margin: 0.75rem 0 !important;
+    transform: none !important;
     box-shadow: none;
     border: 1px solid rgba(0, 0, 0, 0.08);
 
