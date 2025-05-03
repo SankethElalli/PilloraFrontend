@@ -8,6 +8,12 @@ import { useAuth } from '../context/AuthContext';
 import API_BASE_URL from '../api';
 import { PayPalButtons } from "@paypal/react-paypal-js";
 
+const INR_TO_USD_RATE = 83; // Update this rate as needed
+
+function convertInrToUsd(amountInInr) {
+  return (amountInInr / INR_TO_USD_RATE).toFixed(2);
+}
+
 function Checkout() {
   const { user } = useAuth();
   const { cart, clearCart } = useCart();
@@ -19,10 +25,10 @@ function Checkout() {
     email: user?.email || '',
     phone: user?.phone || '',
     address: user?.address || '',
-    paymentMethod: 'paypal'
+    paymentMethod: 'paypal' // Changed default to paypal
   });
   const [paypalError, setPaypalError] = useState(null);
-  const [orderId, setOrderId] = useState(null);
+  const [orderId, setOrderId] = useState(null);  // Add this state
   const [showPaypalModal, setShowPaypalModal] = useState(false);
 
   const calculateSubtotal = () => {
@@ -60,7 +66,7 @@ function Checkout() {
 
       const response = await axios.post(`${API_BASE_URL}/api/orders`, orderData);
       if (response.data) {
-        setOrderId(response.data._id);
+        setOrderId(response.data._id); // Store the order ID
         clearCart();
         setShowSuccessModal(true);
       }
@@ -132,6 +138,7 @@ function Checkout() {
       document.body.appendChild(link);
       link.click();
       
+      // Cleanup
       document.body.removeChild(link);
       window.URL.revokeObjectURL(url);
     } catch (error) {
@@ -282,17 +289,18 @@ function Checkout() {
         <div className="paypal-buttons-wrapper py-3">
           <PayPalButtons
             createOrder={(data, actions) => {
-              const amount = calculateSubtotal();
-              if (amount <= 0) {
+              const amountInInr = calculateSubtotal();
+              if (amountInInr <= 0) {
                 toast.error("Order amount must be greater than 0");
                 return;
               }
+              const amountInUsd = convertInrToUsd(amountInInr);
               return actions.order.create({
                 purchase_units: [
                   {
                     amount: {
                       currency_code: "USD",
-                      value: amount.toFixed(2),
+                      value: amountInUsd,
                     },
                     description: "Purchase from Pillora",
                   },
