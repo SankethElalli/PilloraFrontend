@@ -11,7 +11,8 @@ import { PayPalButtons } from "@paypal/react-paypal-js";
 const INR_TO_USD_RATE = 83; // Update this rate as needed
 
 function convertInrToUsd(amountInInr) {
-  return (amountInInr / INR_TO_USD_RATE).toFixed(2);
+  // Ensure conversion uses a number and returns a string with 2 decimals
+  return (Number(amountInInr) / INR_TO_USD_RATE).toFixed(2);
 }
 
 function Checkout() {
@@ -294,13 +295,14 @@ function Checkout() {
                 toast.error("Order amount must be greater than 0");
                 return;
               }
+              // Convert INR to USD for PayPal
               const amountInUsd = convertInrToUsd(amountInInr);
               return actions.order.create({
                 purchase_units: [
                   {
                     amount: {
                       currency_code: "USD",
-                      value: amountInUsd,
+                      value: amountInUsd, // This will now be the correct USD value
                     },
                     description: "Purchase from Pillora",
                   },
