@@ -318,6 +318,21 @@ function Products() {
                     {selectedProduct.description}
                   </div>
                 </div>
+                <button 
+                  className="add-to-cart-btn"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleAddToCart(selectedProduct);
+                    handleCloseModal();
+                  }}
+                  style={{
+                    width: '100%',
+                    marginTop: '1rem',
+                    padding: '1rem'
+                  }}
+                >
+                  Add to Cart
+                </button>
               </div>
             </div>
           </div>
