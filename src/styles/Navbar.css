@@ -2,6 +2,8 @@
   background: rgba(255, 255, 255, 0.98);
   padding: 0.8rem 0;
   transition: all 0.3s ease;
+  margin: 0;
+  border: none;
 }
 
 .navbar-scrolled {
@@ -119,8 +121,8 @@
 /* Dropdown */
 .dropdown-menu {
   min-width: 230px !important;
-  margin-top: 0.8rem !important;
-  transform: translateY(10px) !important;
+  margin-top: 0.8rem !important; /* Increased from 1.2rem */
+  transform: translateY(10px) !important; /* Added to move down */
   padding: 0rem !important;
   background: #ffffff;
   border: none;
@@ -200,6 +202,8 @@
 @media (max-width: 991.98px) {
   .navbar {
     padding: 0.5rem 0;
+    margin: 0;
+    border: none;
   }
 
   .navbar-brand {
@@ -208,9 +212,10 @@
 
   .navbar-collapse {
     position: fixed;
-    top: 60px;
+    top: 60px; /* Match the body padding-top */
     left: 0;
     right: 0;
+    /* Make transparent with black blur */
     background: rgba(0,0,0,85%);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
@@ -238,6 +243,7 @@
   .nav-link {
     padding: 0.75rem 1rem !important;
     border-radius: 8px;
+    /* Optional: make nav links more visible on dark background */
     color: #fff !important;
   }
 
@@ -264,8 +270,8 @@
 
   .dropdown-menu {
     width: 100% !important;
-    margin: 0.75rem 0 !important;
-    transform: none !important;
+    margin: 0.75rem 0 !important; /* Adjusted margin for mobile */
+    transform: none !important; /* Remove transform on mobile */
     box-shadow: none;
     border: 1px solid rgba(0, 0, 0, 0.08);
 
@@ -277,6 +283,19 @@
   .user-btn {
     width: 100%;
     justify-content: center;
+  }
+
+  .dashboard-btn {
+    color: #497D74;
+    background-color: honeydew;
+    border: 2px solid transparent;
+    width: 100%;
+    height: 100%;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
   }
 }
 
@@ -309,6 +328,7 @@
   text-decoration: none !important;
   box-shadow: none;
   border: none;
+  width: auto;
 }
 
 .dashboard-btn:hover,
@@ -317,6 +337,23 @@
   color: var(--primary-color) !important;
   box-shadow: 0 3px 15px #f5ecd5c8;
   text-decoration: none !important;
+}
+
+.dashboard-btn-text.dashboard-btn-mobile {
+  display: none;
+}
+
+.dashboard-btn-text.dashboard-btn-desktop {
+  display: inline;
+}
+
+@media (max-width: 600px) {
+  .dashboard-btn-text.dashboard-btn-mobile {
+    display: inline !important;
+  }
+  .dashboard-btn-text.dashboard-btn-desktop {
+    display: none !important;
+  }
 }
 
 @keyframes dashboardFadeIn {

@@ -77,10 +77,14 @@ function Navbar() {
                 title="Dashboard"
                 aria-label="Dashboard"
               >
-                <span className="dashboard-btn-text">
+                {/* Desktop: show user name/email, Mobile: show "Dashboard" */}
+                <span className="dashboard-btn-text dashboard-btn-desktop">
                   {user.isVendor
                     ? (user.businessName || user.email || "Dashboard")
                     : (user.name || user.email || "Dashboard")}
+                </span>
+                <span className="dashboard-btn-text dashboard-btn-mobile">
+                  Dashboard
                 </span>
               </Link>
             )}
