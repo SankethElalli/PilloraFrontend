@@ -222,9 +222,12 @@ function Products() {
       <div className="container mb-5">
         <div className="products-grid">
           {loading ? (
-            <div className="text-center w-100">
-              <div className="spinner-border" role="status">
-                <span className="visually-hidden">Loading...</span>
+            <div className="loader-container">
+              <div className="loader-ring">
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
               </div>
             </div>
           ) : (
