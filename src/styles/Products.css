@@ -58,7 +58,7 @@
 }
 
 .header-content {
-  padding: 1rem 0;
+  padding: 2rem 0;
 }
 
 .header-title {
@@ -207,22 +207,28 @@
   z-index: 10;
 }
 
-.loader-container {
+.products-grid .loader-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 200px;
+  min-height: 50vh;
   width: 100%;
-  padding: 2rem 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  margin: 2rem 0;
 }
 
-.loader-ring {
+.products-grid .loader-ring {
   display: inline-block;
   position: relative;
   width: 80px;
   height: 80px;
+  margin: 0 auto;
 }
 
+/* Move the common loader styles to a shared class */
 .loader-ring div {
   box-sizing: border-box;
   display: block;
@@ -255,6 +261,13 @@
   100% {
     transform: rotate(360deg);
   }
+}
+
+.product-carousel-section h2 {
+  color: #497D74;
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin-bottom: 2rem;
 }
 
 @media (max-width: 768px) {
