@@ -68,13 +68,74 @@
   animation-play-state: paused;
 }
 
+@media (max-width: 1024px) {
+  .carousel-product-card {
+    flex: 0 0 280px;
+    padding: 0.875rem;
+  }
+
+  .carousel-product-image {
+    height: 180px;
+  }
+
+  .carousel-product-card h4 {
+    font-size: 1rem;
+    line-height: 1.4;
+  }
+}
+
 @media (max-width: 768px) {
   .carousel-product-card {
-    flex: 0 0 250px;
+    flex: 0 0 220px;
+    margin: 0 0.75rem;
   }
   
   .carousel-product-image {
-    height: 160px;
+    height: 140px;
+  }
+
+  .carousel-product-card h4 {
+    font-size: 0.95rem;
+    margin-bottom: 0.35rem;
+  }
+
+  .carousel-product-card .price {
+    font-size: 1.1rem;
+  }
+
+  .product-carousel-section h2 {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .carousel-product-card {
+    flex: 0 0 180px;
+    margin: 0 0.5rem;
+    padding: 0.75rem;
+  }
+
+  .carousel-product-image {
+    height: 120px;
+    margin-bottom: 0.75rem;
+  }
+
+  .carousel-product-card h4 {
+    font-size: 0.875rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .carousel-product-card .price {
+    font-size: 1rem;
+  }
+
+  .product-carousel {
+    padding: 0.5rem 0;
+  }
+
+  .product-track {
+    animation: scroll 60s linear infinite;
   }
 }
 
