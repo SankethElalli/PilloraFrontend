@@ -21,19 +21,6 @@ function ProductCarousel() {
     fetchProducts();
   }, []);
 
-  if (products.length === 0) {
-    return (
-      <div className="loader-container">
-        <div className="loader-ring">
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
-        </div>
-      </div>
-    );
-  }
-
   const handleProductClick = (product) => {
     navigate('/products', { state: { selectedProduct: product } });
   };
@@ -42,32 +29,43 @@ function ProductCarousel() {
     <section className="product-carousel-section py-5">
       <div className="container">
         <h2 className="text-center mb-5">Featured Products</h2>
-        <div className="product-carousel">
-          <div className="product-track">
-            {[...products, ...products].map((product, index) => (
-              <div 
-                key={`${product._id}-${index}`}
-                className="carousel-product-card"
-                onClick={() => handleProductClick(product)}
-              >
-                <div className="carousel-product-image">
-                  <img 
-                    src={product.image.startsWith('http') 
-                      ? product.image 
-                      : `${API_BASE_URL}${product.image}`}
-                    alt={product.name}
-                    onError={(e) => {
-                      e.target.onerror = null;
-                      e.target.src = '/default-product.png';
-                    }}
-                  />
-                </div>
-                <h4>{product.name}</h4>
-                <p className="price">₹{product.price.toFixed(2)}</p>
-              </div>
-            ))}
+        {products.length === 0 ? (
+          <div className="loader-container">
+            <div className="loader-ring">
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+            </div>
           </div>
-        </div>
+        ) : (
+          <div className="product-carousel">
+            <div className="product-track">
+              {[...products, ...products].map((product, index) => (
+                <div 
+                  key={`${product._id}-${index}`}
+                  className="carousel-product-card"
+                  onClick={() => handleProductClick(product)}
+                >
+                  <div className="carousel-product-image">
+                    <img 
+                      src={product.image.startsWith('http') 
+                        ? product.image 
+                        : `${API_BASE_URL}${product.image}`}
+                      alt={product.name}
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src = '/default-product.png';
+                      }}
+                    />
+                  </div>
+                  <h4>{product.name}</h4>
+                  <p className="price">₹{product.price.toFixed(2)}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </section>
   );

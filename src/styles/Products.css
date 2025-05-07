@@ -211,12 +211,9 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 50vh;
+  min-height: 200px;
   width: 100%;
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  padding: 2rem 0;
 }
 
 .loader-ring {
@@ -224,7 +221,6 @@
   position: relative;
   width: 80px;
   height: 80px;
-  margin: 0 auto;
 }
 
 .loader-ring div {
