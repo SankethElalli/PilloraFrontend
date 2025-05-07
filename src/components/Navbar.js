@@ -43,7 +43,7 @@ function Navbar() {
 
           <div className="navbar-actions">
             <Link to="/cart" className="nav-action cart-btn" onClick={handleNavigation}>
-              <i className="bi bi-basket"></i>
+              <i className="bi bi-cart"></i>
               {cartItemsCount > 0 && (
                 <span className="action-badge">{cartItemsCount}</span>
               )}
