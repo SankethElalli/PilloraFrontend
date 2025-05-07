@@ -22,7 +22,16 @@ function ProductCarousel() {
   }, []);
 
   if (products.length === 0) {
-    return <div>Loading products...</div>;
+    return (
+      <div className="loader-container">
+        <div className="loader-ring">
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
+      </div>
+    );
   }
 
   const handleProductClick = (product) => {
