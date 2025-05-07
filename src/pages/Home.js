@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import '../styles/Home.css';
+import ProductCarousel from '../components/ProductCarousel';
 
 function Home() {
   return (
@@ -32,30 +33,7 @@ function Home() {
         </div>
       </section>
 
-      <section className="stats-section py-5">
-        <div className="container">
-          <div className="row justify-content-center g-4 text-center">
-            <div className="col-md-4">
-              <div className="stat-item">
-                <h3 className="display-4 fw-bold">10k+</h3>
-                <p className="text-muted">Products</p>
-              </div>
-            </div>
-            <div className="col-md-4">
-              <div className="stat-item">
-                <h3 className="display-4 fw-bold">24/7</h3>
-                <p className="text-muted">Support</p>
-              </div>
-            </div>
-            <div className="col-md-4">
-              <div className="stat-item">
-                <h3 className="display-4 fw-bold">100%</h3>
-                <p className="text-muted">Genuine</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      <ProductCarousel />
 
       <section className="features py-5 bg-light">
         <div className="container">
