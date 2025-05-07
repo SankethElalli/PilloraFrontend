@@ -181,13 +181,6 @@ function OrderModal({ order, isOpen, onClose, onStatusUpdate, isCustomer = false
               </span>
             </div>
           </div>
-
-          {/* Actions (e.g., Download Invoice) */}
-          <div className="order-modal-section">
-            <button className="btn btn-outline-primary" onClick={handleDownloadInvoice}>
-              Download Invoice
-            </button>
-          </div>
         </div>
       </div>
     </Modal>
