@@ -33,6 +33,8 @@
   border-radius: 12px;
   transition: all 0.2s ease;
   font-weight: 500;
+  background: transparent;
+  box-shadow: none;
 }
 
 .nav-link i {
@@ -55,21 +57,31 @@
   margin-left: auto;
 }
 
-.nav-link:hover {
+.nav-link:hover,
+.nav-link:focus {
   color: var(--primary-color);
-  background: rgba(37, 99, 235, 0.04);
+  background: #f1f5fd;
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.07);
+  outline: none;
+  border: none;
+  transition: background 0.18s, color 0.18s, box-shadow 0.18s;
 }
 
-.nav-link:hover i {
-  transform: translateX(2px);
+.nav-link:hover i,
+.nav-link:focus i {
+  color: var(--primary-color);
+  transform: translateX(4px) scale(1.08);
+  transition: color 0.18s, transform 0.18s;
 }
 
 .nav-link.active,
 .nav-link.active:focus,
 .nav-link.active:visited {
   color: var(--primary-color) !important;
-  background: rgba(37, 99, 235, 0.08) !important;
-  font-weight: 600 !important;
+  background: #e8f0fe !important;
+  font-weight: 700 !important;
+  box-shadow: 0 4px 16px rgba(37, 99, 235, 0.10);
   outline: none;
   border: none;
 }
@@ -91,16 +103,19 @@
   justify-content: center;
   gap: 0.75rem;
   color: #ef4444;
-  background: rgba(239, 68, 68, 0.04);
+  background: rgba(239, 68, 68, 0.07);
   border: none;
   border-radius: 10px;
   font-weight: 500;
-  transition: all 0.2s ease;
+  transition: background 0.18s, color 0.18s;
 }
 
-.btn-logout:hover {
+.btn-logout:hover,
+.btn-logout:focus {
   background: #ef4444;
   color: #fff;
+  box-shadow: 0 2px 8px rgba(239, 68, 68, 0.13);
+  outline: none;
 }
 
 @media (max-width: 991.98px) {
