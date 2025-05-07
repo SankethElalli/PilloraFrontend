@@ -7,7 +7,7 @@
 
 .product-track {
   display: flex;
-  animation: scroll 40s linear infinite;
+  animation: scroll 60s linear infinite;
   width: fit-content;
 }
 
