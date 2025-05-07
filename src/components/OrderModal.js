@@ -4,6 +4,7 @@ import Modal from './dashboard/Modal';
 import { toast } from 'react-toastify';
 import API_BASE_URL from '../api';
 import '../styles/Modal.css';  // Add this import
+import '../styles/OrderModal.css'; // Add this import
 
 function OrderModal({ order, isOpen, onClose, onStatusUpdate, isCustomer = false }) {
   const [status, setStatus] = useState(order?.status || 'pending');
@@ -18,6 +19,16 @@ function OrderModal({ order, isOpen, onClose, onStatusUpdate, isCustomer = false
   // Responsive horizontal layout for desktop only
   const isDesktop = typeof window !== "undefined" && window.innerWidth >= 992;
   const horizontalLayout = isDesktop;
+
+  // Helper for payment status badge
+  const getPaymentStatusBadge = (status) => {
+    switch (status) {
+      case 'paid': return <span className="badge badge-paid">Paid</span>;
+      case 'pending': return <span className="badge badge-pending">Pending</span>;
+      case 'failed': return <span className="badge badge-failed">Failed</span>;
+      default: return <span className="badge badge-unknown">{status}</span>;
+    }
+  };
 
   const handleStatusUpdate = async () => {
     try {
@@ -66,11 +77,9 @@ function OrderModal({ order, isOpen, onClose, onStatusUpdate, isCustomer = false
       isOpen={isOpen}
       onClose={onClose}
       title={
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
-          <div style={{ fontWeight: 700, fontSize: 20, color: '#1e293b', textAlign: 'left' }}>
-            Order #{order.orderNumber}
-          </div>
-          <div style={{ fontSize: 14, color: '#64748b', marginTop: 4 }}>
+        <div className="order-modal-title-group">
+          <div className="order-modal-title">Order #{order.orderNumber}</div>
+          <div className="order-modal-date">
             Placed on {new Date(order.createdAt).toLocaleDateString()}
           </div>
         </div>
@@ -78,41 +87,18 @@ function OrderModal({ order, isOpen, onClose, onStatusUpdate, isCustomer = false
       horizontal={horizontalLayout}
     >
       <div className={horizontalLayout ? 'order-modal-horizontal-modal' : ''}>
-        <div
-          style={
-            horizontalLayout
-              ? {
-                  display: 'flex',
-                  flexDirection: 'column',
-                  height: 'auto',
-                  maxHeight: '80vh',
-                  justifyContent: 'space-between',
-                  padding: '1rem 1.5rem',
-                }
-              : {}
-          }
-        >
-          {/* Top: Order Info */}
-          <div
-            style={
-              horizontalLayout
-                ? {
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'flex-start',
-                    marginBottom: '1rem',
-                  }
-                : { margin: '16px 0' }
-            }
-          >
-            <div style={{ fontWeight: 600, fontSize: 16, marginBottom: 8, alignSelf: 'center', textAlign: 'center' }}>Customer</div>
-            <div style={{ fontSize: 15, color: '#0f172a', marginBottom: 4, textAlign: 'left' }}>{order.customerName}</div>
-            <div style={{ fontSize: 14, color: '#64748b', marginBottom: 4, textAlign: 'left' }}>{order.customerEmail}</div>
-            <div style={{ fontSize: 14, color: '#64748b', textAlign: 'left' }}>{order.shippingAddress}</div>
+        {/* LEFT: Info & Items */}
+        <div className="order-modal-left">
+          {/* Customer Info */}
+          <div className="order-modal-section">
+            <div className="order-modal-section-header">Customer</div>
+            <div className="order-modal-customer-name">{order.customerName}</div>
+            <div className="order-modal-customer-email">{order.customerEmail}</div>
+            <div className="order-modal-customer-address">{order.shippingAddress}</div>
           </div>
-          {/* Items section - reduced margins and padding */}
-          <div style={{ marginTop: '0.5rem' }}>
-            <div style={{ fontWeight: 600, fontSize: 14, marginBottom: 6 }}>Items</div>
+          {/* Items */}
+          <div className="order-modal-section">
+            <div className="order-modal-section-header">Items</div>
             <div>
               {order.items.map((item, idx) => (
                 <div key={idx} className="order-modal-item">
@@ -126,45 +112,19 @@ function OrderModal({ order, isOpen, onClose, onStatusUpdate, isCustomer = false
                 </div>
               ))}
             </div>
-            <div
-              style={{
-                borderTop: '1px solid #e2e8f0',
-                marginTop: 16,
-                paddingTop: 12,
-                display: 'flex',
-                justifyContent: 'space-between',
-                fontWeight: 700,
-                fontSize: 16,
-              }}
-            >
+            <div className="order-modal-total-row">
               <span>Total</span>
               <span>₹{order.totalAmount}</span>
             </div>
           </div>
         </div>
 
-        {/* Right: Status and Actions - adjusted padding */}
-        <div
-          style={
-            horizontalLayout
-              ? {
-                  flex: 1,
-                  padding: '1rem 1.5rem',
-                  borderTopRightRadius: 18,
-                  borderBottomRightRadius: 18,
-                  background: '#fff',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'flex-start',
-                  minWidth: 0,
-                  maxHeight: '80vh',
-                }
-              : { marginTop: 24 }
-          }
-        >
-          <div style={{ fontWeight: 600, fontSize: 16, marginBottom: 16 }}>Order Status</div>
+        {/* RIGHT: Status, Payment, Actions */}
+        <div className="order-modal-right">
+          {/* Order Status */}
+          <div className="order-modal-section-header">Order Status</div>
           {isCustomer ? (
-            <div style={{ display: 'flex', alignItems: 'center', marginBottom: 16 }}>
+            <div className="order-modal-status-row">
               <span
                 className={`badge ${
                   status === 'pending'
@@ -176,18 +136,11 @@ function OrderModal({ order, isOpen, onClose, onStatusUpdate, isCustomer = false
                     : status === 'delivered'
                     ? 'bg-success'
                     : 'bg-danger'
-                }`}
-                style={{
-                  fontSize: 15,
-                  padding: '0.5rem 1.25rem',
-                  borderRadius: 8,
-                  fontWeight: 500,
-                  textTransform: 'capitalize',
-                }}
+                } order-modal-status-badge`}
               >
                 {status}
               </span>
-              <span style={{ color: '#64748b', fontSize: 13, marginLeft: 12 }}>
+              <span className="order-modal-status-updated">
                 Last updated: {new Date(order.updatedAt || order.createdAt).toLocaleString()}
               </span>
             </div>
@@ -197,7 +150,6 @@ function OrderModal({ order, isOpen, onClose, onStatusUpdate, isCustomer = false
                 className="form-select mb-3"
                 value={status}
                 onChange={(e) => setStatus(e.target.value)}
-                style={{ maxWidth: 240, marginBottom: 16 }}
               >
                 <option value="pending">Pending</option>
                 <option value="processing">Processing</option>
@@ -207,7 +159,6 @@ function OrderModal({ order, isOpen, onClose, onStatusUpdate, isCustomer = false
               </select>
               <button
                 className="btn btn-primary"
-                style={{ minWidth: 160 }}
                 onClick={handleStatusUpdate}
                 disabled={isLoading || status === order.status}
               >
@@ -215,6 +166,28 @@ function OrderModal({ order, isOpen, onClose, onStatusUpdate, isCustomer = false
               </button>
             </div>
           )}
+
+          {/* Payment Info */}
+          <div className="order-modal-section order-modal-payment-section">
+            <div className="order-modal-section-header">Payment</div>
+            <div className="order-modal-payment-row">
+              <span>Status:</span>
+              {getPaymentStatusBadge(order.paymentStatus || 'pending')}
+            </div>
+            <div className="order-modal-payment-row">
+              <span>Method:</span>
+              <span className="order-modal-payment-method">
+                {order.paymentMethod ? order.paymentMethod.charAt(0).toUpperCase() + order.paymentMethod.slice(1) : 'N/A'}
+              </span>
+            </div>
+          </div>
+
+          {/* Actions (e.g., Download Invoice) */}
+          <div className="order-modal-section">
+            <button className="btn btn-outline-primary" onClick={handleDownloadInvoice}>
+              Download Invoice
+            </button>
+          </div>
         </div>
       </div>
     </Modal>
