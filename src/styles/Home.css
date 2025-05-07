@@ -13,7 +13,8 @@
   min-height: calc(100vh - 76px);
   display: flex;
   align-items: center;
-  margin-bottom: 0;
+  margin: 0;
+  border: none;
 }
 
 .video-background {
@@ -294,6 +295,45 @@
   .hero-section .container {
     padding: 3rem 1.5rem;
   }
+
+  body {
+    padding-top: 60px;
+  }
+
+  .hero-section {
+    min-height: calc(100vh - 60px);
+    margin-top: -1px;
+  }
+
+  .navbar + .hero-section {
+    margin-top: 0;
+  }
+
+  .hero-section {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+    border-top: none !important;
+  }
+  body {
+    padding-top: 60px !important;
+  }
+  .App {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+  }
+  .navbar {
+    margin-bottom: 0 !important;
+  }
+  /* Remove any gap between navbar and hero-section */
+  .navbar + .hero-section {
+    margin-top: 0 !important;
+  }
+  /* Remove top margin/padding from the first container inside hero-section */
+  .hero-section > .container,
+  .hero-section > .container.position-relative {
+    padding-top: 0 !important;
+    margin-top: 0 !important;
+  }
 }
 
 @media (max-width: 768px) {
@@ -326,7 +366,7 @@
 
   .hero-buttons .btn {
     width: 100%;
-    margin: 0 !important;
+    margin: 0 !important; /* Override default margin */
     justify-content: center;
     display: flex;
     align-items: center;
@@ -401,19 +441,32 @@
   }
 }
 
+/* Remove top margin/padding from the first container inside hero-section */
 .hero-section > .container,
 .hero-section > .container.position-relative {
   padding-top: 0 !important;
   margin-top: 0 !important;
 }
 
+/* Remove any gap between navbar and hero-section */
 body,
 .App {
   margin-top: -1px !important;
   border-top: none !important;
 }
 
+/* Remove border-bottom from navbar if present */
 .navbar {
   border-bottom: none !important;
   box-shadow: none !important;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+.App {
+  margin: 0;
+  padding: 0;
 }
