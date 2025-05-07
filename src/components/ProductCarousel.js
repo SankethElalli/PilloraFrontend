@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import API_BASE_URL from '../api';
 import '../styles/ProductCarousel.css';
 
 function ProductCarousel() {
   const [products, setProducts] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -24,6 +25,10 @@ function ProductCarousel() {
     return <div>Loading products...</div>;
   }
 
+  const handleProductClick = (product) => {
+    navigate('/products', { state: { selectedProduct: product } });
+  };
+
   return (
     <section className="product-carousel-section py-5">
       <div className="container">
@@ -31,10 +36,10 @@ function ProductCarousel() {
         <div className="product-carousel">
           <div className="product-track">
             {[...products, ...products].map((product, index) => (
-              <Link 
-                to="/products" 
+              <div 
                 key={`${product._id}-${index}`}
                 className="carousel-product-card"
+                onClick={() => handleProductClick(product)}
               >
                 <div className="carousel-product-image">
                   <img 
@@ -50,7 +55,7 @@ function ProductCarousel() {
                 </div>
                 <h4>{product.name}</h4>
                 <p className="price">₹{product.price.toFixed(2)}</p>
-              </Link>
+              </div>
             ))}
           </div>
         </div>
