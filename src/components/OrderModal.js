@@ -3,8 +3,8 @@ import axios from 'axios';
 import Modal from './dashboard/Modal';
 import { toast } from 'react-toastify';
 import API_BASE_URL from '../api';
-import '../styles/Modal.css';  // Add this import
-import '../styles/OrderModal.css'; // Add this import
+import '../styles/Modal.css';
+import '../styles/OrderModal.css';
 
 function OrderModal({ order, isOpen, onClose, onStatusUpdate, isCustomer = false }) {
   const [status, setStatus] = useState(order?.status || 'pending');
@@ -16,11 +16,9 @@ function OrderModal({ order, isOpen, onClose, onStatusUpdate, isCustomer = false
 
   if (!order) return null;
 
-  // Responsive horizontal layout for desktop only
   const isDesktop = typeof window !== "undefined" && window.innerWidth >= 992;
   const horizontalLayout = isDesktop;
 
-  // Helper for payment status badge
   const getPaymentStatusBadge = (status) => {
     switch (status) {
       case 'paid':
@@ -62,7 +60,6 @@ function OrderModal({ order, isOpen, onClose, onStatusUpdate, isCustomer = false
         }
       );
 
-      // Create blob link to download
       const url = window.URL.createObjectURL(new Blob([response.data]));
       const link = document.createElement('a');
       link.href = url;

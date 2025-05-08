@@ -82,7 +82,6 @@
   box-shadow: 0 4px 16px rgba(73, 125, 116, 0.10);
   outline: none;
   border: 1px solid rgba(73, 125, 116, 0.15) !important;
-  /* Prevent hover/focus from overriding active */
   pointer-events: none;
 }
 
@@ -130,13 +129,13 @@
   .dashboard-sidebar {
     transform: translateX(-100%);
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-    z-index: 1200; /* Ensure above overlay */
+    z-index: 1200;
     transition: transform 0.3s cubic-bezier(.4,0,.2,1);
   }
   .dashboard-sidebar.show {
     transform: translateX(0);
   }
-  /* Prevent background scroll when sidebar is open */
+
   body.sidebar-open {
     overflow: hidden;
     touch-action: none;
@@ -146,7 +145,6 @@
 .mobile-sidebar-overlay {
   display: none;
   position: fixed;
-  /* Remove top offset so overlay starts at very top (no gap with navbar) */
   top: 0;
   left: 0;
   right: 0;

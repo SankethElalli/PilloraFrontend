@@ -19,7 +19,7 @@ function Navbar() {
   }, []);
 
   const handleNavigation = () => {
-    setIsOpen(false); // Close menu on navigation
+    setIsOpen(false);
   };
 
   return (
@@ -77,7 +77,6 @@ function Navbar() {
                 title="Dashboard"
                 aria-label="Dashboard"
               >
-                {/* Desktop: show user name/email, Mobile: show "Dashboard" */}
                 <span className="dashboard-btn-text dashboard-btn-desktop">
                   {user.isVendor
                     ? (user.businessName || user.email || "Dashboard")

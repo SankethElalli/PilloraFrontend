@@ -238,7 +238,6 @@ function PrescriptionList({ prescriptions = [], isVendor = false, onRefresh }) {
       >
         {selectedPrescription && (
           <div>
-            {/* Show prescription image at the top of the modal */}
             <div className="prescription-image mb-4">
               <img
                 src={`${API_BASE_URL}${selectedPrescription.documentUrl}`}

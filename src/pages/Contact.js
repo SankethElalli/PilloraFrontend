@@ -12,7 +12,6 @@ function Contact() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Here you would typically send the data to your backend
     console.log('Form submitted:', formData);
     toast.success('Message sent successfully! We will get back to you soon.');
     setFormData({ name: '', email: '', subject: '', message: '' });
@@ -141,7 +140,7 @@ function Contact() {
                   className="btn tele-assist-btn w-100"
                   onClick={handleTeleAssist}
                 >
-                  <i className="bi bi-camera-video-fill me-2"></i>
+                  <i className="bi bi-phone me-2"></i>
                   Tele Assistance
                   <span className="coming-soon-badge ms-2">Coming Soon</span>
                 </button>

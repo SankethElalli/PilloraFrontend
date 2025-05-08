@@ -86,7 +86,6 @@
   gap: 12px;
   border-bottom: 1px solid #e2e8f0;
   padding-bottom: 8px;
-  /* Allow wrapping for long product names */
   flex-wrap: wrap;
 }
 .order-modal-item-name {
@@ -178,8 +177,8 @@
   color: #059669 !important;
 }
 .badge-pending {
-  background: #ffca61;   /* Brighter orange-yellow background */
-  color: #b45309;        /* Stronger orange text */
+  background: #ffca61;
+  color: #b45309;
 }
 .badge-failed {
   background: #fef2f2;

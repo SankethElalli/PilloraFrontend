@@ -10,7 +10,6 @@ function Home() {
         <div className="video-background">
           <video autoPlay muted loop playsInline id="heroVideo">
             <source src="/video/med.mp4" type="video/mp4" />
-            {/* Fallback message for unsupported browsers */}
             Your browser does not support the video tag.
           </video>
           <div className="video-overlay"></div>

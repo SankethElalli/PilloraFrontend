@@ -14,7 +14,6 @@ function OrderList({ orders = [], isCustomer = false, onViewDetails }) {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  // Only filter for customer dashboard
   const filteredOrders = isCustomer && user && user.email
     ? orders.filter(order => order.customerEmail === user.email)
     : orders;

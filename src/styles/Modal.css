@@ -175,7 +175,6 @@
   }
 }
 
-/* If you want to keep a horizontal layout for specific modals, use a custom class like below: */
 .order-modal-horizontal-modal {
   display: flex;
   flex-direction: row;

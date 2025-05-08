@@ -8,10 +8,9 @@ import { useAuth } from '../context/AuthContext';
 import API_BASE_URL from '../api';
 import { PayPalButtons } from "@paypal/react-paypal-js";
 
-const INR_TO_USD_RATE = 83; // Update this rate as needed
+const INR_TO_USD_RATE = 85.68; // conversion rate, adjust as needed
 
 function convertInrToUsd(amountInInr) {
-  // Ensure conversion uses a number and returns a string with 2 decimals
   return (Number(amountInInr) / INR_TO_USD_RATE).toFixed(2);
 }
 
@@ -26,14 +25,13 @@ function Checkout() {
     email: user?.email || '',
     phone: user?.phone || '',
     address: user?.address || '',
-    paymentMethod: 'paypal' // Changed default to paypal
+    paymentMethod: 'paypal'
   });
   const [paypalError, setPaypalError] = useState(null);
-  const [orderId, setOrderId] = useState(null);  // Add this state
+  const [orderId, setOrderId] = useState(null);
   const [showPaypalModal, setShowPaypalModal] = useState(false);
 
   const calculateSubtotal = () => {
-    // Correct: sum of price * quantity for each item
     return cart.reduce((total, item) => total + (item.price * item.quantity), 0);
   };
 
@@ -67,7 +65,7 @@ function Checkout() {
 
       const response = await axios.post(`${API_BASE_URL}/api/orders`, orderData);
       if (response.data) {
-        setOrderId(response.data._id); // Store the order ID
+        setOrderId(response.data._id);
         clearCart();
         setShowSuccessModal(true);
       }
@@ -94,7 +92,6 @@ function Checkout() {
       paymentMethod: formData.paymentMethod
     };
 
-    // Only process form submit for COD
     if (formData.paymentMethod === 'cod') {
       try {
         const response = await axios.post(`${API_BASE_URL}/api/orders`, orderData);
@@ -139,7 +136,6 @@ function Checkout() {
       document.body.appendChild(link);
       link.click();
       
-      // Cleanup
       document.body.removeChild(link);
       window.URL.revokeObjectURL(url);
     } catch (error) {
@@ -233,7 +229,6 @@ function Checkout() {
                     </div>
                   </div>
                 </div>
-                {/* Show PayPal modal trigger button if PayPal is selected */}
                 {formData.paymentMethod === 'paypal' ? (
                   <button
                     type="button"
@@ -302,7 +297,7 @@ function Checkout() {
                   {
                     amount: {
                       currency_code: "USD",
-                      value: amountInUsd, // This will now be the correct USD value
+                      value: amountInUsd,
                     },
                     description: "Purchase from Pillora",
                   },

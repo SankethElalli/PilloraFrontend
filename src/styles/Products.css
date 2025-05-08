@@ -156,7 +156,7 @@
 
 .product-image-wrapper {
   position: relative;
-  padding-top: 75%; /* 4:3 Aspect Ratio */
+  padding-top: 75%;
   background: #f8fafc;
 }
 
@@ -228,7 +228,6 @@
   margin: 0 auto;
 }
 
-/* Move the common loader styles to a shared class */
 .loader-ring div {
   box-sizing: border-box;
   display: block;

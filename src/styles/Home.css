@@ -324,11 +324,9 @@
   .navbar {
     margin-bottom: 0 !important;
   }
-  /* Remove any gap between navbar and hero-section */
   .navbar + .hero-section {
     margin-top: 0 !important;
   }
-  /* Remove top margin/padding from the first container inside hero-section */
   .hero-section > .container,
   .hero-section > .container.position-relative {
     padding-top: 0 !important;
@@ -366,7 +364,7 @@
 
   .hero-buttons .btn {
     width: 100%;
-    margin: 0 !important; /* Override default margin */
+    margin: 0 !important;
     justify-content: center;
     display: flex;
     align-items: center;
@@ -441,21 +439,18 @@
   }
 }
 
-/* Remove top margin/padding from the first container inside hero-section */
 .hero-section > .container,
 .hero-section > .container.position-relative {
   padding-top: 0 !important;
   margin-top: 0 !important;
 }
 
-/* Remove any gap between navbar and hero-section */
 body,
 .App {
   margin-top: -1px !important;
   border-top: none !important;
 }
 
-/* Remove border-bottom from navbar if present */
 .navbar {
   border-bottom: none !important;
   box-shadow: none !important;

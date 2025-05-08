@@ -57,7 +57,6 @@ function VendorDashboard() {
           'Authorization': `Bearer ${localStorage.getItem('token')}`
         }
       });
-      // Ensure we have customer details
       setPrescriptions(response.data.map(prescription => ({
         ...prescription,
         customerName: prescription.customerName || 'Unknown Customer',
@@ -98,7 +97,6 @@ function VendorDashboard() {
     loadSectionData(hash);
   }, [loadSectionData]);
 
-  // Add this useEffect for scroll-to-hide toggle button
   useEffect(() => {
     const toggleBtn = document.querySelector('.mobile-sidebar-toggle');
     if (!toggleBtn) return;
@@ -141,9 +139,7 @@ function VendorDashboard() {
   const handleUpdateProduct = async (updatedProduct) => {
     try {
       const token = localStorage.getItem('token');
-      // Remove _id from the body to avoid Mongoose immutable error
       const { _id, ...productData } = updatedProduct;
-      // Try PATCH, fallback to PUT if PATCH fails
       let response;
       try {
         response = await axios.patch(
@@ -156,7 +152,6 @@ function VendorDashboard() {
           }
         );
       } catch (patchError) {
-        // If PATCH route does not exist, try PUT
         if (
           patchError?.response?.status === 404 ||
           (patchError?.response?.data && typeof patchError.response.data === 'string' && patchError.response.data.includes('Cannot PATCH'))
@@ -178,7 +173,6 @@ function VendorDashboard() {
       setIsEditModalOpen(false);
       setEditProduct(null);
     } catch (error) {
-      // Show more details for debugging
       console.error('Error updating product:', error?.response?.data || error);
       alert(
         error?.response?.data?.message
@@ -189,7 +183,6 @@ function VendorDashboard() {
   };
 
   const handleDeleteProduct = (productId) => {
-    // TODO: Add API call to delete product
     setProducts(products.filter(p => p._id !== productId));
   };
 
@@ -204,7 +197,6 @@ function VendorDashboard() {
         order._id === updatedOrder._id ? updatedOrder : order
       )
     );
-    // Refresh orders list to ensure we have latest data
     fetchOrders();
   };
 
@@ -281,9 +273,6 @@ function VendorDashboard() {
                 }}
               />
             </Modal>
-            {/* If you have other modals (e.g., order details, prescription), add horizontal prop as well */}
-            {/* Example: */}
-            {/* <Modal isOpen={someModalOpen} onClose={...} title="..." horizontal>...</Modal> */}
           </div>
         );
       case 'orders':

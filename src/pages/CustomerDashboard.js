@@ -88,7 +88,6 @@ function CustomerDashboard() {
     }
   }, [user, fetchOrders]);
 
-  // Add this useEffect for scroll-to-hide toggle button
   useEffect(() => {
     const toggleBtn = document.querySelector('.mobile-sidebar-toggle');
     if (!toggleBtn) return;

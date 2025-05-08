@@ -29,7 +29,6 @@ function CustomerLogin() {
       <div className="auth-card login-wide-card shadow-lg rounded-4 p-0 d-none d-md-flex">
         <div className="row g-0 flex-md-row flex-column w-100">
           <div className="col-md-6 d-none d-md-flex align-items-center justify-content-center login-side-visual">
-            {/* Illustration or branding section for desktop */}
             <div className="w-100 text-center px-4">
               <i className="bi bi-person-circle text-primary" style={{ fontSize: '5rem' }}></i>
               <h2 className="fw-bold mt-3 mb-2">Customer Login</h2>
