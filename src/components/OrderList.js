@@ -14,7 +14,8 @@ function OrderList({ orders = [], isCustomer = false, onViewDetails }) {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  const filteredOrders = isCustomer 
+  // Only filter for customer dashboard
+  const filteredOrders = isCustomer && user && user.email
     ? orders.filter(order => order.customerEmail === user.email)
     : orders;
 
@@ -48,8 +49,8 @@ function OrderList({ orders = [], isCustomer = false, onViewDetails }) {
               </span>
               <span className="order-time">
                 <i className="bi bi-clock me-1"></i>
-                {new Date(order.createdAt).toLocaleTimeString([], { 
-                  hour: '2-digit', 
+                {new Date(order.createdAt).toLocaleTimeString([], {
+                  hour: '2-digit',
                   minute: '2-digit'
                 })}
               </span>
@@ -69,8 +70,8 @@ function OrderList({ orders = [], isCustomer = false, onViewDetails }) {
                   <div key={idx} className="product-item">
                     <div className="product-image-container">
                       {item.productId?.image ? (
-                        <img 
-                          src={item.productId.image} 
+                        <img
+                          src={item.productId.image}
                           alt={item.name}
                           className="product-img"
                         />
@@ -97,7 +98,7 @@ function OrderList({ orders = [], isCustomer = false, onViewDetails }) {
                 <span className="total-label">Total Amount</span>
                 <span className="total-amount">₹{order.totalAmount.toFixed(2)}</span>
               </div>
-              <button 
+              <button
                 className="btn btn-primary view-details-btn"
                 onClick={() => onViewDetails(order)}
               >
@@ -120,87 +121,76 @@ function OrderList({ orders = [], isCustomer = false, onViewDetails }) {
             <th>Date</th>
             <th>Items</th>
             <th>Total</th>
-            {/* Add Payment Status column for vendors */}
             {!isCustomer && <th>Payment</th>}
             <th>Status</th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
-          {filteredOrders.length === 0 ? (
-            <tr>
-              <td colSpan={isCustomer ? "6" : "7"} className="text-center py-4">
-                <i className="bi bi-inbox text-muted display-4 d-block mb-2"></i>
-                <p className="text-muted">No orders found</p>
+          {filteredOrders.map(order => (
+            <tr key={order._id}>
+              <td>{order.orderNumber}</td>
+              {!isCustomer && (
+                <td>
+                  <div>{order.customerName}</div>
+                  <small className="text-muted">{order.customerEmail}</small>
+                </td>
+              )}
+              <td>{new Date(order.createdAt).toLocaleDateString()}</td>
+              <td>
+                <ul className="list-unstyled">
+                  {order.items.map((item, i) => (
+                    <li key={i} className="d-flex align-items-center mb-2">
+                      {item.productId?.image && (
+                        <img
+                          src={item.productId.image}
+                          alt={item.name}
+                          className="me-2"
+                          style={{ width: '40px', height: '40px', objectFit: 'cover' }}
+                        />
+                      )}
+                      <div>
+                        <div>{item.quantity} × {item.name}</div>
+                        <small className="text-muted">₹{item.price.toFixed(2)} each</small>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </td>
+              <td>₹{order.totalAmount.toFixed(2)}</td>
+              {!isCustomer && (
+                <td>
+                  <span className={
+                    "badge " +
+                    (order.paymentStatus === 'paid' || order.paymentStatus === 'completed'
+                      ? 'badge-paid'
+                      : order.paymentStatus === 'failed'
+                      ? 'badge-failed'
+                      : 'badge-pending')
+                  }>
+                    {order.paymentStatus ? order.paymentStatus.charAt(0).toUpperCase() + order.paymentStatus.slice(1) : 'Pending'}
+                  </span>
+                </td>
+              )}
+              <td>
+                <span className={`badge ${getStatusBadgeClass(order.status)}`}>
+                  {order.status}
+                </span>
+                <div className="text-muted small mt-1">
+                  {new Date(order.createdAt).toLocaleString()}
+                </div>
+              </td>
+              <td>
+                <button
+                  className="btn btn-sm btn-outline-primary"
+                  onClick={() => onViewDetails && onViewDetails(order)}
+                  title={isCustomer ? "View Order Details" : "Manage Order"}
+                >
+                  {isCustomer ? "View Details" : "Manage Order"}
+                </button>
               </td>
             </tr>
-          ) : (
-            filteredOrders.map(order => (
-              <tr key={order._id}>
-                <td>{order.orderNumber}</td>
-                {!isCustomer && (
-                  <td>
-                    <div>{order.customerName}</div>
-                    <small className="text-muted">{order.customerEmail}</small>
-                  </td>
-                )}
-                <td>{new Date(order.createdAt).toLocaleDateString()}</td>
-                <td>
-                  <ul className="list-unstyled">
-                    {order.items.map((item, i) => (
-                      <li key={i} className="d-flex align-items-center mb-2">
-                        {item.productId?.image && (
-                          <img 
-                            src={item.productId.image} 
-                            alt={item.name}
-                            className="me-2"
-                            style={{ width: '40px', height: '40px', objectFit: 'cover' }}
-                          />
-                        )}
-                        <div>
-                          <div>{item.quantity} × {item.name}</div>
-                          <small className="text-muted">₹{item.price.toFixed(2)} each</small>
-                        </div>
-                      </li>
-                    ))}
-                  </ul>
-                </td>
-                <td>₹{order.totalAmount.toFixed(2)}</td>
-                {/* Payment Status cell for vendors */}
-                {!isCustomer && (
-                  <td>
-                    <span className={
-                      "badge " +
-                      (order.paymentStatus === 'paid' || order.paymentStatus === 'completed'
-                        ? 'badge-paid'
-                        : order.paymentStatus === 'failed'
-                        ? 'badge-failed'
-                        : 'badge-pending')
-                    }>
-                      {order.paymentStatus ? order.paymentStatus.charAt(0).toUpperCase() + order.paymentStatus.slice(1) : 'Pending'}
-                    </span>
-                  </td>
-                )}
-                <td>
-                  <span className={`badge ${getStatusBadgeClass(order.status)}`}>
-                    {order.status}
-                  </span>
-                  <div className="text-muted small mt-1">
-                    {new Date(order.createdAt).toLocaleString()}
-                  </div>
-                </td>
-                <td>
-                  <button 
-                    className="btn btn-sm btn-outline-primary"
-                    onClick={() => onViewDetails && onViewDetails(order)}
-                    title={isCustomer ? "View Order Details" : "Manage Order"}
-                  >
-                    {isCustomer ? "View Details" : "Manage Order"}
-                  </button>
-                </td>
-              </tr>
-            ))
-          )}
+          ))}
         </tbody>
       </table>
     </div>
