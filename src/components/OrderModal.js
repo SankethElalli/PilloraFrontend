@@ -23,10 +23,15 @@ function OrderModal({ order, isOpen, onClose, onStatusUpdate, isCustomer = false
   // Helper for payment status badge
   const getPaymentStatusBadge = (status) => {
     switch (status) {
-      case 'paid': return <span className="badge badge-paid">Paid</span>;
-      case 'pending': return <span className="badge badge-pending">Pending</span>;
-      case 'failed': return <span className="badge badge-failed">Failed</span>;
-      default: return <span className="badge badge-unknown">{status}</span>;
+      case 'paid':
+      case 'completed':
+        return <span className="badge badge-paid">Paid</span>;
+      case 'pending':
+        return <span className="badge badge-pending">Pending</span>;
+      case 'failed':
+        return <span className="badge badge-failed">Failed</span>;
+      default:
+        return <span className="badge badge-unknown">{status}</span>;
     }
   };
 
