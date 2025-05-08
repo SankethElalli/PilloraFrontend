@@ -416,7 +416,13 @@ textarea.form-control {
 }
 
 i.text-primary, .login-logo .text-primary {
-  color: #0d7c66 !important;
+  color: #c3ffe3 !important;
+}
+
+@media (max-width: 768px) {
+  i.text-primary, .login-logo .text-primary {
+    color: #0d7c66 !important;
+  }
 }
 
 .btn-icon {
