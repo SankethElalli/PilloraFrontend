@@ -14,7 +14,8 @@ function OrderList({ orders = [], isCustomer = false, onViewDetails }) {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  const filteredOrders = isCustomer 
+  // Only filter for customer dashboard
+  const filteredOrders = isCustomer && user && user.email
     ? orders.filter(order => order.customerEmail === user.email)
     : orders;
 
@@ -48,8 +49,8 @@ function OrderList({ orders = [], isCustomer = false, onViewDetails }) {
               </span>
               <span className="order-time">
                 <i className="bi bi-clock me-1"></i>
-                {new Date(order.createdAt).toLocaleTimeString([], { 
-                  hour: '2-digit', 
+                {new Date(order.createdAt).toLocaleTimeString([], {
+                  hour: '2-digit',
                   minute: '2-digit'
                 })}
               </span>
@@ -69,8 +70,8 @@ function OrderList({ orders = [], isCustomer = false, onViewDetails }) {
                   <div key={idx} className="product-item">
                     <div className="product-image-container">
                       {item.productId?.image ? (
-                        <img 
-                          src={item.productId.image} 
+                        <img
+                          src={item.productId.image}
                           alt={item.name}
                           className="product-img"
                         />
@@ -97,7 +98,7 @@ function OrderList({ orders = [], isCustomer = false, onViewDetails }) {
                 <span className="total-label">Total Amount</span>
                 <span className="total-amount">₹{order.totalAmount.toFixed(2)}</span>
               </div>
-              <button 
+              <button
                 className="btn btn-primary view-details-btn"
                 onClick={() => onViewDetails(order)}
               >
@@ -117,39 +118,35 @@ function OrderList({ orders = [], isCustomer = false, onViewDetails }) {
           <tr>
             <th>Order ID</th>
             {!isCustomer && <th>Customer</th>}
-            <th>Date</th>
-            <th>Items</th>
+            {/* Remove Date, Items, Status columns for customer */}
+            {!isCustomer && <th>Date</th>}
+            {!isCustomer && <th>Items</th>}
             <th>Total</th>
-            <th>Status</th>
+            {!isCustomer && <th>Payment</th>}
+            {!isCustomer && <th>Status</th>}
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
-          {filteredOrders.length === 0 ? (
-            <tr>
-              <td colSpan={isCustomer ? "6" : "7"} className="text-center py-4">
-                <i className="bi bi-inbox text-muted display-4 d-block mb-2"></i>
-                <p className="text-muted">No orders found</p>
-              </td>
-            </tr>
-          ) : (
-            filteredOrders.map(order => (
-              <tr key={order._id}>
-                <td>{order.orderNumber}</td>
-                {!isCustomer && (
-                  <td>
-                    <div>{order.customerName}</div>
-                    <small className="text-muted">{order.customerEmail}</small>
-                  </td>
-                )}
-                <td>{new Date(order.createdAt).toLocaleDateString()}</td>
+          {filteredOrders.map(order => (
+            <tr key={order._id}>
+              <td>{order.orderNumber}</td>
+              {!isCustomer && (
+                <td>
+                  <div>{order.customerName}</div>
+                  <small className="text-muted">{order.customerEmail}</small>
+                </td>
+              )}
+              {/* Remove Date, Items, Status cells for customer */}
+              {!isCustomer && <td>{new Date(order.createdAt).toLocaleDateString()}</td>}
+              {!isCustomer && (
                 <td>
                   <ul className="list-unstyled">
                     {order.items.map((item, i) => (
                       <li key={i} className="d-flex align-items-center mb-2">
                         {item.productId?.image && (
-                          <img 
-                            src={item.productId.image} 
+                          <img
+                            src={item.productId.image}
                             alt={item.name}
                             className="me-2"
                             style={{ width: '40px', height: '40px', objectFit: 'cover' }}
@@ -163,7 +160,23 @@ function OrderList({ orders = [], isCustomer = false, onViewDetails }) {
                     ))}
                   </ul>
                 </td>
-                <td>₹{order.totalAmount.toFixed(2)}</td>
+              )}
+              <td>₹{order.totalAmount.toFixed(2)}</td>
+              {!isCustomer && (
+                <td>
+                  <span className={
+                    "badge " +
+                    (order.paymentStatus === 'paid' || order.paymentStatus === 'completed'
+                      ? 'badge-paid'
+                      : order.paymentStatus === 'failed'
+                      ? 'badge-failed'
+                      : 'badge-pending')
+                  }>
+                    {order.paymentStatus ? order.paymentStatus.charAt(0).toUpperCase() + order.paymentStatus.slice(1) : 'Pending'}
+                  </span>
+                </td>
+              )}
+              {!isCustomer && (
                 <td>
                   <span className={`badge ${getStatusBadgeClass(order.status)}`}>
                     {order.status}
@@ -172,18 +185,18 @@ function OrderList({ orders = [], isCustomer = false, onViewDetails }) {
                     {new Date(order.createdAt).toLocaleString()}
                   </div>
                 </td>
-                <td>
-                  <button 
-                    className="btn btn-sm btn-outline-primary"
-                    onClick={() => onViewDetails && onViewDetails(order)}
-                    title={isCustomer ? "View Order Details" : "Manage Order"}
-                  >
-                    {isCustomer ? "View Details" : "Manage Order"}
-                  </button>
-                </td>
-              </tr>
-            ))
-          )}
+              )}
+              <td>
+                <button
+                  className="btn btn-sm btn-outline-primary"
+                  onClick={() => onViewDetails && onViewDetails(order)}
+                  title={isCustomer ? "View Order Details" : "Manage Order"}
+                >
+                  {isCustomer ? "View Details" : "Manage Order"}
+                </button>
+              </td>
+            </tr>
+          ))}
         </tbody>
       </table>
     </div>
