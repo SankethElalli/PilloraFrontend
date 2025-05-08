@@ -175,7 +175,7 @@
 }
 .badge-paid {
   background: #ecfdf5;
-  color: #059669;
+  color: #059669 !important;
 }
 .badge-pending {
   background: #ffca61;   /* Brighter orange-yellow background */
