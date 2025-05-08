@@ -118,12 +118,10 @@ function OrderList({ orders = [], isCustomer = false, onViewDetails }) {
           <tr>
             <th>Order ID</th>
             {!isCustomer && <th>Customer</th>}
-            {/* Remove Date, Items, Status columns for customer */}
-            {!isCustomer && <th>Date</th>}
-            {!isCustomer && <th>Items</th>}
+            <th>Date</th>
             <th>Total</th>
             {!isCustomer && <th>Payment</th>}
-            {!isCustomer && <th>Status</th>}
+            <th>Status</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -137,30 +135,7 @@ function OrderList({ orders = [], isCustomer = false, onViewDetails }) {
                   <small className="text-muted">{order.customerEmail}</small>
                 </td>
               )}
-              {/* Remove Date, Items, Status cells for customer */}
-              {!isCustomer && <td>{new Date(order.createdAt).toLocaleDateString()}</td>}
-              {!isCustomer && (
-                <td>
-                  <ul className="list-unstyled">
-                    {order.items.map((item, i) => (
-                      <li key={i} className="d-flex align-items-center mb-2">
-                        {item.productId?.image && (
-                          <img
-                            src={item.productId.image}
-                            alt={item.name}
-                            className="me-2"
-                            style={{ width: '40px', height: '40px', objectFit: 'cover' }}
-                          />
-                        )}
-                        <div>
-                          <div>{item.quantity} × {item.name}</div>
-                          <small className="text-muted">₹{item.price.toFixed(2)} each</small>
-                        </div>
-                      </li>
-                    ))}
-                  </ul>
-                </td>
-              )}
+              <td>{new Date(order.createdAt).toLocaleDateString()}</td>
               <td>₹{order.totalAmount.toFixed(2)}</td>
               {!isCustomer && (
                 <td>
@@ -176,16 +151,11 @@ function OrderList({ orders = [], isCustomer = false, onViewDetails }) {
                   </span>
                 </td>
               )}
-              {!isCustomer && (
-                <td>
-                  <span className={`badge ${getStatusBadgeClass(order.status)}`}>
-                    {order.status}
-                  </span>
-                  <div className="text-muted small mt-1">
-                    {new Date(order.createdAt).toLocaleString()}
-                  </div>
-                </td>
-              )}
+              <td>
+                <span className={`badge ${getStatusBadgeClass(order.status)}`}>
+                  {order.status}
+                </span>
+              </td>
               <td>
                 <button
                   className="btn btn-sm btn-outline-primary"
