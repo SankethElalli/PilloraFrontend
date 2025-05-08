@@ -8,6 +8,7 @@
   --card-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
 }
 
+/* Remove default body padding for dashboard */
 .dashboard-container {
   padding-top: 0;
   display: flex;
@@ -18,8 +19,6 @@
 
 .dashboard-sidebar {
   width: 280px;
-  background: #fff;
-  border-right: 1px solid rgba(0,0,0,0.1);
   position: fixed;
   height: 100vh;
   z-index: 1000;
@@ -520,11 +519,10 @@ textarea.form-control {
 
   .dashboard-sidebar {
     position: fixed;
-    top: 76px;
+    top: 63px; /* Height of navbar */
     left: -100%;
     width: 280px;
-    height: calc(100vh - 76px);
-    background: white;
+    height: calc(100vh - 63px);
     z-index: 1040;
     transition: left 0.3s ease;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
@@ -536,7 +534,7 @@ textarea.form-control {
   }
 
   .nav-menu {
-    padding: 1.5rem 1rem;
+    padding: 1.5rem 1rem;  /* Increased top padding to compensate for removed header */
   }
 
   .nav-link {
@@ -576,7 +574,7 @@ textarea.form-control {
   .mobile-sidebar-toggle {
     display: block;
     position: fixed;
-    top: 108px;
+    top: 90px;
     left: 2rem;
     z-index: 1020;
     padding: 0.5rem;
@@ -588,6 +586,12 @@ textarea.form-control {
     transition: opacity 0.3s ease, visibility 0.3s ease;
   }
 
+  .mobile-sidebar-toggle.hide-on-scroll {
+    opacity: 0 !important;
+    pointer-events: none !important;
+  }
+
+  /* Hide sidebar toggle when navbar is expanded */
   .navbar-collapse.show ~ .dashboard-container .mobile-sidebar-toggle,
   .navbar-collapse.collapsing ~ .dashboard-container .mobile-sidebar-toggle {
     opacity: 0;
@@ -595,6 +599,7 @@ textarea.form-control {
     pointer-events: none;
   }
 
+  /* Ensure navbar menu appears above sidebar toggle */
   .navbar-collapse {
     z-index: 1030;
   }
@@ -602,7 +607,7 @@ textarea.form-control {
   .mobile-sidebar-overlay {
     display: none;
     position: fixed;
-    top: 76px;
+    top: 60px;
     left: 0;
     right: 0;
     bottom: 0;
@@ -638,10 +643,12 @@ textarea.form-control {
     padding: 0.75rem;
   }
 
+  /* Stack form elements on mobile */
   .form-group {
     margin-bottom: 1rem;
   }
 
+  /* Improve modal display on mobile */
   .modal-container {
     max-width: 100%;
     margin: 0.5rem;
@@ -833,7 +840,7 @@ textarea.form-control {
 
   /* Vendor specific mobile styles */
   .product-table {
-    display: none;
+    display: none; /* Hide table view on mobile */
   }
 
   .product-cards {
@@ -986,7 +993,7 @@ textarea.form-control {
 
   .item-image-wrapper {
     width: 100%;
-    height: 140px;
+    height: 140px;  /* Reduced height */
     border-radius: 6px;
   }
 
@@ -1670,15 +1677,15 @@ textarea.form-control {
     width: 100%;
     display: flex;
     flex-direction: row;
-    flex-wrap: nowrap;
+    flex-wrap: nowrap;         /* Prevent wrapping to keep horizontal */
     background: none;
     padding: 0;
-    overflow: visible;
+    overflow: visible;         /* Allow content to expand horizontally */
   }
   .order-modal-horizontal-modal > div:first-child,
   .order-modal-horizontal-modal > div:last-child {
-    overflow: visible;
-    flex-shrink: 0; 
+    overflow: visible;         /* Ensure no scrollbars, allow content to show */
+    flex-shrink: 0;            /* Prevent shrinking */
   }
   .order-modal-horizontal-modal > div:first-child {
     min-width: 340px;
@@ -1709,6 +1716,6 @@ textarea.form-control {
     padding: 0;
     height: 100%;
     background: none;
-    overflow: visible;
+    overflow: visible;         /* No scrollbars, allow horizontal expansion */
   }
 }

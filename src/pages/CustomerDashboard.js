@@ -88,6 +88,25 @@ function CustomerDashboard() {
     }
   }, [user, fetchOrders]);
 
+  // Add this useEffect for scroll-to-hide toggle button
+  useEffect(() => {
+    const toggleBtn = document.querySelector('.mobile-sidebar-toggle');
+    if (!toggleBtn) return;
+
+    function onScroll() {
+      if (window.scrollY > 10) {
+        toggleBtn.classList.add('hide-on-scroll');
+      } else {
+        toggleBtn.classList.remove('hide-on-scroll');
+      }
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll(); // Initial check
+
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
   const handleViewOrder = (order) => {
     setSelectedOrder(order);
     setShowOrderModal(true);
