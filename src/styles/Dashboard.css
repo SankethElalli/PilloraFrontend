@@ -1702,7 +1702,7 @@ textarea.form-control {
   }
   .order-modal-horizontal-modal > div:last-child {
     flex: 1;
-    padding: 1.5rem 1rem 2rem 0rem;
+    padding: 1.5rem 5rem 2rem 0;
     border-top-right-radius: 18px;
     border-bottom-right-radius: 18px;
     background: #fff;
