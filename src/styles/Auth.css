@@ -67,7 +67,7 @@
 }
 
 .btn-primary {
-  background: #0D7C66 !important;
+  background: #0D7C66 !important; /* Change to your desired color */
   border: none;
   padding: 0.625rem 1.25rem;
   font-weight: 600;
@@ -79,7 +79,7 @@
 
 .btn-primary:hover,
 .btn-primary:focus {
-  background: #095c4a !important;
+  background: #095c4a !important; /* Darker shade for hover/focus */
   color: #fff !important;
   transform: translateY(-1px);
 }
@@ -198,9 +198,9 @@ textarea.form-control {
   padding: 0;
   display: flex;
   align-items: flex-start;
-  margin-top: -80px;
-  overflow: hidden;
-  position: fixed;
+  margin-top: -80px; /* Increased negative margin */
+  overflow: hidden; /* Prevent scrolling */
+  position: fixed; /* Fix the position */
   width: 100%;
   top: 0;
 }
@@ -237,7 +237,7 @@ textarea.form-control {
 @media (max-width: 768px) {
   .auth-wrapper {
     padding: 0;
-    margin-top: -90px;
+    margin-top: -90px; /* Even more negative margin for mobile */
     position: fixed;
     width: 100%;
   }
@@ -249,7 +249,7 @@ textarea.form-control {
   }
 
   .card-body {
-    padding: 1rem !important;
+    padding: 1rem !important; /* Further reduced padding */
   }
 
   .auth-container {
@@ -275,8 +275,8 @@ textarea.form-control {
     background: #fff;
     border-radius: 18px;
     box-shadow: 0 4px 24px rgba(37,99,235,0.10), 0 1.5px 6px rgba(0,0,0,0.04);
-    padding: 0rem 2.25rem 4.5rem;
-    margin: 0rem auto 50px;
+    padding: 2rem 1.25rem 1.5rem 1.25rem;
+    margin: 2.5rem auto 0 auto;
     max-width: 95vw;
     width: 100%;
     display: flex;
@@ -375,6 +375,7 @@ textarea.form-control {
     text-decoration: underline;
   }
 
+  /* Hide desktop card on mobile if both exist */
   .auth-card {
     display: none !important;
   }
@@ -401,6 +402,11 @@ textarea.form-control {
     align-items: center;
     display: flex;
   }
+}
+
+.auth-card.login-wide-card {
+  margin-top: 2.5rem; /* Add this or adjust as needed */
+  padding-top: 2.5rem; /* Add this for more top spacing */
 }
 
 .navbar-nav .nav-link {
