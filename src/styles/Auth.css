@@ -405,8 +405,7 @@ textarea.form-control {
 }
 
 .auth-card.login-wide-card {
-  margin-top: 2.5rem; /* Add this or adjust as needed */
-  padding-top: 2.5rem; /* Add this for more top spacing */
+  margin-top: -1rem;
 }
 
 .navbar-nav .nav-link {
