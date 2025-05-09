@@ -111,7 +111,6 @@ function CustomerLogin() {
                     <GoogleLogin
                       onSuccess={handleGoogleLoginSuccess}
                       onError={() => { console.error('Google Login Failed'); }}
-                      width="100%"
                     />
                   </div>
                   <div className="text-center">
@@ -176,7 +175,6 @@ function CustomerLogin() {
               <GoogleLogin
                 onSuccess={handleGoogleLoginSuccess}
                 onError={() => { console.error('Google Login Failed'); }}
-                width="100%"
               />
             </div>
             <div className="text-center">
