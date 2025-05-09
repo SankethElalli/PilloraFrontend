@@ -3,17 +3,16 @@ import axios from 'axios';
 import { useCart } from '../context/CartContext';
 import { toast } from 'react-toastify';
 import '../styles/Products.css';
-import '../styles/ProductGrid.css'; // Use the new grid styles
+import '../styles/ProductGrid.css';
 import API_BASE_URL from '../api';
-import { useAuth } from '../context/AuthContext'; // <-- Add this import
-import CategoryFilterModal from '../components/CategoryFilterModal'; // Fix import path
-import Modal from '../components/Modal'; // Ensure Modal is imported
+import { useAuth } from '../context/AuthContext';
+import CategoryFilterModal from '../components/CategoryFilterModal';
+import Modal from '../components/Modal';
 import { useLocation } from 'react-router-dom';
-import ProductReviews from '../components/ProductReviews';
 
 function Products() {
   const { addToCart } = useCart();
-  const { user } = useAuth(); // <-- Get user from AuthContext
+  const { user } = useAuth();
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState('');
@@ -28,11 +27,9 @@ function Products() {
 
   useEffect(() => {
     fetchProducts();
-    // Check for selected product from carousel
     if (location.state?.selectedProduct) {
       setSelectedProduct(location.state.selectedProduct);
     }
-    // eslint-disable-next-line
   }, [user]);
 
   useEffect(() => {
@@ -41,9 +38,9 @@ function Products() {
       if (currentScrollY < 80) {
         setShowHeader(true);
       } else if (currentScrollY > lastScrollY.current) {
-        setShowHeader(false); // scrolling down
+        setShowHeader(false);
       } else {
-        setShowHeader(true); // scrolling up
+        setShowHeader(true);
       }
       lastScrollY.current = currentScrollY;
     };
@@ -55,12 +52,10 @@ function Products() {
     try {
       setLoading(true);
       let config = {};
-      // Only send Authorization header if user is a vendor
       if (user && user.isVendor) {
         const token = localStorage.getItem('token');
         config.headers = { Authorization: `Bearer ${token}` };
       }
-      // For customers and logged-out users, do NOT send Authorization header
       const response = await axios.get(`${API_BASE_URL}/api/products`, config);
       setProducts(response.data);
     } catch (error) {
@@ -288,13 +283,11 @@ function Products() {
             style={window.innerWidth < 992 ? { maxWidth: 420, width: '95%' } : undefined}
             onClick={e => e.stopPropagation()}
           >
-            {/* Product name always on top */}
             <div className="modal-header" style={window.innerWidth < 992 ? { padding: '1.25rem 1.5rem', borderBottom: '1px solid #e2e8f0' } : { borderBottom: 'none', padding: '2rem 2.5rem 1rem 2.5rem', justifyContent: 'center' }}>
               <div className="modal-title" style={{ width: '100%', textAlign: 'center' }}>{selectedProduct.name}</div>
             </div>
             <div className="modal-content" style={window.innerWidth < 992 ? { padding: '1.5rem' } : { display: 'flex', flexDirection: 'row', gap: '2.5rem', alignItems: 'flex-start', padding: '2rem 2.5rem' }}>
-              {/* Image on the left */}
-              <div className="product-modal-image">
+              <div className="product-modal-image" style={window.innerWidth < 992 ? { textAlign: 'center', marginBottom: '1rem' } : { minWidth: 240, maxWidth: 260, textAlign: 'center' }}>
                 <img
                   src={selectedProduct.image.startsWith('http')
                     ? selectedProduct.image
@@ -309,37 +302,33 @@ function Products() {
                   }}
                 />
               </div>
-              {/* Details on the right */}
-              <div className="product-modal-details">
-                <div className="product-description-scroll">
-                  <div className="product-category" style={{ marginBottom: 8 }}>{selectedProduct.category}</div>
-                  <div className="product-price" style={{ marginBottom: 12 }}>₹{selectedProduct.price.toFixed(2)}</div>
-                  <div style={{ marginBottom: 12 }}>
-                    <strong>Stock:</strong> {selectedProduct.stock > 0 ? `${selectedProduct.stock} available` : 'Out of stock'}
-                  </div>
-                  <div style={{ marginBottom: 16, textAlign: 'left' }}>
-                    <strong>Description:</strong>
-                    <div style={{ color: '#334155', marginTop: 4, textAlign: 'left' }}>
-                      {selectedProduct.description}
-                    </div>
-                  </div>
-                  <button 
-                    className="add-to-cart-btn"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleAddToCart(selectedProduct);
-                      handleCloseModal();
-                    }}
-                    style={{
-                      width: '100%',
-                      marginTop: '1rem',
-                      padding: '1rem'
-                    }}
-                  >
-                    Add to Cart
-                  </button>
-                  <ProductReviews productId={selectedProduct._id} />
+              <div style={window.innerWidth < 992 ? {} : { flex: 1, minWidth: 0 }}>
+                <div className="product-category" style={{ marginBottom: 8 }}>{selectedProduct.category}</div>
+                <div className="product-price" style={{ marginBottom: 12 }}>₹{selectedProduct.price.toFixed(2)}</div>
+                <div style={{ marginBottom: 12 }}>
+                  <strong>Stock:</strong> {selectedProduct.stock > 0 ? `${selectedProduct.stock} available` : 'Out of stock'}
                 </div>
+                <div style={{ marginBottom: 16, textAlign: 'left' }}>
+                  <strong>Description:</strong>
+                  <div style={{ color: '#334155', marginTop: 4, textAlign: 'left' }}>
+                    {selectedProduct.description}
+                  </div>
+                </div>
+                <button 
+                  className="add-to-cart-btn"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleAddToCart(selectedProduct);
+                    handleCloseModal();
+                  }}
+                  style={{
+                    width: '100%',
+                    marginTop: '1rem',
+                    padding: '1rem'
+                  }}
+                >
+                  Add to Cart
+                </button>
               </div>
             </div>
           </div>
