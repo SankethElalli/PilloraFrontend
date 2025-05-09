@@ -156,7 +156,7 @@
 
 .product-image-wrapper {
   position: relative;
-  padding-top: 75%;
+  padding-top: 75%; /* 4:3 Aspect Ratio */
   background: #f8fafc;
 }
 
@@ -228,6 +228,7 @@
   margin: 0 auto;
 }
 
+/* Move the common loader styles to a shared class */
 .loader-ring div {
   box-sizing: border-box;
   display: block;
@@ -313,5 +314,29 @@
   .add-to-cart-btn {
     padding: 0.5rem;
     font-size: 0.75rem;
+  }
+}
+
+@media (min-width: 992px) {
+  .modal-container.product-modal-horizontal .modal-content {
+    position: relative;
+  }
+
+  .product-modal-image {
+    position: sticky;
+    top: 2rem;
+    height: fit-content;
+    min-width: 240px;
+    max-width: 260px;
+    text-align: center;
+    padding: 1rem 0;
+  }
+
+  .product-modal-details {
+    flex: 1;
+    min-width: 0;
+    padding-left: 2.5rem;
+    overflow-y: auto;
+    max-height: calc(80vh - 120px);
   }
 }

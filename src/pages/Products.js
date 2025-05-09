@@ -3,16 +3,17 @@ import axios from 'axios';
 import { useCart } from '../context/CartContext';
 import { toast } from 'react-toastify';
 import '../styles/Products.css';
-import '../styles/ProductGrid.css';
+import '../styles/ProductGrid.css'; // Use the new grid styles
 import API_BASE_URL from '../api';
-import { useAuth } from '../context/AuthContext';
-import CategoryFilterModal from '../components/CategoryFilterModal';
-import Modal from '../components/Modal';
+import { useAuth } from '../context/AuthContext'; // <-- Add this import
+import CategoryFilterModal from '../components/CategoryFilterModal'; // Fix import path
+import Modal from '../components/Modal'; // Ensure Modal is imported
 import { useLocation } from 'react-router-dom';
+import ProductReviews from '../components/ProductReviews';
 
 function Products() {
   const { addToCart } = useCart();
-  const { user } = useAuth();
+  const { user } = useAuth(); // <-- Get user from AuthContext
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState('');
@@ -27,9 +28,11 @@ function Products() {
 
   useEffect(() => {
     fetchProducts();
+    // Check for selected product from carousel
     if (location.state?.selectedProduct) {
       setSelectedProduct(location.state.selectedProduct);
     }
+    // eslint-disable-next-line
   }, [user]);
 
   useEffect(() => {
@@ -38,9 +41,9 @@ function Products() {
       if (currentScrollY < 80) {
         setShowHeader(true);
       } else if (currentScrollY > lastScrollY.current) {
-        setShowHeader(false);
+        setShowHeader(false); // scrolling down
       } else {
-        setShowHeader(true);
+        setShowHeader(true); // scrolling up
       }
       lastScrollY.current = currentScrollY;
     };
@@ -52,10 +55,12 @@ function Products() {
     try {
       setLoading(true);
       let config = {};
+      // Only send Authorization header if user is a vendor
       if (user && user.isVendor) {
         const token = localStorage.getItem('token');
         config.headers = { Authorization: `Bearer ${token}` };
       }
+      // For customers and logged-out users, do NOT send Authorization header
       const response = await axios.get(`${API_BASE_URL}/api/products`, config);
       setProducts(response.data);
     } catch (error) {
@@ -283,11 +288,13 @@ function Products() {
             style={window.innerWidth < 992 ? { maxWidth: 420, width: '95%' } : undefined}
             onClick={e => e.stopPropagation()}
           >
+            {/* Product name always on top */}
             <div className="modal-header" style={window.innerWidth < 992 ? { padding: '1.25rem 1.5rem', borderBottom: '1px solid #e2e8f0' } : { borderBottom: 'none', padding: '2rem 2.5rem 1rem 2.5rem', justifyContent: 'center' }}>
               <div className="modal-title" style={{ width: '100%', textAlign: 'center' }}>{selectedProduct.name}</div>
             </div>
             <div className="modal-content" style={window.innerWidth < 992 ? { padding: '1.5rem' } : { display: 'flex', flexDirection: 'row', gap: '2.5rem', alignItems: 'flex-start', padding: '2rem 2.5rem' }}>
-              <div className="product-modal-image" style={window.innerWidth < 992 ? { textAlign: 'center', marginBottom: '1rem' } : { minWidth: 240, maxWidth: 260, textAlign: 'center' }}>
+              {/* Image on the left */}
+              <div className="product-modal-image">
                 <img
                   src={selectedProduct.image.startsWith('http')
                     ? selectedProduct.image
@@ -302,7 +309,8 @@ function Products() {
                   }}
                 />
               </div>
-              <div style={window.innerWidth < 992 ? {} : { flex: 1, minWidth: 0 }}>
+              {/* Details on the right */}
+              <div className="product-modal-details">
                 <div className="product-category" style={{ marginBottom: 8 }}>{selectedProduct.category}</div>
                 <div className="product-price" style={{ marginBottom: 12 }}>₹{selectedProduct.price.toFixed(2)}</div>
                 <div style={{ marginBottom: 12 }}>
@@ -329,6 +337,7 @@ function Products() {
                 >
                   Add to Cart
                 </button>
+                <ProductReviews productId={selectedProduct._id} />
               </div>
             </div>
           </div>
