@@ -311,33 +311,35 @@ function Products() {
               </div>
               {/* Details on the right */}
               <div className="product-modal-details">
-                <div className="product-category" style={{ marginBottom: 8 }}>{selectedProduct.category}</div>
-                <div className="product-price" style={{ marginBottom: 12 }}>₹{selectedProduct.price.toFixed(2)}</div>
-                <div style={{ marginBottom: 12 }}>
-                  <strong>Stock:</strong> {selectedProduct.stock > 0 ? `${selectedProduct.stock} available` : 'Out of stock'}
-                </div>
-                <div style={{ marginBottom: 16, textAlign: 'left' }}>
-                  <strong>Description:</strong>
-                  <div style={{ color: '#334155', marginTop: 4, textAlign: 'left' }}>
-                    {selectedProduct.description}
+                <div className="product-description-scroll">
+                  <div className="product-category" style={{ marginBottom: 8 }}>{selectedProduct.category}</div>
+                  <div className="product-price" style={{ marginBottom: 12 }}>₹{selectedProduct.price.toFixed(2)}</div>
+                  <div style={{ marginBottom: 12 }}>
+                    <strong>Stock:</strong> {selectedProduct.stock > 0 ? `${selectedProduct.stock} available` : 'Out of stock'}
                   </div>
+                  <div style={{ marginBottom: 16, textAlign: 'left' }}>
+                    <strong>Description:</strong>
+                    <div style={{ color: '#334155', marginTop: 4, textAlign: 'left' }}>
+                      {selectedProduct.description}
+                    </div>
+                  </div>
+                  <button 
+                    className="add-to-cart-btn"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleAddToCart(selectedProduct);
+                      handleCloseModal();
+                    }}
+                    style={{
+                      width: '100%',
+                      marginTop: '1rem',
+                      padding: '1rem'
+                    }}
+                  >
+                    Add to Cart
+                  </button>
+                  <ProductReviews productId={selectedProduct._id} />
                 </div>
-                <button 
-                  className="add-to-cart-btn"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleAddToCart(selectedProduct);
-                    handleCloseModal();
-                  }}
-                  style={{
-                    width: '100%',
-                    marginTop: '1rem',
-                    padding: '1rem'
-                  }}
-                >
-                  Add to Cart
-                </button>
-                <ProductReviews productId={selectedProduct._id} />
               </div>
             </div>
           </div>
