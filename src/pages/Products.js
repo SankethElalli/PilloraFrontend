@@ -9,10 +9,11 @@ import { useAuth } from '../context/AuthContext';
 import CategoryFilterModal from '../components/CategoryFilterModal';
 import Modal from '../components/Modal';
 import { useLocation } from 'react-router-dom';
+import ProductReviews from '../components/ProductReviews';
 
 function Products() {
   const { addToCart } = useCart();
-  const { user } = useAuth();
+  const { user } = useAuth(); // <-- Get user from AuthContext
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState('');
@@ -27,9 +28,11 @@ function Products() {
 
   useEffect(() => {
     fetchProducts();
+    // Check for selected product from carousel
     if (location.state?.selectedProduct) {
       setSelectedProduct(location.state.selectedProduct);
     }
+    // eslint-disable-next-line
   }, [user]);
 
   useEffect(() => {
@@ -38,9 +41,9 @@ function Products() {
       if (currentScrollY < 80) {
         setShowHeader(true);
       } else if (currentScrollY > lastScrollY.current) {
-        setShowHeader(false);
+        setShowHeader(false); // scrolling down
       } else {
-        setShowHeader(true);
+        setShowHeader(true); // scrolling up
       }
       lastScrollY.current = currentScrollY;
     };
@@ -52,10 +55,12 @@ function Products() {
     try {
       setLoading(true);
       let config = {};
+      // Only send Authorization header if user is a vendor
       if (user && user.isVendor) {
         const token = localStorage.getItem('token');
         config.headers = { Authorization: `Bearer ${token}` };
       }
+      // For customers and logged-out users, do NOT send Authorization header
       const response = await axios.get(`${API_BASE_URL}/api/products`, config);
       setProducts(response.data);
     } catch (error) {
@@ -246,7 +251,7 @@ function Products() {
                     className="product-img"
                     onError={(e) => {
                       e.target.onerror = null;
-                      e.target.src = '/default-product.png'; // Fallback image
+                      e.target.src = '/default-product.png';
                     }}
                   />
                 </div>
@@ -283,53 +288,63 @@ function Products() {
             style={window.innerWidth < 992 ? { maxWidth: 420, width: '95%' } : undefined}
             onClick={e => e.stopPropagation()}
           >
+            {/* Product name always on top */}
             <div className="modal-header" style={window.innerWidth < 992 ? { padding: '1.25rem 1.5rem', borderBottom: '1px solid #e2e8f0' } : { borderBottom: 'none', padding: '2rem 2.5rem 1rem 2.5rem', justifyContent: 'center' }}>
               <div className="modal-title" style={{ width: '100%', textAlign: 'center' }}>{selectedProduct.name}</div>
             </div>
-            <div className="modal-content" style={window.innerWidth < 992 ? { padding: '1.5rem' } : { display: 'flex', flexDirection: 'row', gap: '2.5rem', alignItems: 'flex-start', padding: '2rem 2.5rem' }}>
-              <div className="product-modal-image" style={window.innerWidth < 992 ? { textAlign: 'center', marginBottom: '1rem' } : { minWidth: 240, maxWidth: 260, textAlign: 'center' }}>
-                <img
-                  src={selectedProduct.image.startsWith('http')
-                    ? selectedProduct.image
-                    : `${API_BASE_URL}${selectedProduct.image}`}
-                  alt={selectedProduct.name}
-                  style={{
-                    maxWidth: '220px',
-                    maxHeight: '220px',
-                    objectFit: 'contain',
-                    borderRadius: '12px',
-                    background: '#f8fafc'
-                  }}
-                />
-              </div>
-              <div style={window.innerWidth < 992 ? {} : { flex: 1, minWidth: 0 }}>
-                <div className="product-category" style={{ marginBottom: 8 }}>{selectedProduct.category}</div>
-                <div className="product-price" style={{ marginBottom: 12 }}>₹{selectedProduct.price.toFixed(2)}</div>
-                <div style={{ marginBottom: 12 }}>
-                  <strong>Stock:</strong> {selectedProduct.stock > 0 ? `${selectedProduct.stock} available` : 'Out of stock'}
+            <div className="modal-content" style={window.innerWidth < 992 ? { padding: '1.5rem' } : { display: 'flex', flexDirection: 'column', gap: '2.5rem', padding: '2rem 2.5rem' }}>
+              <div style={{ display: 'flex', flexDirection: window.innerWidth < 992 ? 'column' : 'row', gap: '2.5rem', alignItems: 'flex-start' }}>
+                {/* Existing product image and details */}
+                <div className="product-modal-image" style={window.innerWidth < 992 ? { textAlign: 'center', marginBottom: '1rem' } : { minWidth: 240, maxWidth: 260, textAlign: 'center' }}>
+                  <img
+                    src={selectedProduct.image.startsWith('http')
+                      ? selectedProduct.image
+                      : `${API_BASE_URL}${selectedProduct.image}`}
+                    alt={selectedProduct.name}
+                    style={{
+                      maxWidth: '220px',
+                      maxHeight: '220px',
+                      objectFit: 'contain',
+                      borderRadius: '12px',
+                      background: '#f8fafc'
+                    }}
+                  />
                 </div>
-                <div style={{ marginBottom: 16, textAlign: 'left' }}>
-                  <strong>Description:</strong>
-                  <div style={{ color: '#334155', marginTop: 4, textAlign: 'left' }}>
-                    {selectedProduct.description}
+                <div style={window.innerWidth < 992 ? {} : { flex: 1, minWidth: 0 }}>
+                  <div className="product-category" style={{ marginBottom: 8 }}>{selectedProduct.category}</div>
+                  <div className="product-price" style={{ marginBottom: 12 }}>₹{selectedProduct.price.toFixed(2)}</div>
+                  <div style={{ marginBottom: 12 }}>
+                    <strong>Stock:</strong> {selectedProduct.stock > 0 ? `${selectedProduct.stock} available` : 'Out of stock'}
                   </div>
+                  <div style={{ marginBottom: 16, textAlign: 'left' }}>
+                    <strong>Description:</strong>
+                    <div style={{ color: '#334155', marginTop: 4, textAlign: 'left' }}>
+                      {selectedProduct.description}
+                    </div>
+                  </div>
+                  <button 
+                    className="add-to-cart-btn"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleAddToCart(selectedProduct);
+                      handleCloseModal();
+                    }}
+                    style={{
+                      width: '100%',
+                      marginTop: '1rem',
+                      padding: '1rem'
+                    }}
+                  >
+                    Add to Cart
+                  </button>
                 </div>
-                <button 
-                  className="add-to-cart-btn"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleAddToCart(selectedProduct);
-                    handleCloseModal();
-                  }}
-                  style={{
-                    width: '100%',
-                    marginTop: '1rem',
-                    padding: '1rem'
-                  }}
-                >
-                  Add to Cart
-                </button>
               </div>
+              {/* Add reviews section */}
+              <ProductReviews
+                productId={selectedProduct._id}
+                reviews={selectedProduct.reviews || []}
+                isModal={true}
+              />
             </div>
           </div>
         </div>
