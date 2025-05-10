@@ -6,7 +6,7 @@ import { toast } from 'react-toastify';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 import API_BASE_URL from '../api';
-import { PayPalButtons } from "@paypal/react-paypal-js";
+import { PayPalButtons, PayPalScriptProvider } from "@paypal/react-paypal-js";
 
 const INR_TO_USD_RATE = 85.42;
 const GST_RATE = 0.12;
@@ -30,6 +30,7 @@ function Checkout() {
   });
   const [isPlacingOrder, setIsPlacingOrder] = useState(false);
   const paypalBtnContainerRef = useRef(null);
+  const [showPaypalModal, setShowPaypalModal] = useState(false);
 
   const calculateSubtotal = () => {
     return cart.reduce((total, item) => total + (item.price * item.quantity), 0);
@@ -182,13 +183,7 @@ function Checkout() {
   const handlePlaceOrder = async (e) => {
     e.preventDefault();
     if (formData.paymentMethod === 'paypal') {
-      // Find the PayPal button inside the hidden container and click it
-      if (paypalBtnContainerRef.current) {
-        const btn = paypalBtnContainerRef.current.querySelector('iframe')
-          ? paypalBtnContainerRef.current.querySelector('iframe').contentWindow.document.querySelector('button')
-          : paypalBtnContainerRef.current.querySelector('button');
-        if (btn) btn.click();
-      }
+      setShowPaypalModal(true);
     } else {
       handleSubmit(e);
     }
@@ -291,24 +286,6 @@ function Checkout() {
                 >
                   {formData.paymentMethod === 'paypal' ? 'Pay with PayPal' : 'Place Order'}
                 </button>
-                {/* Render PayPalButtons but hide it, trigger programmatically */}
-                {formData.paymentMethod === 'paypal' && cart.length > 0 && (
-                  <div style={{ display: 'none' }} ref={paypalBtnContainerRef}>
-                    <PayPalButtons
-                      forceReRender={[cart, formData]}
-                      createOrder={createOrder}
-                      onApprove={async (data, actions) => {
-                        await onApprove(data, actions);
-                        setIsPlacingOrder(false);
-                      }}
-                      onError={(err) => {
-                        toast.error("Payment failed. Please try again.");
-                        setIsPlacingOrder(false);
-                      }}
-                      style={{ layout: "vertical" }}
-                    />
-                  </div>
-                )}
               </form>
             </div>
           </div>
@@ -345,6 +322,36 @@ function Checkout() {
           </div>
         </div>
       </div>
+      {/* PayPal Modal */}
+      <Modal
+        isOpen={showPaypalModal}
+        onClose={() => setShowPaypalModal(false)}
+        title="Pay with PayPal"
+      >
+        <div className="py-3">
+          {showPaypalModal && (
+            <PayPalScriptProvider options={{ "client-id": "ASAO98-C0qmce7opUlvn6BcmhRNfa4Ea4QLB0aOplsBmeM9_XcGu_x8LF8z2WXiocPknbZixypn9-jLk", currency: "USD" }}>
+              <PayPalButtons
+                key={JSON.stringify([cart, formData])}
+                forceReRender={[cart, formData]}
+                createOrder={createOrder}
+                onApprove={async (data, actions) => {
+                  await onApprove(data, actions);
+                  setIsPlacingOrder(false);
+                  setShowPaypalModal(false);
+                }}
+                onError={(err) => {
+                  toast.error("Payment failed. Please try again.");
+                  setIsPlacingOrder(false);
+                  setShowPaypalModal(false);
+                }}
+                onCancel={() => setShowPaypalModal(false)}
+                style={{ layout: "vertical" }}
+              />
+            </PayPalScriptProvider>
+          )}
+        </div>
+      </Modal>
       {/* Success Modal */}
       <Modal
         isOpen={showSuccessModal}
