@@ -1,15 +1,15 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { useCart } from '../context/CartContext';
-import { toast } from 'react-toastify';
 import '../styles/Products.css';
-import '../styles/ProductGrid.css';
+import '../styles/ProductGrid.css'; // Use the new grid styles
+import '../styles/Notification.css'; // <-- Add this line
 import API_BASE_URL from '../api';
-import { useAuth } from '../context/AuthContext';
-import CategoryFilterModal from '../components/CategoryFilterModal';
-import Modal from '../components/Modal';
+import { useAuth } from '../context/AuthContext'; // <-- Add this import
+import CategoryFilterModal from '../components/CategoryFilterModal'; // Fix import path
+import Modal from '../components/Modal'; // Ensure Modal is imported
 import { useLocation } from 'react-router-dom';
-import ProductReviews from '../components/ProductReviews';
+import ProductReviews from '../components/ProductReviews'; // Add import at the top
 
 function Products() {
   const { addToCart } = useCart();
@@ -25,6 +25,8 @@ function Products() {
   const [showSortModal, setShowSortModal] = useState(false);
   const lastScrollY = useRef(window.scrollY);
   const location = useLocation();
+  const [showSnackbar, setShowSnackbar] = useState(false);
+  const [snackbarText, setSnackbarText] = useState('');
 
   useEffect(() => {
     fetchProducts();
@@ -107,14 +109,9 @@ function Products() {
 
   const handleAddToCart = (product) => {
     addToCart(product);
-    toast.success('🛒 Added to cart!', {
-      position: "top-right",
-      autoClose: 2000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-    });
+    setSnackbarText(`Added "${product.name}" to cart`);
+    setShowSnackbar(true);
+    setTimeout(() => setShowSnackbar(false), 2000);
   };
 
   const handleProductClick = (product) => {
@@ -127,6 +124,15 @@ function Products() {
 
   return (
     <div>
+      {/* Snackbar notification */}
+      <div
+        className={`pillora-snackbar${showSnackbar ? ' show' : ''}`}
+        aria-live="polite"
+        aria-atomic="true"
+      >
+        <i className="bi bi-cart-check me-2"></i>
+        {snackbarText}
+      </div>
       <div
         className={`products-header${showHeader ? '' : ' hide-on-scroll'}`}
         style={{
@@ -251,7 +257,7 @@ function Products() {
                     className="product-img"
                     onError={(e) => {
                       e.target.onerror = null;
-                      e.target.src = '/default-product.png';
+                      e.target.src = '/default-product.png'; // Fallback image
                     }}
                   />
                 </div>

@@ -1,0 +1,33 @@
+.pillora-snackbar {
+  position: fixed;
+  left: 50%;
+  bottom: 2rem;
+  transform: translateX(-50%);
+  z-index: 9999;
+  min-width: 220px;
+  max-width: 90vw;
+  background-color: #497D74;
+  color: cornsilk;
+  border-radius: 1rem;
+  padding: 0.85rem 1.5rem;
+  box-shadow: 0 4px 24px rgba(36, 230, 152, 0.13);
+  font-weight: 600;
+  font-size: 1rem;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  letter-spacing: 0.01em;
+}
+
+.pillora-snackbar.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.pillora-snackbar i {
+  font-size: 1.25em;
+  color: cornsilk;
+}

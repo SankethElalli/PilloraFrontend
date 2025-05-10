@@ -1,26 +1,53 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useCart } from '../context/CartContext';
 import { Link, useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
 import '../styles/CartProduct.css';
+import '../styles/Notification.css'; // Add this import
 
 function Cart() {
-  const { cart, removeFromCart, updateQuantity } = useCart();
+  const { cart, removeFromCart, updateQuantity, clearCart } = useCart();
   const navigate = useNavigate();
+
+  // Snackbar state
+  const [showSnackbar, setShowSnackbar] = useState(false);
+  const [snackbarText, setSnackbarText] = useState('');
+
+  // GST rate (12%)
+  const GST_RATE = 0.12;
 
   const handleRemoveFromCart = (productId, productName) => {
     removeFromCart(productId);
-    toast.error(`🗑️ Removed ${productName} from cart`);
+    setSnackbarText(`Removed "${productName}" from cart`);
+    setShowSnackbar(true);
+    setTimeout(() => setShowSnackbar(false), 2000);
   };
 
   const handleUpdateQuantity = (productId, quantity, productName) => {
+    // Ensure quantity is a valid number and at least 1
     const newQuantity = Math.max(1, parseInt(quantity) || 1);
     updateQuantity(productId, newQuantity);
-    toast.info(`Updated ${productName} quantity`);
+    setSnackbarText(`Updated "${productName}" quantity`);
+    setShowSnackbar(true);
+    setTimeout(() => setShowSnackbar(false), 2000);
+  };
+
+  const handleClearCart = () => {
+    clearCart();
+    setSnackbarText('Cleared all products from cart');
+    setShowSnackbar(true);
+    setTimeout(() => setShowSnackbar(false), 2000);
   };
 
   const calculateSubtotal = () => {
     return cart.reduce((total, item) => total + item.price * item.quantity, 0);
+  };
+
+  const calculateGST = () => {
+    return calculateSubtotal() * GST_RATE;
+  };
+
+  const calculateTotal = () => {
+    return calculateSubtotal() + calculateGST();
   };
 
   if (cart.length === 0) {
@@ -34,13 +61,31 @@ function Cart() {
             Continue Shopping
           </Link>
         </div>
+        {/* Snackbar notification */}
+        <div
+          className={`pillora-snackbar${showSnackbar ? ' show' : ''}`}
+          aria-live="polite"
+          aria-atomic="true"
+        >
+          <i className="bi bi-cart-x me-2"></i>
+          {snackbarText}
+        </div>
       </div>
     );
   }
 
   return (
     <div className="container mt-4">
-      <h2 className="mb-4">Cart</h2>
+      {/* Snackbar notification */}
+      <div
+        className={`pillora-snackbar${showSnackbar ? ' show' : ''}`}
+        aria-live="polite"
+        aria-atomic="true"
+      >
+        <i className="bi bi-cart-check me-2"></i>
+        {snackbarText}
+      </div>
+      {/* Removed Cart title and top clear button */}
       <div className="row">
         <div className="col-lg-8">
           <div className="cart-items-list">
@@ -56,9 +101,12 @@ function Cart() {
                   }}
                 />
                 <div className="cart-item-details">
-                  <div className="cart-item-title">{item.name}</div>
-                  <div className="cart-item-meta">₹{item.price} × {item.quantity}</div>
-                  <div className="cart-item-price">₹{item.price}</div>
+                  <div className="cart-item-header d-flex justify-content-between align-items-center mb-2">
+                    <div className="cart-item-title">{item.name}</div>
+                    <div className="cart-item-total">
+                      ₹{(item.price * item.quantity).toFixed(2)}
+                    </div>
+                  </div>
                   <div className="cart-item-qty-group">
                     <button
                       className="btn btn-outline-secondary"
@@ -92,9 +140,6 @@ function Cart() {
                     </button>
                   </div>
                 </div>
-                <div className="cart-item-total">
-                  ₹{(item.price * item.quantity).toFixed(2)}
-                </div>
               </div>
             ))}
           </div>
@@ -109,13 +154,17 @@ function Cart() {
                 <span className="fw-bold">₹{calculateSubtotal().toFixed(2)}</span>
               </div>
               <div className="d-flex justify-content-between mb-3">
+                <span>GST (12%):</span>
+                <span className="fw-bold">₹{calculateGST().toFixed(2)}</span>
+              </div>
+              <div className="d-flex justify-content-between mb-3">
                 <span>Shipping:</span>
                 <span className="text-success">Free</span>
               </div>
               <hr />
               <div className="d-flex justify-content-between mb-4">
                 <span className="fw-bold">Total:</span>
-                <span className="fw-bold">₹{calculateSubtotal().toFixed(2)}</span>
+                <span className="fw-bold">₹{calculateTotal().toFixed(2)}</span>
               </div>
               <button 
                 className="btn btn-primary w-100" 
@@ -123,6 +172,14 @@ function Cart() {
                 onClick={() => navigate('/checkout')}
               >
                 Proceed to Checkout
+              </button>
+              {/* Clear Cart button inside the card, after checkout */}
+              <button
+                className="btn btn-outline-danger w-100 mt-3"
+                onClick={handleClearCart}
+                disabled={cart.length === 0}
+              >
+                Clear Cart
               </button>
             </div>
           </div>
