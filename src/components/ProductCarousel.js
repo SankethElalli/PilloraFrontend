@@ -10,7 +10,25 @@ function ProductCarousel() {
   const [loading, setLoading] = useState(true);
   const [isFading, setIsFading] = useState(false);
   const navigate = useNavigate();
-  const productsPerSlide = 4;
+  const [productsPerSlide, setProductsPerSlide] = useState(4);
+
+  // Responsive products per slide
+  useEffect(() => {
+    function handleResize() {
+      if (window.innerWidth <= 600) {
+        setProductsPerSlide(1);
+      } else if (window.innerWidth <= 900) {
+        setProductsPerSlide(2);
+      } else if (window.innerWidth <= 1200) {
+        setProductsPerSlide(3);
+      } else {
+        setProductsPerSlide(4);
+      }
+    }
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -46,7 +64,7 @@ function ProductCarousel() {
       });
       setIsFading(false);
     }, 350);
-  }, [products.length]);
+  }, [products.length, productsPerSlide]);
 
   const prevSlide = () => {
     setIsFading(true);
@@ -65,7 +83,7 @@ function ProductCarousel() {
       const timer = setInterval(nextSlide, 5000); // Change slides every 5 seconds
       return () => clearInterval(timer);
     }
-  }, [loading, products.length, nextSlide]);
+  }, [loading, products.length, nextSlide, productsPerSlide]);
 
   if (loading) {
     return (
