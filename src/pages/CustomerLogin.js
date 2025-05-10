@@ -2,8 +2,6 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import '../styles/Auth.css';
-import axios from 'axios';
-import API_BASE_URL from '../api';
 
 function CustomerLogin() {
   const [email, setEmail] = useState('');
@@ -16,11 +14,10 @@ function CustomerLogin() {
     e.preventDefault();
     try {
       if (!email.trim() || !password.trim()) {
-        // No toast, handled by AuthContext snackbar
         return;
       }
       await login(email.trim(), password.trim());
-      navigate('/'); // Redirect to home page after login
+      navigate('/');
     } catch (error) {
       // No toast, handled by AuthContext snackbar
     }
