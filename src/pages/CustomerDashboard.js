@@ -8,8 +8,8 @@ import OrderModal from '../components/OrderModal';
 import PrescriptionUploadForm from '../components/dashboard/PrescriptionUploadForm';
 import '../styles/Dashboard.css';
 import { useAuth } from '../context/AuthContext';
-import { toast } from 'react-toastify';
 import API_BASE_URL from '../api';
+import '../styles/Notification.css';
 
 function CustomerDashboard() {
   const { user } = useAuth();
@@ -21,6 +21,8 @@ function CustomerDashboard() {
   const [showOrderModal, setShowOrderModal] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [showSnackbar, setShowSnackbar] = useState(false);
+  const [snackbarText, setSnackbarText] = useState('');
 
   const fetchOrders = useCallback(async () => {
     try {
@@ -34,7 +36,9 @@ function CustomerDashboard() {
       setOrders(response.data);
     } catch (error) {
       console.error('Error fetching orders:', error);
-      toast.error('Failed to load orders');
+      setSnackbarText('Failed to load orders');
+      setShowSnackbar(true);
+      setTimeout(() => setShowSnackbar(false), 2000);
     } finally {
       setIsLoading(false);
     }
@@ -52,7 +56,9 @@ function CustomerDashboard() {
       setPrescriptions(response.data);
     } catch (error) {
       console.error('Error fetching prescriptions:', error);
-      toast.error('Failed to load prescriptions');
+      setSnackbarText('Failed to load prescriptions');
+      setShowSnackbar(true);
+      setTimeout(() => setShowSnackbar(false), 2000);
     } finally {
       setIsLoading(false);
     }
@@ -88,6 +94,7 @@ function CustomerDashboard() {
     }
   }, [user, fetchOrders]);
 
+  // Add this useEffect for scroll-to-hide toggle button
   useEffect(() => {
     const toggleBtn = document.querySelector('.mobile-sidebar-toggle');
     if (!toggleBtn) return;
@@ -218,6 +225,15 @@ function CustomerDashboard() {
 
   return (
     <div className="dashboard-container">
+      {/* Snackbar notification */}
+      <div
+        className={`pillora-snackbar${showSnackbar ? ' show' : ''}`}
+        aria-live="polite"
+        aria-atomic="true"
+      >
+        <i className="bi bi-exclamation-triangle me-2"></i>
+        {snackbarText}
+      </div>
       <button 
         className="mobile-sidebar-toggle d-lg-none"
         onClick={toggleSidebar}

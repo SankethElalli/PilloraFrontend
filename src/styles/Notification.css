@@ -31,3 +31,12 @@
   font-size: 1.25em;
   color: cornsilk;
 }
+
+.pillora-snackbar.error {
+  background: linear-gradient(90deg, #ef4444 0%, #b91c1c 100%);
+  color: #fff;
+}
+
+.pillora-snackbar.error i {
+  color: #fee2e2;
+}
