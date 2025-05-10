@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, useRef } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import API_BASE_URL from '../api';
@@ -11,11 +11,15 @@ function ProductCarousel() {
   const [isFading, setIsFading] = useState(false);
   const navigate = useNavigate();
   const [productsPerSlide, setProductsPerSlide] = useState(4);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 600);
+  const touchStartX = useRef(null);
 
-  // Responsive products per slide
+  // Responsive products per slide and mobile flag
   useEffect(() => {
     function handleResize() {
-      if (window.innerWidth <= 600) {
+      const mobile = window.innerWidth <= 600;
+      setIsMobile(mobile);
+      if (mobile) {
         setProductsPerSlide(1);
       } else if (window.innerWidth <= 900) {
         setProductsPerSlide(2);
@@ -77,6 +81,18 @@ function ProductCarousel() {
     }, 350);
   };
 
+  // Swipe support for mobile
+  const handleTouchStart = (e) => {
+    touchStartX.current = e.touches[0].clientX;
+  };
+  const handleTouchEnd = (e) => {
+    if (touchStartX.current === null) return;
+    const diff = e.changedTouches[0].clientX - touchStartX.current;
+    if (diff > 40) prevSlide();
+    else if (diff < -40) nextSlide();
+    touchStartX.current = null;
+  };
+
   // Auto-advance timer
   useEffect(() => {
     if (!loading && products.length > productsPerSlide) {
@@ -102,47 +118,80 @@ function ProductCarousel() {
     <section className="product-carousel-section py-5">
       <div className="container">
         <h2 className="text-center mb-5">Featured Products</h2>
-        <div className="pillora-carousel-outer">
-          <button 
-            className="pillora-carousel-arrow left" 
-            onClick={prevSlide}
-            disabled={currentIndex === 0}
-          >
-            <i className="bi bi-chevron-left"></i>
-          </button>
-          
-          <div className={`pillora-carousel-track ${isFading ? 'fade-out' : 'fade-in'}`}>
-            {getVisibleProducts().map((product) => (
-              <div
-                key={product._id}
-                className="pillora-carousel-card"
-                onClick={() => handleProductClick(product)}
+        <div className={`pillora-carousel-outer${isMobile ? ' mobile-marquee' : ''}`}>
+          {/* Desktop carousel */}
+          {!isMobile && (
+            <>
+              <button 
+                className="pillora-carousel-arrow left" 
+                onClick={prevSlide}
+                disabled={currentIndex === 0}
               >
-                <div className="carousel-product-image">
-                  <img
-                    src={product.image.startsWith('http')
-                      ? product.image
-                      : `${API_BASE_URL}${product.image}`}
-                    alt={product.name}
-                    onError={(e) => {
-                      e.target.onerror = null;
-                      e.target.src = '/default-product.png';
-                    }}
-                  />
-                </div>
-                <h4>{product.name}</h4>
-                <p className="price">₹{product.price.toFixed(2)}</p>
+                <i className="bi bi-chevron-left"></i>
+              </button>
+              <div className={`pillora-carousel-track${isFading ? ' fade-out' : ' fade-in'}`}>
+                {getVisibleProducts().map((product) => (
+                  <div
+                    key={product._id}
+                    className="pillora-carousel-card"
+                    onClick={() => handleProductClick(product)}
+                  >
+                    <div className="carousel-product-image">
+                      <img
+                        src={product.image.startsWith('http')
+                          ? product.image
+                          : `${API_BASE_URL}${product.image}`}
+                        alt={product.name}
+                        onError={(e) => {
+                          e.target.onerror = null;
+                          e.target.src = '/default-product.png';
+                        }}
+                      />
+                    </div>
+                    <h4>{product.name}</h4>
+                    <p className="price">₹{product.price.toFixed(2)}</p>
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
-
-          <button 
-            className="pillora-carousel-arrow right" 
-            onClick={nextSlide}
-            disabled={currentIndex + productsPerSlide >= products.length}
-          >
-            <i className="bi bi-chevron-right"></i>
-          </button>
+              <button 
+                className="pillora-carousel-arrow right" 
+                onClick={nextSlide}
+                disabled={currentIndex + productsPerSlide >= products.length}
+              >
+                <i className="bi bi-chevron-right"></i>
+              </button>
+            </>
+          )}
+          {/* Mobile marquee carousel */}
+          {isMobile && (
+            <div className="pillora-carousel-marquee-wrapper">
+              <div className="pillora-carousel-marquee-track" style={{ width: `${products.length * 210}px` }}>
+                {/* Show each product only once, in order, for a true continuous scroll */}
+                {products.map((product) => (
+                  <div
+                    key={product._id}
+                    className="pillora-carousel-card mobile-marquee"
+                    onClick={() => handleProductClick(product)}
+                  >
+                    <div className="carousel-product-image">
+                      <img
+                        src={product.image.startsWith('http')
+                          ? product.image
+                          : `${API_BASE_URL}${product.image}`}
+                        alt={product.name}
+                        onError={(e) => {
+                          e.target.onerror = null;
+                          e.target.src = '/default-product.png';
+                        }}
+                      />
+                    </div>
+                    <h4>{product.name}</h4>
+                    <p className="price">₹{product.price.toFixed(2)}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </section>
