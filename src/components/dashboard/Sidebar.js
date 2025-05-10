@@ -1,7 +1,6 @@
 import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { toast } from 'react-toastify';
 import '../../styles/Sidebar.css';
 
 function Sidebar({ type = 'vendor', onSectionChange, menuItems, className, currentSection }) {
@@ -11,7 +10,6 @@ function Sidebar({ type = 'vendor', onSectionChange, menuItems, className, curre
 
   const handleLogout = () => {
     logout();
-    toast.success('Logged out successfully');
     navigate(type === 'vendor' ? '/vendor-login' : '/customer-login');
   };
 
@@ -25,7 +23,8 @@ function Sidebar({ type = 'vendor', onSectionChange, menuItems, className, curre
     { title: 'Prescriptions', icon: 'bi bi-file-medical', id: 'prescriptions' }
   ] : menuItems;
 
-  const isActive = (id) => currentSection === id || location.hash === `#${id}`;
+  // Use only the prop for active state
+  const isActive = (id) => currentSection === id;
 
   return (
     <nav className={`dashboard-sidebar ${className || ''}`}>
@@ -33,8 +32,12 @@ function Sidebar({ type = 'vendor', onSectionChange, menuItems, className, curre
         {defaultMenuItems.map((item) => (
           <li className="nav-item" key={item.id}>
             <button
-              className={`nav-link ${isActive(item.id) ? 'active' : ''}`}
+              type="button"
+              className={`nav-link${isActive(item.id) ? ' active' : ''}`}
               onClick={() => handleSectionClick(item.id)}
+              tabIndex={isActive(item.id) ? -1 : 0}
+              // Prevent pointer events if active
+              style={isActive(item.id) ? { pointerEvents: 'none' } : undefined}
             >
               <i className={item.icon}></i>
               <span>{item.title}</span>
@@ -43,7 +46,7 @@ function Sidebar({ type = 'vendor', onSectionChange, menuItems, className, curre
         ))}
       </ul>
       <div className="sidebar-footer">
-        <button className="btn-logout" onClick={handleLogout}>
+        <button type="button" className="btn-logout" onClick={handleLogout}>
           <i className="bi bi-box-arrow-right"></i>
           <span>Logout</span>
         </button>

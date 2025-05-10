@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { toast } from 'react-toastify';
 import '../styles/Auth.css';
 import API_BASE_URL from '../api';
 
@@ -26,16 +25,13 @@ function VendorRegister() {
     e.preventDefault();
     
     if (formData.password !== formData.confirmPassword) {
-      toast.error('Passwords do not match!');
       return;
     }
 
     try {
       await axios.post(`${API_BASE_URL}/api/vendors/register`, formData);
-      toast.success('Registration successful!');
       navigate('/vendor-login');
     } catch (error) {
-      toast.error(error.response?.data?.message || 'Registration failed');
     }
   };
 
