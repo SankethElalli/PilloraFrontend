@@ -28,6 +28,7 @@ function Checkout() {
     address: user?.address || '',
     paymentMethod: 'paypal'
   });
+  const [isPlacingOrder, setIsPlacingOrder] = useState(false);
 
   const calculateSubtotal = () => {
     return cart.reduce((total, item) => total + (item.price * item.quantity), 0);
@@ -75,7 +76,6 @@ function Checkout() {
   const onApprove = async (data, actions) => {
     try {
       const details = await actions.order.capture();
-      // ...existing code...
       const subtotal = calculateSubtotal();
       const gst = calculateGST();
       const total = calculateTotal();
@@ -177,6 +177,18 @@ function Checkout() {
     }
   };
 
+  // Handle Place Order button click
+  const handlePlaceOrder = async (e) => {
+    e.preventDefault();
+    if (formData.paymentMethod === 'paypal') {
+      // Trigger PayPal button programmatically
+      setIsPlacingOrder(true);
+      // The PayPalButtons component will handle the rest
+    } else {
+      handleSubmit(e);
+    }
+  };
+
   const handleModalClose = () => {
     setShowSuccessModal(false);
     if (typeof clearCart === 'function') {
@@ -192,9 +204,8 @@ function Checkout() {
           <div className="card shadow-sm">
             <div className="card-body">
               <h3 className="card-title mb-4">Shipping Details</h3>
-              <form onSubmit={handleSubmit}>
+              <form onSubmit={handlePlaceOrder}>
                 <div className="row g-3">
-                  {/* ...existing code... */}
                   <div className="col-12">
                     <label className="form-label">Full Name</label>
                     <input
@@ -267,29 +278,43 @@ function Checkout() {
                     </div>
                   </div>
                 </div>
-                {/* Show PayPal button inline if PayPal is selected */}
-                {formData.paymentMethod === 'paypal' && cart.length > 0 ? (
-                  <div className="mt-4">
+                {/* Always show Place Order button */}
+                <button
+                  type="submit"
+                  className="btn btn-primary w-100 mt-4"
+                  disabled={isPlacingOrder}
+                >
+                  {formData.paymentMethod === 'paypal' ? 'Pay with PayPal' : 'Place Order'}
+                </button>
+                {/* Render PayPalButtons but hide it, trigger programmatically */}
+                {formData.paymentMethod === 'paypal' && cart.length > 0 && (
+                  <div style={{ display: 'none' }}>
                     <PayPalButtons
+                      forceReRender={[cart, formData]}
                       createOrder={createOrder}
-                      onApprove={onApprove}
+                      onApprove={async (data, actions) => {
+                        await onApprove(data, actions);
+                        setIsPlacingOrder(false);
+                      }}
                       onError={(err) => {
                         toast.error("Payment failed. Please try again.");
+                        setIsPlacingOrder(false);
                       }}
                       style={{ layout: "vertical" }}
+                      // Expose a ref to trigger click programmatically
+                      ref={el => {
+                        if (isPlacingOrder && el && el.children && el.children[0]) {
+                          el.children[0].click();
+                        }
+                      }}
                     />
                   </div>
-                ) : (
-                  <button type="submit" className="btn btn-primary w-100 mt-4">
-                    Place Order
-                  </button>
                 )}
               </form>
             </div>
           </div>
         </div>
         <div className="col-md-4">
-          {/* ...existing code for order summary... */}
           <div className="card shadow-sm">
             <div className="card-body">
               <h3 className="card-title mb-4">Order Summary</h3>
