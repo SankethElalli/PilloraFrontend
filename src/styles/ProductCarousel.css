@@ -202,3 +202,243 @@
   width: 80px;
   height: 80px;
 }
+
+.pillora-carousel-outer {
+  position: relative;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto 2.5rem auto;
+  min-height: 340px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  outline: none;
+  padding: 0 40px;
+  overflow: visible;
+  background-color: #23383408;
+  border-radius: 20px;
+}
+
+.pillora-carousel-track {
+  position: relative;
+  width: 100%;
+  height: 320px;
+  display: flex;
+  gap: 1.5rem;
+  transition: opacity 0.35s ease;
+  overflow: visible;
+}
+
+.pillora-carousel-track.fade-out {
+  opacity: 0;
+}
+
+.pillora-carousel-track.fade-in {
+  opacity: 1;
+}
+
+.pillora-carousel-card {
+  position: relative;
+  width: calc(25% - 1.125rem);
+  min-height: 320px;
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 4px 16px rgba(37,99,235,0.07), 0 1.5px 6px rgba(0,0,0,0.04);
+  padding: 1.5rem 1.25rem 1.25rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  transition: 
+    transform 0.45s cubic-bezier(.4,0,.2,1),
+    box-shadow 0.25s,
+    opacity 0.35s;
+  opacity: 1;
+  z-index: 0;
+  pointer-events: auto;
+  user-select: auto;
+}
+
+.pillora-carousel-card.active {
+  pointer-events: auto;
+  opacity: 1;
+  z-index: 2;
+  user-select: auto;
+}
+
+.pillora-carousel-card h4 {
+  font-size: 1.15rem;
+  margin-bottom: 0.5rem;
+  color: #1e293b;
+  font-weight: 700;
+  text-align: center;
+  margin-top: 1.25rem;
+}
+
+.pillora-carousel-card .price {
+  font-size: 1.18rem;
+  font-weight: 600;
+  color: #497D74;
+  margin-bottom: 0.5rem;
+  text-align: center;
+}
+
+.pillora-carousel-card .carousel-product-image {
+  width: 100%;
+  height: 170px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.5rem;
+}
+
+.pillora-carousel-card .carousel-product-image img {
+  max-width: 90%;
+  max-height: 160px;
+  object-fit: contain;
+  border-radius: 12px;
+  background: #f8fafc;
+  box-shadow: 0 1px 4px rgba(73, 125, 116, 0.04);
+}
+
+.pillora-carousel-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #fff;
+  border: none;
+  box-shadow: 0 2px 8px rgba(73, 125, 116, 0.15);
+  color: #497D74;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.pillora-carousel-arrow.left {
+  left: -20px;
+}
+
+.pillora-carousel-arrow.right {
+  right: -20px;
+}
+
+.pillora-carousel-arrow:hover {
+  background: #497D74;
+  color: #fff;
+  transform: translateY(-50%) scale(1.1);
+}
+
+.pillora-carousel-arrow:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: #e2e8f0;
+  color: #94a3b8;
+  transform: translateY(-50%) scale(1);
+}
+
+.pillora-carousel-dots {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 0.5rem;
+  z-index: 20;
+}
+
+.pillora-carousel-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #e2e8f0;
+  border: none;
+  transition: background 0.2s, transform 0.2s;
+  cursor: pointer;
+  outline: none;
+  box-shadow: 0 1px 2px rgba(73, 125, 116, 0.05);
+}
+
+.pillora-carousel-dot.active {
+  background: #497D74;
+  transform: scale(1.2);
+}
+
+@media (max-width: 1024px) {
+  .pillora-carousel-outer {
+    max-width: 98vw;
+    min-height: 260px;
+  }
+  .pillora-carousel-track {
+    height: 220px;
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .pillora-carousel-card {
+    width: 220px;
+    min-height: 220px;
+    padding: 1rem 0.5rem 1rem 0.5rem;
+  }
+  .pillora-carousel-card .carousel-product-image {
+    height: 110px;
+  }
+  .pillora-carousel-arrow {
+    width: 36px;
+    height: 36px;
+    font-size: 1.2rem;
+    left: -12px;
+    right: -12px;
+  }
+}
+
+@media (max-width: 768px) {
+  .pillora-carousel-track {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .pillora-carousel-outer {
+    min-height: 180px;
+  }
+  .pillora-carousel-track {
+    height: 140px;
+  }
+  .pillora-carousel-card {
+    width: 140px;
+    min-height: 140px;
+    padding: 0.5rem 0.25rem 0.5rem 0.25rem;
+  }
+  .pillora-carousel-card .carousel-product-image {
+    height: 70px;
+  }
+  .pillora-carousel-arrow {
+    width: 28px;
+    height: 28px;
+    font-size: 1rem;
+    left: -6px;
+    right: -6px;
+  }
+  .pillora-carousel-dots {
+    bottom: 2px;
+  }
+}
+
+@media (max-width: 480px) {
+  .pillora-carousel-track {
+    grid-template-columns: 1fr;
+  }
+  
+  .pillora-carousel-outer {
+    padding: 0 30px;
+  }
+  
+  .pillora-carousel-arrow {
+    width: 32px;
+    height: 32px;
+  }
+}

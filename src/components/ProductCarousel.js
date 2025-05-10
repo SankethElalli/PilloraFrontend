@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import API_BASE_URL from '../api';
@@ -6,16 +6,23 @@ import '../styles/ProductCarousel.css';
 
 function ProductCarousel() {
   const [products, setProducts] = useState([]);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const [isFading, setIsFading] = useState(false);
   const navigate = useNavigate();
+  const productsPerSlide = 4;
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get(`${API_BASE_URL}/api/products?limit=10`);
-        console.log('Fetched products:', response.data);
-        setProducts(response.data);
+        const response = await axios.get(`${API_BASE_URL}/api/products`);
+        // Shuffle the products array
+        const shuffled = [...response.data].sort(() => Math.random() - 0.5);
+        setProducts(shuffled);
+        setLoading(false);
       } catch (error) {
         console.error('Error fetching products:', error);
+        setLoading(false);
       }
     };
     fetchProducts();
@@ -25,47 +32,100 @@ function ProductCarousel() {
     navigate('/products', { state: { selectedProduct: product } });
   };
 
+  const getVisibleProducts = () => {
+    const start = currentIndex;
+    return products.slice(start, start + productsPerSlide);
+  };
+
+  const nextSlide = useCallback(() => {
+    setIsFading(true);
+    setTimeout(() => {
+      setCurrentIndex((prevIndex) => {
+        const nextIndex = prevIndex + productsPerSlide;
+        return nextIndex >= products.length ? 0 : nextIndex;
+      });
+      setIsFading(false);
+    }, 350);
+  }, [products.length]);
+
+  const prevSlide = () => {
+    setIsFading(true);
+    setTimeout(() => {
+      setCurrentIndex((prevIndex) => {
+        const nextIndex = prevIndex - productsPerSlide;
+        return nextIndex < 0 ? Math.max(0, products.length - productsPerSlide) : nextIndex;
+      });
+      setIsFading(false);
+    }, 350);
+  };
+
+  // Auto-advance timer
+  useEffect(() => {
+    if (!loading && products.length > productsPerSlide) {
+      const timer = setInterval(nextSlide, 5000); // Change slides every 5 seconds
+      return () => clearInterval(timer);
+    }
+  }, [loading, products.length, nextSlide]);
+
+  if (loading) {
+    return (
+      <div className="loader-container">
+        <div className="loader-ring">
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <section className="product-carousel-section py-5">
       <div className="container">
         <h2 className="text-center mb-5">Featured Products</h2>
-        {products.length === 0 ? (
-          <div className="loader-container">
-            <div className="loader-ring">
-              <div></div>
-              <div></div>
-              <div></div>
-              <div></div>
-            </div>
-          </div>
-        ) : (
-          <div className="product-carousel">
-            <div className="product-track">
-              {[...products, ...products].map((product, index) => (
-                <div 
-                  key={`${product._id}-${index}`}
-                  className="carousel-product-card"
-                  onClick={() => handleProductClick(product)}
-                >
-                  <div className="carousel-product-image">
-                    <img 
-                      src={product.image.startsWith('http') 
-                        ? product.image 
-                        : `${API_BASE_URL}${product.image}`}
-                      alt={product.name}
-                      onError={(e) => {
-                        e.target.onerror = null;
-                        e.target.src = '/default-product.png';
-                      }}
-                    />
-                  </div>
-                  <h4>{product.name}</h4>
-                  <p className="price">₹{product.price.toFixed(2)}</p>
+        <div className="pillora-carousel-outer">
+          <button 
+            className="pillora-carousel-arrow left" 
+            onClick={prevSlide}
+            disabled={currentIndex === 0}
+          >
+            <i className="bi bi-chevron-left"></i>
+          </button>
+          
+          <div className={`pillora-carousel-track ${isFading ? 'fade-out' : 'fade-in'}`}>
+            {getVisibleProducts().map((product) => (
+              <div
+                key={product._id}
+                className="pillora-carousel-card"
+                onClick={() => handleProductClick(product)}
+              >
+                <div className="carousel-product-image">
+                  <img
+                    src={product.image.startsWith('http')
+                      ? product.image
+                      : `${API_BASE_URL}${product.image}`}
+                    alt={product.name}
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src = '/default-product.png';
+                    }}
+                  />
                 </div>
-              ))}
-            </div>
+                <h4>{product.name}</h4>
+                <p className="price">₹{product.price.toFixed(2)}</p>
+              </div>
+            ))}
           </div>
-        )}
+
+          <button 
+            className="pillora-carousel-arrow right" 
+            onClick={nextSlide}
+            disabled={currentIndex + productsPerSlide >= products.length}
+          >
+            <i className="bi bi-chevron-right"></i>
+          </button>
+        </div>
       </div>
     </section>
   );
