@@ -118,18 +118,25 @@ function Checkout() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const subtotal = calculateSubtotal();
+    const gst = calculateGST();
+    const total = calculateTotal();
+
     const orderData = {
       orderNumber: `ORD${Date.now()}${Math.floor(Math.random() * 1000)}`,
       customerId: user._id,
       customerName: formData.name,
       customerEmail: formData.email,
+      customerPhone: formData.phone,
       items: cart.map(item => ({
         productId: item._id,
         name: item.name,
         price: item.price,
         quantity: item.quantity
       })),
-      totalAmount: calculateTotal(), // Update to include GST
+      subtotal,
+      gst,
+      totalAmount: total,
       shippingAddress: formData.address,
       paymentMethod: formData.paymentMethod
     };
@@ -137,7 +144,16 @@ function Checkout() {
     // Only process form submit for COD
     if (formData.paymentMethod === 'cod') {
       try {
-        const response = await axios.post(`${API_BASE_URL}/api/orders`, orderData);
+        const response = await axios.post(
+          `${API_BASE_URL}/api/orders`,
+          orderData,
+          {
+            headers: {
+              'Authorization': `Bearer ${localStorage.getItem('token')}`,
+              'Content-Type': 'application/json'
+            }
+          }
+        );
         if (response.data) {
           clearCart();
           setShowSuccessModal(true);
