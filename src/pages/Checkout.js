@@ -8,9 +8,11 @@ import { useAuth } from '../context/AuthContext';
 import API_BASE_URL from '../api';
 import { PayPalButtons } from "@paypal/react-paypal-js";
 
-const INR_TO_USD_RATE = 85.68; // conversion rate, adjust as needed
+const INR_TO_USD_RATE = 83; // Update this rate as needed
+const GST_RATE = 0.12; // Add GST rate constant at the top with other constants
 
 function convertInrToUsd(amountInInr) {
+  // Ensure conversion uses a number and returns a string with 2 decimals
   return (Number(amountInInr) / INR_TO_USD_RATE).toFixed(2);
 }
 
@@ -25,14 +27,22 @@ function Checkout() {
     email: user?.email || '',
     phone: user?.phone || '',
     address: user?.address || '',
-    paymentMethod: 'paypal'
+    paymentMethod: 'paypal' // Changed default to paypal
   });
   const [paypalError, setPaypalError] = useState(null);
-  const [orderId, setOrderId] = useState(null);
+  const [orderId, setOrderId] = useState(null);  // Add this state
   const [showPaypalModal, setShowPaypalModal] = useState(false);
 
   const calculateSubtotal = () => {
     return cart.reduce((total, item) => total + (item.price * item.quantity), 0);
+  };
+
+  const calculateGST = () => {
+    return calculateSubtotal() * GST_RATE;
+  };
+
+  const calculateTotal = () => {
+    return calculateSubtotal() + calculateGST();
   };
 
   const handleInputChange = (e) => {
@@ -56,7 +66,7 @@ function Checkout() {
           price: item.price,
           quantity: item.quantity
         })),
-        totalAmount: calculateSubtotal(),
+        totalAmount: calculateTotal(), // Update to include GST
         shippingAddress: formData.address,
         paymentMethod: 'paypal',
         paypalOrderId: details.id,
@@ -65,7 +75,7 @@ function Checkout() {
 
       const response = await axios.post(`${API_BASE_URL}/api/orders`, orderData);
       if (response.data) {
-        setOrderId(response.data._id);
+        setOrderId(response.data._id); // Store the order ID
         clearCart();
         setShowSuccessModal(true);
       }
@@ -87,11 +97,12 @@ function Checkout() {
         price: item.price,
         quantity: item.quantity
       })),
-      totalAmount: calculateSubtotal(),
+      totalAmount: calculateTotal(), // Update to include GST
       shippingAddress: formData.address,
       paymentMethod: formData.paymentMethod
     };
 
+    // Only process form submit for COD
     if (formData.paymentMethod === 'cod') {
       try {
         const response = await axios.post(`${API_BASE_URL}/api/orders`, orderData);
@@ -136,12 +147,33 @@ function Checkout() {
       document.body.appendChild(link);
       link.click();
       
+      // Cleanup
       document.body.removeChild(link);
       window.URL.revokeObjectURL(url);
     } catch (error) {
       console.error('Error downloading invoice:', error);
       toast.error('Failed to download invoice. Please try again.');
     }
+  };
+
+  const createPaypalOrder = (data, actions) => {
+    const amountInInr = calculateTotal(); // Update to use total with GST
+    if (amountInInr <= 0) {
+      toast.error("Order amount must be greater than 0");
+      return;
+    }
+    const amountInUsd = convertInrToUsd(amountInInr);
+    return actions.order.create({
+      purchase_units: [
+        {
+          amount: {
+            currency_code: "USD",
+            value: amountInUsd,
+          },
+          description: "Purchase from Pillora",
+        },
+      ],
+    });
   };
 
   return (
@@ -229,6 +261,7 @@ function Checkout() {
                     </div>
                   </div>
                 </div>
+                {/* Show PayPal modal trigger button if PayPal is selected */}
                 {formData.paymentMethod === 'paypal' ? (
                   <button
                     type="button"
@@ -263,13 +296,17 @@ function Checkout() {
                 <span>₹{calculateSubtotal().toFixed(2)}</span>
               </div>
               <div className="d-flex justify-content-between mb-2">
+                <span>GST (12%):</span>
+                <span>₹{calculateGST().toFixed(2)}</span>
+              </div>
+              <div className="d-flex justify-content-between mb-2">
                 <span>Shipping:</span>
                 <span className="text-success">Free</span>
               </div>
               <hr />
               <div className="d-flex justify-content-between">
                 <strong>Total:</strong>
-                <strong>₹{calculateSubtotal().toFixed(2)}</strong>
+                <strong>₹{calculateTotal().toFixed(2)}</strong>
               </div>
             </div>
           </div>
@@ -284,26 +321,7 @@ function Checkout() {
       >
         <div className="paypal-buttons-wrapper py-3">
           <PayPalButtons
-            createOrder={(data, actions) => {
-              const amountInInr = calculateSubtotal();
-              if (amountInInr <= 0) {
-                toast.error("Order amount must be greater than 0");
-                return;
-              }
-              // Convert INR to USD for PayPal
-              const amountInUsd = convertInrToUsd(amountInInr);
-              return actions.order.create({
-                purchase_units: [
-                  {
-                    amount: {
-                      currency_code: "USD",
-                      value: amountInUsd,
-                    },
-                    description: "Purchase from Pillora",
-                  },
-                ],
-              });
-            }}
+            createOrder={createPaypalOrder}
             onApprove={async (data, actions) => {
               await handlePaypalApprove(data, actions);
               setShowPaypalModal(false);
@@ -325,7 +343,8 @@ function Checkout() {
           <i className="bi bi-check-circle text-success" style={{ fontSize: '4rem' }}></i>
           <h4 className="mt-3">Thank You For Your Order!</h4>
           <p className="mb-4">Your order number is: <strong>{orderNumber}</strong></p>
-          <p className="text-muted mb-4">
+          <p className="text-muted mb-4"></p>
+          <p>
             You will receive an email confirmation with invoice shortly. Your order will be delivered within 24-48 hours.
           </p>
           <button className="btn btn-primary px-4" onClick={handleModalClose}>
