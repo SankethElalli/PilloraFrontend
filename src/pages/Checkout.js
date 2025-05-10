@@ -55,32 +55,64 @@ function Checkout() {
   const handlePaypalApprove = async (data, actions) => {
     try {
       const details = await actions.order.capture();
+      console.log('PayPal payment successful:', details);
+      
+      // Calculate individual amounts
+      const subtotal = calculateSubtotal();
+      const gst = calculateGST();
+      const total = calculateTotal();
+
       const orderData = {
         orderNumber: `ORD${Date.now()}${Math.floor(Math.random() * 1000)}`,
         customerId: user._id,
         customerName: formData.name,
         customerEmail: formData.email,
+        customerPhone: formData.phone,
         items: cart.map(item => ({
           productId: item._id,
           name: item.name,
           price: item.price,
           quantity: item.quantity
         })),
-        totalAmount: calculateTotal(), // Update to include GST
+        subtotal: subtotal,
+        gst: gst,
+        totalAmount: total,
         shippingAddress: formData.address,
         paymentMethod: 'paypal',
-        paypalOrderId: details.id,
-        paymentStatus: 'completed'
+        paymentStatus: 'completed',
+        paypalDetails: {
+          orderId: details.id,
+          payerId: details.payer.payer_id,
+          status: details.status,
+          createTime: details.create_time,
+          updateTime: details.update_time
+        }
       };
 
-      const response = await axios.post(`${API_BASE_URL}/api/orders`, orderData);
+      const response = await axios.post(
+        `${API_BASE_URL}/api/orders`,
+        orderData,
+        {
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+            'Content-Type': 'application/json'
+          }
+        }
+      );
+
       if (response.data) {
-        setOrderId(response.data._id); // Store the order ID
+        setOrderId(response.data._id);
         clearCart();
         setShowSuccessModal(true);
+        setShowPaypalModal(false);
       }
     } catch (error) {
-      toast.error('Payment failed. Please try again.');
+      console.error('Payment error:', error?.response?.data || error);
+      toast.error(
+        error?.response?.data?.message || 
+        'Payment processing failed. Please try again or contact support.'
+      );
+      setShowPaypalModal(false);
     }
   };
 
@@ -156,24 +188,35 @@ function Checkout() {
     }
   };
 
-  const createPaypalOrder = (data, actions) => {
-    const amountInInr = calculateTotal(); // Update to use total with GST
-    if (amountInInr <= 0) {
-      toast.error("Order amount must be greater than 0");
-      return;
+  const createPaypalOrder = async () => {
+    try {
+      const total = calculateTotal();
+      if (total <= 0) {
+        toast.error("Order amount must be greater than 0");
+        return null;
+      }
+      const amountInUsd = convertInrToUsd(total);
+      console.log('Creating PayPal order for USD:', amountInUsd);
+      
+      return {
+        purchase_units: [
+          {
+            amount: {
+              currency_code: "USD",
+              value: amountInUsd
+            },
+            description: `Order from Pillora - ${cart.length} items`
+          }
+        ],
+        application_context: {
+          shipping_preference: "NO_SHIPPING"
+        }
+      };
+    } catch (error) {
+      console.error('Error creating PayPal order:', error);
+      toast.error('Failed to initialize payment. Please try again.');
+      return null;
     }
-    const amountInUsd = convertInrToUsd(amountInInr);
-    return actions.order.create({
-      purchase_units: [
-        {
-          amount: {
-            currency_code: "USD",
-            value: amountInUsd,
-          },
-          description: "Purchase from Pillora",
-        },
-      ],
-    });
   };
 
   return (
@@ -321,15 +364,18 @@ function Checkout() {
       >
         <div className="paypal-buttons-wrapper py-3">
           <PayPalButtons
-            createOrder={createPaypalOrder}
-            onApprove={async (data, actions) => {
-              await handlePaypalApprove(data, actions);
-              setShowPaypalModal(false);
-            }}
+            createOrder={(data, actions) => actions.order.create(createPaypalOrder())}
+            onApprove={handlePaypalApprove}
             onError={(err) => {
               console.error("PayPal error:", err);
               toast.error("Payment failed. Please try again.");
+              setShowPaypalModal(false);
             }}
+            onCancel={() => {
+              toast.info("Payment cancelled");
+              setShowPaypalModal(false);
+            }}
+            style={{ layout: "vertical" }}
           />
         </div>
       </Modal>
