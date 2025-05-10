@@ -8,11 +8,10 @@ import { useAuth } from '../context/AuthContext';
 import API_BASE_URL from '../api';
 import { PayPalButtons } from "@paypal/react-paypal-js";
 
-const INR_TO_USD_RATE = 83; // Update this rate as needed
-const GST_RATE = 0.12; // Add GST rate constant at the top with other constants
+const INR_TO_USD_RATE = 85.42;
+const GST_RATE = 0.12;
 
 function convertInrToUsd(amountInInr) {
-  // Ensure conversion uses a number and returns a string with 2 decimals
   return (Number(amountInInr) / INR_TO_USD_RATE).toFixed(2);
 }
 
@@ -27,11 +26,8 @@ function Checkout() {
     email: user?.email || '',
     phone: user?.phone || '',
     address: user?.address || '',
-    paymentMethod: 'paypal' // Changed default to paypal
+    paymentMethod: 'paypal'
   });
-  const [paypalError, setPaypalError] = useState(null);
-  const [orderId, setOrderId] = useState(null);  // Add this state
-  const [showPaypalModal, setShowPaypalModal] = useState(false);
 
   const calculateSubtotal = () => {
     return cart.reduce((total, item) => total + (item.price * item.quantity), 0);
@@ -52,12 +48,34 @@ function Checkout() {
     });
   };
 
-  const handlePaypalApprove = async (data, actions) => {
+  // PayPal order creation and approval
+  const createOrder = (data, actions) => {
+    const total = calculateTotal();
+    if (total <= 0) {
+      toast.error("Order amount must be greater than 0");
+      return;
+    }
+    const amountInUsd = convertInrToUsd(total);
+    return actions.order.create({
+      purchase_units: [
+        {
+          amount: {
+            currency_code: "USD",
+            value: amountInUsd
+          },
+          description: `Order from Pillora - ${cart.length} items`
+        }
+      ],
+      application_context: {
+        shipping_preference: "NO_SHIPPING"
+      }
+    });
+  };
+
+  const onApprove = async (data, actions) => {
     try {
       const details = await actions.order.capture();
-      console.log('PayPal payment successful:', details);
-      
-      // Calculate individual amounts
+      // ...existing code...
       const subtotal = calculateSubtotal();
       const gst = calculateGST();
       const total = calculateTotal();
@@ -74,8 +92,8 @@ function Checkout() {
           price: item.price,
           quantity: item.quantity
         })),
-        subtotal: subtotal,
-        gst: gst,
+        subtotal,
+        gst,
         totalAmount: total,
         shippingAddress: formData.address,
         paymentMethod: 'paypal',
@@ -101,18 +119,14 @@ function Checkout() {
       );
 
       if (response.data) {
-        setOrderId(response.data._id);
         clearCart();
         setShowSuccessModal(true);
-        setShowPaypalModal(false);
       }
     } catch (error) {
-      console.error('Payment error:', error?.response?.data || error);
       toast.error(
-        error?.response?.data?.message || 
+        error?.response?.data?.message ||
         'Payment processing failed. Please try again or contact support.'
       );
-      setShowPaypalModal(false);
     }
   };
 
@@ -141,7 +155,6 @@ function Checkout() {
       paymentMethod: formData.paymentMethod
     };
 
-    // Only process form submit for COD
     if (formData.paymentMethod === 'cod') {
       try {
         const response = await axios.post(
@@ -159,7 +172,6 @@ function Checkout() {
           setShowSuccessModal(true);
         }
       } catch (error) {
-        console.error('Order creation error:', error.response?.data || error);
         toast.error('Failed to place order. Please try again.');
       }
     }
@@ -173,68 +185,6 @@ function Checkout() {
     navigate('/customer-dashboard#orders');
   };
 
-  const handleDownloadInvoice = async () => {
-    try {
-      console.log('Downloading invoice for order:', orderNumber); // Add this log
-      const response = await axios.get(
-        `${API_BASE_URL}/api/orders/${orderNumber}/invoice`,
-        {
-          responseType: 'blob',
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`
-          }
-        }
-      );
-
-      // Create blob link to download
-      const blob = new Blob([response.data], { type: 'application/pdf' });
-      const url = window.URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.setAttribute('download', `invoice-${orderNumber}.pdf`);
-      document.body.appendChild(link);
-      link.click();
-      
-      // Cleanup
-      document.body.removeChild(link);
-      window.URL.revokeObjectURL(url);
-    } catch (error) {
-      console.error('Error downloading invoice:', error);
-      toast.error('Failed to download invoice. Please try again.');
-    }
-  };
-
-  const createPaypalOrder = async () => {
-    try {
-      const total = calculateTotal();
-      if (total <= 0) {
-        toast.error("Order amount must be greater than 0");
-        return null;
-      }
-      const amountInUsd = convertInrToUsd(total);
-      console.log('Creating PayPal order for USD:', amountInUsd);
-      
-      return {
-        purchase_units: [
-          {
-            amount: {
-              currency_code: "USD",
-              value: amountInUsd
-            },
-            description: `Order from Pillora - ${cart.length} items`
-          }
-        ],
-        application_context: {
-          shipping_preference: "NO_SHIPPING"
-        }
-      };
-    } catch (error) {
-      console.error('Error creating PayPal order:', error);
-      toast.error('Failed to initialize payment. Please try again.');
-      return null;
-    }
-  };
-
   return (
     <div className="container my-5">
       <div className="row">
@@ -244,6 +194,7 @@ function Checkout() {
               <h3 className="card-title mb-4">Shipping Details</h3>
               <form onSubmit={handleSubmit}>
                 <div className="row g-3">
+                  {/* ...existing code... */}
                   <div className="col-12">
                     <label className="form-label">Full Name</label>
                     <input
@@ -255,7 +206,6 @@ function Checkout() {
                       required
                     />
                   </div>
-                  
                   <div className="col-md-6">
                     <label className="form-label">Email</label>
                     <input
@@ -267,7 +217,6 @@ function Checkout() {
                       required
                     />
                   </div>
-                  
                   <div className="col-md-6">
                     <label className="form-label">Phone</label>
                     <input
@@ -279,7 +228,6 @@ function Checkout() {
                       required
                     />
                   </div>
-                  
                   <div className="col-12">
                     <label className="form-label">Delivery Address</label>
                     <textarea
@@ -291,7 +239,6 @@ function Checkout() {
                       required
                     ></textarea>
                   </div>
-
                   <div className="col-12">
                     <label className="form-label">Payment Method</label>
                     <div className="d-flex gap-3">
@@ -320,15 +267,18 @@ function Checkout() {
                     </div>
                   </div>
                 </div>
-                {/* Show PayPal modal trigger button if PayPal is selected */}
-                {formData.paymentMethod === 'paypal' ? (
-                  <button
-                    type="button"
-                    className="btn btn-primary w-100 mt-4"
-                    onClick={() => setShowPaypalModal(true)}
-                  >
-                    Pay Now
-                  </button>
+                {/* Show PayPal button inline if PayPal is selected */}
+                {formData.paymentMethod === 'paypal' && cart.length > 0 ? (
+                  <div className="mt-4">
+                    <PayPalButtons
+                      createOrder={createOrder}
+                      onApprove={onApprove}
+                      onError={(err) => {
+                        toast.error("Payment failed. Please try again.");
+                      }}
+                      style={{ layout: "vertical" }}
+                    />
+                  </div>
                 ) : (
                   <button type="submit" className="btn btn-primary w-100 mt-4">
                     Place Order
@@ -338,8 +288,8 @@ function Checkout() {
             </div>
           </div>
         </div>
-
         <div className="col-md-4">
+          {/* ...existing code for order summary... */}
           <div className="card shadow-sm">
             <div className="card-body">
               <h3 className="card-title mb-4">Order Summary</h3>
@@ -371,31 +321,7 @@ function Checkout() {
           </div>
         </div>
       </div>
-
-      {/* PayPal Modal */}
-      <Modal
-        isOpen={showPaypalModal}
-        onClose={() => setShowPaypalModal(false)}
-        title="Pay with PayPal"
-      >
-        <div className="paypal-buttons-wrapper py-3">
-          <PayPalButtons
-            createOrder={(data, actions) => actions.order.create(createPaypalOrder())}
-            onApprove={handlePaypalApprove}
-            onError={(err) => {
-              console.error("PayPal error:", err);
-              toast.error("Payment failed. Please try again.");
-              setShowPaypalModal(false);
-            }}
-            onCancel={() => {
-              toast.info("Payment cancelled");
-              setShowPaypalModal(false);
-            }}
-            style={{ layout: "vertical" }}
-          />
-        </div>
-      </Modal>
-
+      {/* Success Modal */}
       <Modal
         isOpen={showSuccessModal}
         onClose={handleModalClose}
@@ -405,7 +331,6 @@ function Checkout() {
           <i className="bi bi-check-circle text-success" style={{ fontSize: '4rem' }}></i>
           <h4 className="mt-3">Thank You For Your Order!</h4>
           <p className="mb-4">Your order number is: <strong>{orderNumber}</strong></p>
-          <p className="text-muted mb-4"></p>
           <p>
             You will receive an email confirmation with invoice shortly. Your order will be delivered within 24-48 hours.
           </p>
