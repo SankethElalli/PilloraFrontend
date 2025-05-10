@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import Modal from '../components/dashboard/Modal';
@@ -29,6 +29,7 @@ function Checkout() {
     paymentMethod: 'paypal'
   });
   const [isPlacingOrder, setIsPlacingOrder] = useState(false);
+  const paypalBtnContainerRef = useRef(null);
 
   const calculateSubtotal = () => {
     return cart.reduce((total, item) => total + (item.price * item.quantity), 0);
@@ -181,9 +182,13 @@ function Checkout() {
   const handlePlaceOrder = async (e) => {
     e.preventDefault();
     if (formData.paymentMethod === 'paypal') {
-      // Trigger PayPal button programmatically
-      setIsPlacingOrder(true);
-      // The PayPalButtons component will handle the rest
+      // Find the PayPal button inside the hidden container and click it
+      if (paypalBtnContainerRef.current) {
+        const btn = paypalBtnContainerRef.current.querySelector('iframe')
+          ? paypalBtnContainerRef.current.querySelector('iframe').contentWindow.document.querySelector('button')
+          : paypalBtnContainerRef.current.querySelector('button');
+        if (btn) btn.click();
+      }
     } else {
       handleSubmit(e);
     }
@@ -288,7 +293,7 @@ function Checkout() {
                 </button>
                 {/* Render PayPalButtons but hide it, trigger programmatically */}
                 {formData.paymentMethod === 'paypal' && cart.length > 0 && (
-                  <div style={{ display: 'none' }}>
+                  <div style={{ display: 'none' }} ref={paypalBtnContainerRef}>
                     <PayPalButtons
                       forceReRender={[cart, formData]}
                       createOrder={createOrder}
@@ -301,12 +306,6 @@ function Checkout() {
                         setIsPlacingOrder(false);
                       }}
                       style={{ layout: "vertical" }}
-                      // Expose a ref to trigger click programmatically
-                      ref={el => {
-                        if (isPlacingOrder && el && el.children && el.children[0]) {
-                          el.children[0].click();
-                        }
-                      }}
                     />
                   </div>
                 )}
