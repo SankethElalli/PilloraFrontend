@@ -7,7 +7,7 @@
 
 .product-track {
   display: flex;
-  animation: scroll 120s linear infinite;
+  animation: scroll 180s linear infinite;
   width: fit-content;
 }
 
@@ -135,7 +135,7 @@
   }
 
   .product-track {
-    animation: scroll 120s linear infinite;
+    animation: scroll 180s linear infinite;
   }
 }
 
@@ -470,7 +470,7 @@
   display: flex;
   align-items: center;
   gap: 0;
-  animation: pillora-marquee-scroll 120s linear infinite;
+  animation: pillora-marquee-scroll 180s linear infinite;
   will-change: transform;
 }
 
