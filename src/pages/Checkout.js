@@ -51,7 +51,6 @@ function Checkout() {
     });
   };
 
-  // PayPal order creation and approval
   const createOrder = (data, actions) => {
     const total = calculateTotal();
     if (total <= 0) {
@@ -179,7 +178,6 @@ function Checkout() {
     }
   };
 
-  // Handle Place Order button click
   const handlePlaceOrder = async (e) => {
     e.preventDefault();
     if (formData.paymentMethod === 'paypal') {
@@ -278,7 +276,6 @@ function Checkout() {
                     </div>
                   </div>
                 </div>
-                {/* Always show Place Order button */}
                 <button
                   type="submit"
                   className="btn btn-primary w-100 mt-4"

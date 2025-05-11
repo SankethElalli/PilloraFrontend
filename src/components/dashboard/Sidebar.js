@@ -23,7 +23,6 @@ function Sidebar({ type = 'vendor', onSectionChange, menuItems, className, curre
     { title: 'Prescriptions', icon: 'bi bi-file-medical', id: 'prescriptions' }
   ] : menuItems;
 
-  // Use only the prop for active state
   const isActive = (id) => currentSection === id;
 
   return (
@@ -36,7 +35,6 @@ function Sidebar({ type = 'vendor', onSectionChange, menuItems, className, curre
               className={`nav-link${isActive(item.id) ? ' active' : ''}`}
               onClick={() => handleSectionClick(item.id)}
               tabIndex={isActive(item.id) ? -1 : 0}
-              // Prevent pointer events if active
               style={isActive(item.id) ? { pointerEvents: 'none' } : undefined}
             >
               <i className={item.icon}></i>

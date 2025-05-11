@@ -41,7 +41,6 @@
   color: #fee2e2;
 }
 
-/* Responsive styles for mobile and small screens */
 @media (max-width: 600px) {
   .pillora-snackbar {
     min-width: 140px;

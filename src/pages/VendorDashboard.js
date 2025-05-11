@@ -8,7 +8,7 @@ import OrderList from '../components/dashboard/OrderList';
 import PrescriptionList from '../components/dashboard/PrescriptionList';
 import OrderModal from '../components/OrderModal';
 import '../styles/Dashboard.css';
-import '../styles/Notification.css'; // Add this import
+import '../styles/Notification.css';
 import API_BASE_URL from '../api';
 
 function VendorDashboard() {
@@ -23,11 +23,9 @@ function VendorDashboard() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [editProduct, setEditProduct] = useState(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-
-  // Snackbar state
   const [showSnackbar, setShowSnackbar] = useState(false);
   const [snackbarText, setSnackbarText] = useState('');
-  const [snackbarType, setSnackbarType] = useState('success'); // 'success' | 'error'
+  const [snackbarType, setSnackbarType] = useState('success');
 
   const fetchProducts = useCallback(async () => {
     try {
@@ -63,7 +61,6 @@ function VendorDashboard() {
           'Authorization': `Bearer ${localStorage.getItem('token')}`
         }
       });
-      // Ensure we have customer details
       setPrescriptions(response.data.map(prescription => ({
         ...prescription,
         customerName: prescription.customerName || 'Unknown Customer',
@@ -104,7 +101,6 @@ function VendorDashboard() {
     loadSectionData(hash);
   }, [loadSectionData]);
 
-  // Add this useEffect for scroll-to-hide toggle button
   useEffect(() => {
     const toggleBtn = document.querySelector('.mobile-sidebar-toggle');
     if (!toggleBtn) return;
@@ -118,7 +114,7 @@ function VendorDashboard() {
     }
 
     window.addEventListener('scroll', onScroll, { passive: true });
-    onScroll(); // Initial check
+    onScroll();
 
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
@@ -154,9 +150,7 @@ function VendorDashboard() {
   const handleUpdateProduct = async (updatedProduct) => {
     try {
       const token = localStorage.getItem('token');
-      // Remove _id from the body to avoid Mongoose immutable error
       const { _id, ...productData } = updatedProduct;
-      // Try PATCH, fallback to PUT if PATCH fails
       let response;
       try {
         response = await axios.patch(
@@ -169,7 +163,6 @@ function VendorDashboard() {
           }
         );
       } catch (patchError) {
-        // If PATCH route does not exist, try PUT
         if (
           patchError?.response?.status === 404 ||
           (patchError?.response?.data && typeof patchError.response.data === 'string' && patchError.response.data.includes('Cannot PATCH'))
@@ -195,7 +188,6 @@ function VendorDashboard() {
       setShowSnackbar(true);
       setTimeout(() => setShowSnackbar(false), 2000);
     } catch (error) {
-      // Show more details for debugging
       console.error('Error updating product:', error?.response?.data || error);
       setSnackbarText(
         error?.response?.data?.message
@@ -209,7 +201,6 @@ function VendorDashboard() {
   };
 
   const handleDeleteProduct = (productId) => {
-    // TODO: Add API call to delete product
     setProducts(products.filter(p => p._id !== productId));
   };
 
@@ -224,7 +215,6 @@ function VendorDashboard() {
         order._id === updatedOrder._id ? updatedOrder : order
       )
     );
-    // Refresh orders list to ensure we have latest data
     fetchOrders();
   };
 
@@ -301,9 +291,6 @@ function VendorDashboard() {
                 }}
               />
             </Modal>
-            {/* If you have other modals (e.g., order details, prescription), add horizontal prop as well */}
-            {/* Example: */}
-            {/* <Modal isOpen={someModalOpen} onClose={...} title="..." horizontal>...</Modal> */}
           </div>
         );
       case 'orders':

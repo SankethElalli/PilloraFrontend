@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useCart } from '../context/CartContext';
 import { Link, useNavigate } from 'react-router-dom';
 import '../styles/CartProduct.css';
-import '../styles/Notification.css'; // Add this import
+import '../styles/Notification.css';
 
 function Cart() {
   const { cart, removeFromCart, updateQuantity, clearCart } = useCart();

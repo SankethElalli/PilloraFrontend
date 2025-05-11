@@ -2,14 +2,14 @@ import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { useCart } from '../context/CartContext';
 import '../styles/Products.css';
-import '../styles/ProductGrid.css'; // Use the new grid styles
-import '../styles/Notification.css'; // <-- Add this line
+import '../styles/ProductGrid.css';
+import '../styles/Notification.css';
 import API_BASE_URL from '../api';
-import { useAuth } from '../context/AuthContext'; // <-- Add this import
-import CategoryFilterModal from '../components/CategoryFilterModal'; // Fix import path
-import Modal from '../components/Modal'; // Ensure Modal is imported
+import { useAuth } from '../context/AuthContext';
+import CategoryFilterModal from '../components/CategoryFilterModal';
+import Modal from '../components/Modal';
 import { useLocation } from 'react-router-dom';
-import ProductReviews from '../components/ProductReviews'; // Add import at the top
+import ProductReviews from '../components/ProductReviews';
 
 function Products() {
   const { addToCart } = useCart();
@@ -30,11 +30,9 @@ function Products() {
 
   useEffect(() => {
     fetchProducts();
-    // Check for selected product from carousel
     if (location.state?.selectedProduct) {
       setSelectedProduct(location.state.selectedProduct);
     }
-    // eslint-disable-next-line
   }, [user]);
 
   useEffect(() => {
@@ -43,9 +41,9 @@ function Products() {
       if (currentScrollY < 80) {
         setShowHeader(true);
       } else if (currentScrollY > lastScrollY.current) {
-        setShowHeader(false); // scrolling down
+        setShowHeader(false);
       } else {
-        setShowHeader(true); // scrolling up
+        setShowHeader(true);
       }
       lastScrollY.current = currentScrollY;
     };
@@ -57,12 +55,10 @@ function Products() {
     try {
       setLoading(true);
       let config = {};
-      // Only send Authorization header if user is a vendor
       if (user && user.isVendor) {
         const token = localStorage.getItem('token');
         config.headers = { Authorization: `Bearer ${token}` };
       }
-      // For customers and logged-out users, do NOT send Authorization header
       const response = await axios.get(`${API_BASE_URL}/api/products`, config);
       setProducts(response.data);
     } catch (error) {
@@ -257,7 +253,7 @@ function Products() {
                     className="product-img"
                     onError={(e) => {
                       e.target.onerror = null;
-                      e.target.src = '/default-product.png'; // Fallback image
+                      e.target.src = '/default-product.png';
                     }}
                   />
                 </div>

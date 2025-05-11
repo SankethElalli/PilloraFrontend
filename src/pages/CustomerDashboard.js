@@ -94,7 +94,6 @@ function CustomerDashboard() {
     }
   }, [user, fetchOrders]);
 
-  // Add this useEffect for scroll-to-hide toggle button
   useEffect(() => {
     const toggleBtn = document.querySelector('.mobile-sidebar-toggle');
     if (!toggleBtn) return;
@@ -108,7 +107,7 @@ function CustomerDashboard() {
     }
 
     window.addEventListener('scroll', onScroll, { passive: true });
-    onScroll(); // Initial check
+    onScroll();
 
     return () => window.removeEventListener('scroll', onScroll);
   }, []);

@@ -13,8 +13,7 @@ function ProductCarousel() {
   const [productsPerSlide, setProductsPerSlide] = useState(4);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 600);
   const touchStartX = useRef(null);
-
-  // Responsive products per slide and mobile flag
+  
   useEffect(() => {
     function handleResize() {
       const mobile = window.innerWidth <= 600;
@@ -38,7 +37,6 @@ function ProductCarousel() {
     const fetchProducts = async () => {
       try {
         const response = await axios.get(`${API_BASE_URL}/api/products`);
-        // Shuffle the products array
         const shuffled = [...response.data].sort(() => Math.random() - 0.5);
         setProducts(shuffled);
         setLoading(false);
@@ -81,7 +79,6 @@ function ProductCarousel() {
     }, 350);
   };
 
-  // Swipe support for mobile
   const handleTouchStart = (e) => {
     touchStartX.current = e.touches[0].clientX;
   };
@@ -93,10 +90,9 @@ function ProductCarousel() {
     touchStartX.current = null;
   };
 
-  // Auto-advance timer
   useEffect(() => {
     if (!loading && products.length > productsPerSlide) {
-      const timer = setInterval(nextSlide, 5000); // Change slides every 5 seconds
+      const timer = setInterval(nextSlide, 5000);
       return () => clearInterval(timer);
     }
   }, [loading, products.length, nextSlide, productsPerSlide]);
@@ -166,7 +162,6 @@ function ProductCarousel() {
           {isMobile && (
             <div className="pillora-carousel-marquee-wrapper">
               <div className="pillora-carousel-marquee-track" style={{ width: `${products.length * 210}px` }}>
-                {/* Show each product only once, in order, for a true continuous scroll */}
                 {products.map((product) => (
                   <div
                     key={product._id}

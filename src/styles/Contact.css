@@ -299,7 +299,6 @@
   }
 }
 
-/* Utility for better stacking on mobile */
 @media (max-width: 767.98px) {
   .row.g-4.flex-column-reverse.flex-md-row {
     flex-direction: column-reverse !important;

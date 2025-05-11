@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import '../styles/Auth.css';
-import API_BASE_URL from '../api'; // <-- Add this import
+import API_BASE_URL from '../api';
 
 function CustomerRegister() {
   const navigate = useNavigate();
@@ -23,16 +23,13 @@ function CustomerRegister() {
     e.preventDefault();
     
     if (formData.password !== formData.confirmPassword) {
-      // No toast, handled by AuthContext snackbar if needed
       return;
     }
 
     try {
       await axios.post(`${API_BASE_URL}/api/customers/register`, formData);
-      // No toast, handled by AuthContext snackbar if needed
       navigate('/customer-login');
     } catch (error) {
-      // No toast, handled by AuthContext snackbar if needed
     }
   };
 

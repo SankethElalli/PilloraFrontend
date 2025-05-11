@@ -53,9 +53,6 @@ function VendorLogin() {
               <div className="w-100 text-center px-4">
                 <i className="bi bi-shop text-primary" style={{ fontSize: '5rem' }}></i>
                 <h2 className="fw-bold mt-3 mb-2">Vendor Login</h2>
-                <p className="text-muted mb-0" style={{ fontSize: '1.1rem' }}>
-                  Sign in to manage your Pillora vendor account and orders.
-                </p>
               </div>
             </div>
             <div className="col-md-6 col-12">
