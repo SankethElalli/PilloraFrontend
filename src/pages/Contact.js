@@ -117,7 +117,7 @@ function Contact() {
                   onClick={handleTeleAssist}
                   aria-label="Tele Assistance Coming Soon"
                 >
-                  <i className="bi bi-camera-video-fill me-2"></i>
+                  <i className="bi bi-phone me-2"></i>
                   Tele Assistance
                   <span className="coming-soon-badge ms-2">Coming Soon</span>
                 </button>
