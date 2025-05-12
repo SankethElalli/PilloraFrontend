@@ -202,7 +202,7 @@ function VendorRegister() {
             />
           </div>
 
-          <div className="form-group"></div>
+          <div className="form-group">
             <label className="form-label">Phone Number</label>
             <input
               type="tel"
@@ -283,7 +283,7 @@ function VendorRegister() {
             Register
           </button>
 
-          <p className="text-center mb-0"></p>
+          <p className="text-center mb-0">
             Already have an account? <Link to="/vendor-login" className="auth-link">Login here</Link>
           </p>
         </form>

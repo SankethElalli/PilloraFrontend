@@ -156,7 +156,7 @@ function CustomerRegister() {
             />
           </div>
 
-          <div className="form-group"></div>
+          <div className="form-group">
             <label className="form-label">Email Address</label>
             <input
               type="email"
@@ -169,7 +169,7 @@ function CustomerRegister() {
             />
           </div>
 
-          <div className="form-group"></div>
+          <div className="form-group">
             <label className="form-label">Phone Number</label>
             <input
               type="tel"
@@ -182,7 +182,7 @@ function CustomerRegister() {
             />
           </div>
 
-          <div className="form-group"></div>
+          <div className="form-group">
             <label className="form-label">Address</label>
             <textarea
               name="address"
