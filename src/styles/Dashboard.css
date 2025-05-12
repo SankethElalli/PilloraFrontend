@@ -641,12 +641,10 @@ textarea.form-control {
     padding: 0.75rem;
   }
 
-  /* Stack form elements on mobile */
   .form-group {
     margin-bottom: 1rem;
   }
 
-  /* Improve modal display on mobile */
   .modal-container {
     max-width: 100%;
     margin: 0.5rem;
@@ -836,7 +834,6 @@ textarea.form-control {
     font-weight: 500;
   }
 
-  /* Vendor specific mobile styles */
   .product-table {
     display: none;
   }
@@ -1008,7 +1005,6 @@ textarea.form-control {
     font-size: 0.9rem;
   }
 
-  /* Product specific styles */
   .product-cards {
     padding: 0.5rem;
     margin: 0;
