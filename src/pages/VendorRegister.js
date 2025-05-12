@@ -172,7 +172,7 @@ function VendorRegister() {
       {/* Mobile View */}
       <div className="mobile-auth-card d-md-none">
         <div className="login-logo mb-4">
-          <i className="bi bi-capsule fs-1 text-primary"></i>
+          <i className="bi bi-shop fs-1 text-primary"></i>
         </div>
         <h3>Register as Vendor</h3>
         <form onSubmit={handleSubmit} className="auth-form">
