@@ -10,6 +10,7 @@ import OrderModal from '../components/OrderModal';
 import '../styles/Dashboard.css';
 import '../styles/Notification.css';
 import API_BASE_URL from '../api';
+import { useLocation } from 'react-router-dom';
 
 function VendorDashboard() {
   const [showModal, setShowModal] = useState(false);
@@ -26,6 +27,7 @@ function VendorDashboard() {
   const [showSnackbar, setShowSnackbar] = useState(false);
   const [snackbarText, setSnackbarText] = useState('');
   const [snackbarType, setSnackbarType] = useState('success');
+  const location = useLocation();
 
   const fetchProducts = useCallback(async () => {
     try {
@@ -118,6 +120,18 @@ function VendorDashboard() {
 
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
+
+  useEffect(() => {
+    // Show snackbar if redirected from login
+    if (location.state && location.state.snackbar) {
+      setSnackbarText(location.state.snackbar);
+      setSnackbarType('success');
+      setShowSnackbar(true);
+      setTimeout(() => setShowSnackbar(false), 2000);
+      // Clear the snackbar state so it doesn't show again on refresh
+      window.history.replaceState({}, document.title);
+    }
+  }, [location.state]);
 
   const handleAddProduct = async (product) => {
     try {

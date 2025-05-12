@@ -10,6 +10,7 @@ import '../styles/Dashboard.css';
 import { useAuth } from '../context/AuthContext';
 import API_BASE_URL from '../api';
 import '../styles/Notification.css';
+import { useLocation } from 'react-router-dom';
 
 function CustomerDashboard() {
   const { user } = useAuth();
@@ -23,6 +24,7 @@ function CustomerDashboard() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [showSnackbar, setShowSnackbar] = useState(false);
   const [snackbarText, setSnackbarText] = useState('');
+  const location = useLocation();
 
   const fetchOrders = useCallback(async () => {
     try {
@@ -111,6 +113,17 @@ function CustomerDashboard() {
 
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
+
+  useEffect(() => {
+    // Show snackbar if redirected from login
+    if (location.state && location.state.snackbar) {
+      setSnackbarText(location.state.snackbar);
+      setShowSnackbar(true);
+      setTimeout(() => setShowSnackbar(false), 2000);
+      // Clear the snackbar state so it doesn't show again on refresh
+      window.history.replaceState({}, document.title);
+    }
+  }, [location.state]);
 
   const handleViewOrder = (order) => {
     setSelectedOrder(order);

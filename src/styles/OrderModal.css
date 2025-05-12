@@ -104,7 +104,6 @@
   line-height: 1.4;
   margin-bottom: 2px;
   max-width: 260px;
-  /* Allow text to wrap */
   word-break: break-word;
   white-space: normal;
 }

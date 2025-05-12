@@ -25,7 +25,8 @@ function VendorLogin() {
         return;
       }
       await login(email.trim().toLowerCase(), password.trim(), true);
-      navigate('/');
+      // Pass snackbar message to dashboard
+      navigate('/', { state: { snackbar: 'Login successful!' } });
     } catch (error) {
       setSnackbarText('Login failed. Please check your credentials.');
       setShowSnackbar(true);

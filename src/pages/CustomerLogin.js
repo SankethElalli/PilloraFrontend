@@ -23,7 +23,8 @@ function CustomerLogin() {
         return;
       }
       await login(email.trim(), password.trim());
-      navigate('/');
+      // Pass snackbar message to dashboard
+      navigate('/', { state: { snackbar: 'Login successful!' } });
     } catch (error) {
       setSnackbarText('Login failed. Please check your credentials.');
       setShowSnackbar(true);
