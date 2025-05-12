@@ -458,18 +458,28 @@
   padding: 1rem;
   margin: 20px auto;
   bottom: 0;
+  padding-bottom: 1.5rem;
+  margin-bottom: 1.5rem;
+  padding-left: 8px;
+  padding-right: 8px;
+  box-sizing: border-box;
 }
 
 .pillora-carousel-marquee-wrapper {
   width: 100vw;
-  overflow: hidden;
+  overflow-x: auto;
   position: relative;
+  padding-bottom: 1.5rem;
+  margin-bottom: 0.5rem;
+  box-sizing: border-box;
 }
 
 .pillora-carousel-marquee-track {
   display: flex;
   align-items: center;
   gap: 0;
+  min-width: 100vw;
+  box-sizing: border-box;
   animation: pillora-marquee-scroll 180s linear infinite;
   will-change: transform;
 }
@@ -752,6 +762,20 @@
   .pillora-carousel-mobile-dots,
   .pillora-carousel-dots {
     display: none !important;
+  }
+  .pillora-carousel-section {
+    margin-bottom: 2.5rem;
+    padding-bottom: 1.5rem;
+  }
+  .pillora-carousel-outer.mobile-marquee {
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    padding-left: 4px;
+    padding-right: 4px;
+  }
+  .pillora-carousel-marquee-wrapper {
+    padding-bottom: 2rem;
+    margin-bottom: 1rem;
   }
 }
 
