@@ -49,7 +49,7 @@ function About() {
       <div className="developer-credit">
         <div className="developer-content">
           <span className="developer-title">Developed by</span>
-          <h2 className="developer-name">Sanketh Elalli</h2>
+          <h2 className="developer-name">snketh</h2>
         </div>
       </div>
     </div>
