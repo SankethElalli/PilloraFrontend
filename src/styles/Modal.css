@@ -183,3 +183,54 @@
   width: 100%;
   min-width: 0;
 }
+
+.modal-share-section {
+  padding: 16px;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  margin-top: 16px;
+}
+
+.share-title {
+  font-size: 14px;
+  color: #64748b;
+  margin-bottom: 12px;
+}
+
+.share-buttons {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-start;
+}
+
+.share-button {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+  color: white;
+}
+
+.share-button:hover {
+  transform: scale(1.1);
+}
+
+.share-button.whatsapp {
+  background-color: #25D366;
+}
+
+.share-button.email {
+  background-color: #EA4335;
+}
+
+.share-button.copy {
+  background-color: #0CA678;
+}
+
+.share-button i {
+  font-size: 20px;
+}
