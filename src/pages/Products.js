@@ -325,47 +325,28 @@ function Products() {
                     </div>
                   </div>
                   {/* Share buttons */}
-                  <div style={{ marginBottom: 16, display: 'flex', gap: '12px', alignItems: 'center' }}>
-                    <span style={{ color: '#64748b', fontSize: '0.9em' }}>Share:</span>
+                  <div className="share-buttons">
+                    <span className="share-label">Share:</span>
                     <button
+                      className="share-button"
                       onClick={(e) => {
                         e.stopPropagation();
                         window.open(`https://wa.me/?text=Check out ${selectedProduct.name} on Pillora: ${window.location.origin}/products?id=${selectedProduct._id}`, '_blank');
                       }}
-                      style={{
-                        background: '#25D366',
-                        border: 'none',
-                        borderRadius: '50%',
-                        width: '32px',
-                        height: '32px',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        cursor: 'pointer'
-                      }}
                     >
-                      <i className="bi bi-whatsapp" style={{ color: 'white' }}></i>
+                      <i className="bi bi-whatsapp"></i>
                     </button>
                     <button
+                      className="share-button"
                       onClick={(e) => {
                         e.stopPropagation();
                         window.location.href = `mailto:?subject=Check out this product on Pillora&body=Check out ${selectedProduct.name} on Pillora: ${window.location.origin}/products?id=${selectedProduct._id}`;
                       }}
-                      style={{
-                        background: '#EA4335',
-                        border: 'none',
-                        borderRadius: '50%',
-                        width: '32px',
-                        height: '32px',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        cursor: 'pointer'
-                      }}
                     >
-                      <i className="bi bi-envelope" style={{ color: 'white' }}></i>
+                      <i className="bi bi-envelope"></i>
                     </button>
                     <button
+                      className="share-button"
                       onClick={(e) => {
                         e.stopPropagation();
                         const url = `${window.location.origin}/products?id=${selectedProduct._id}`;
@@ -374,19 +355,8 @@ function Products() {
                         setShowSnackbar(true);
                         setTimeout(() => setShowSnackbar(false), 2000);
                       }}
-                      style={{
-                        background: '#3B82F6',
-                        border: 'none',
-                        borderRadius: '50%',
-                        width: '32px',
-                        height: '32px',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        cursor: 'pointer'
-                      }}
                     >
-                      <i className="bi bi-link-45deg" style={{ color: 'white' }}></i>
+                      <i className="bi bi-link-45deg"></i>
                     </button>
                   </div>
                   <button 
