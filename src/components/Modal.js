@@ -35,22 +35,6 @@ function Modal({ isOpen, onClose, title, children, horizontal }) {
           </button>
         </div>
         <div className="modal-content">{children}</div>
-        
-        {/* Share Section */}
-        <div className="modal-share-section">
-          <div className="share-title">Share via</div>
-          <div className="share-buttons">
-            <button className="share-button whatsapp" onClick={() => handleShare('whatsapp')}>
-              <i className="bi bi-whatsapp"></i>
-            </button>
-            <button className="share-button email" onClick={() => handleShare('email')}>
-              <i className="bi bi-envelope"></i>
-            </button>
-            <button className="share-button copy" onClick={() => handleShare('copy')}>
-              <i className="bi bi-clipboard"></i>
-            </button>
-          </div>
-        </div>
 
         {/* Copy Toast */}
         {showShareToast && (
