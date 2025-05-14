@@ -688,3 +688,103 @@
     display: block;
   }
 }
+
+/* Share buttons styles */
+.share-buttons {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.share-label {
+  color: #64748b;
+  font-size: 0.9em;
+}
+
+.share-button {
+  border: none;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.share-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.share-button i {
+  color: white;
+  font-size: 1rem;
+}
+
+.share-button.whatsapp {
+  background: #25D366;
+}
+
+.share-button.email {
+  background: #EA4335;
+}
+
+.share-button.copy-link {
+  background: #3B82F6;
+}
+
+/* Enhanced notification styles */
+.pillora-snackbar {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  background: #1e293b;
+  color: white;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  opacity: 0;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.pillora-snackbar.show {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+}
+
+.pillora-snackbar i {
+  font-size: 1.1rem;
+}
+
+/* Success variant */
+.pillora-snackbar.success {
+  background: #059669;
+}
+
+/* Info variant */
+.pillora-snackbar.info {
+  background: #3B82F6;
+}
+
+@media (max-width: 640px) {
+  .share-buttons {
+    justify-content: center;
+    margin: 12px 0;
+  }
+  
+  .pillora-snackbar {
+    width: 90%;
+    max-width: 320px;
+    font-size: 0.85rem;
+    padding: 10px 20px;
+  }
+}
