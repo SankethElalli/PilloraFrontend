@@ -10,9 +10,8 @@ function ProductCarousel() {
   const [isFading, setIsFading] = useState(false);
   const [productsPerSlide, setProductsPerSlide] = useState(4);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 600);
-  const [selectedProduct, setSelectedProduct] = useState(null);
   const touchStartX = useRef(null);
-  
+
   useEffect(() => {
     function handleResize() {
       const mobile = window.innerWidth <= 600;
@@ -46,10 +45,6 @@ function ProductCarousel() {
     };
     fetchProducts();
   }, []);
-
-  const handleProductClick = (product) => {
-    setSelectedProduct(product);
-  };
 
   const getVisibleProducts = () => {
     const start = currentIndex;
@@ -129,7 +124,6 @@ function ProductCarousel() {
                   <div
                     key={product._id}
                     className="pillora-carousel-card"
-                    onClick={() => handleProductClick(product)}
                   >
                     <div className="carousel-product-image">
                       <img
@@ -145,6 +139,11 @@ function ProductCarousel() {
                     </div>
                     <h4>{product.name}</h4>
                     <p className="price">₹{product.price.toFixed(2)}</p>
+                    <div className="carousel-product-desc" style={{ color: "#64748b", fontSize: "0.98rem", marginTop: 8, minHeight: 40, maxHeight: 48, overflow: "hidden", textOverflow: "ellipsis" }}>
+                      {product.description?.length > 80
+                        ? product.description.slice(0, 80) + "..."
+                        : product.description}
+                    </div>
                   </div>
                 ))}
               </div>
@@ -165,7 +164,6 @@ function ProductCarousel() {
                   <div
                     key={product._id}
                     className="pillora-carousel-card mobile-marquee"
-                    onClick={() => handleProductClick(product)}
                   >
                     <div className="carousel-product-image">
                       <img
@@ -181,90 +179,17 @@ function ProductCarousel() {
                     </div>
                     <h4>{product.name}</h4>
                     <p className="price">₹{product.price.toFixed(2)}</p>
+                    <div className="carousel-product-desc" style={{ color: "#64748b", fontSize: "0.98rem", marginTop: 8, minHeight: 40, maxHeight: 48, overflow: "hidden", textOverflow: "ellipsis" }}>
+                      {product.description?.length > 80
+                        ? product.description.slice(0, 80) + "..."
+                        : product.description}
+                    </div>
                   </div>
                 ))}
               </div>
             </div>
           )}
         </div>
-        {/* Product Details Modal */}
-        {selectedProduct && (
-          <div className="modal-overlay" onClick={() => setSelectedProduct(null)}>
-            <div
-              className={`modal-container${window.innerWidth >= 992 ? ' product-modal-horizontal' : ''}`}
-              style={window.innerWidth < 992 ? { maxWidth: 420, width: '95%' } : undefined}
-              onClick={e => e.stopPropagation()}
-            >
-              <div className="modal-header" style={window.innerWidth < 992 ? { padding: '1.25rem 1.5rem', borderBottom: '1px solid #e2e8f0' } : { borderBottom: 'none', padding: '2rem 2.5rem 1rem 2.5rem', justifyContent: 'center' }}>
-                <div className="modal-title" style={{ width: '100%', textAlign: 'center' }}>{selectedProduct.name}</div>
-              </div>
-              <div className="modal-content" style={window.innerWidth < 992 ? { padding: '1.5rem' } : { display: 'flex', flexDirection: 'column', gap: '2.5rem', padding: '2rem 2.5rem' }}>
-                <div style={{ display: 'flex', flexDirection: window.innerWidth < 992 ? 'column' : 'row', gap: '2.5rem', alignItems: 'flex-start' }}>
-                  <div className="product-modal-image" style={window.innerWidth < 992 ? { textAlign: 'center', marginBottom: '1rem' } : { minWidth: 240, maxWidth: 260, textAlign: 'center' }}>
-                    <img
-                      src={selectedProduct.image.startsWith('http')
-                        ? selectedProduct.image
-                        : `${API_BASE_URL}${selectedProduct.image}`}
-                      alt={selectedProduct.name}
-                      style={{
-                        maxWidth: '220px',
-                        maxHeight: '220px',
-                        objectFit: 'contain',
-                        borderRadius: '12px',
-                        background: '#f8fafc'
-                      }}
-                    />
-                  </div>
-                  <div style={window.innerWidth < 992 ? {} : { flex: 1, minWidth: 0 }}>
-                    <div className="product-category" style={{ marginBottom: 8 }}>{selectedProduct.category}</div>
-                    <div className="product-price" style={{ marginBottom: 12 }}>₹{selectedProduct.price.toFixed(2)}</div>
-                    <div style={{ marginBottom: 12 }}>
-                      <strong>Stock:</strong> {selectedProduct.stock > 0 ? `${selectedProduct.stock} available` : 'Out of stock'}
-                    </div>
-                    <div style={{ marginBottom: 16, textAlign: 'left' }}>
-                      <strong>Description:</strong>
-                      <div style={{ color: '#334155', marginTop: 4, textAlign: 'left' }}>
-                        {selectedProduct.description}
-                      </div>
-                    </div>
-                    {/* Share buttons */}
-                    <div className="share-buttons">
-                      <span className="share-label">Share:</span>
-                      <button
-                        className="share-button"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          window.open(`https://wa.me/?text=Check out ${selectedProduct.name} on Pillora: ${window.location.origin}/products?id=${selectedProduct._id}`, '_blank');
-                        }}
-                      >
-                        <i className="bi bi-whatsapp"></i>
-                      </button>
-                      <button
-                        className="share-button"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          window.location.href = `mailto:?subject=Check out this product on Pillora&body=Check out ${selectedProduct.name} on Pillora: ${window.location.origin}/products?id=${selectedProduct._id}`;
-                        }}
-                      >
-                        <i className="bi bi-envelope"></i>
-                      </button>
-                      <button
-                        className="share-button"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          const url = `${window.location.origin}/products?id=${selectedProduct._id}`;
-                          navigator.clipboard.writeText(url);
-                        }}
-                      >
-                        <i className="bi bi-link-45deg"></i>
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
       </div>
     </section>
   );
