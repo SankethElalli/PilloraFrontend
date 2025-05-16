@@ -10,7 +10,7 @@ function ProductCarousel() {
   const [isFading, setIsFading] = useState(false);
   const [productsPerSlide, setProductsPerSlide] = useState(4);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 600);
-  const [openProductId, setOpenProductId] = useState(null);
+  const [modalProduct, setModalProduct] = useState(null);
   const touchStartX = useRef(null);
 
   useEffect(() => {
@@ -46,10 +46,6 @@ function ProductCarousel() {
     };
     fetchProducts();
   }, []);
-
-  const handleCardClick = (productId) => {
-    setOpenProductId((prev) => (prev === productId ? null : productId));
-  };
 
   const getVisibleProducts = () => {
     const start = currentIndex;
@@ -130,7 +126,7 @@ function ProductCarousel() {
                     key={product._id}
                     className="pillora-carousel-card"
                     style={{ cursor: 'pointer' }}
-                    onClick={() => handleCardClick(product._id)}
+                    onClick={() => setModalProduct(product)}
                   >
                     <div className="carousel-product-image">
                       <img
@@ -146,23 +142,6 @@ function ProductCarousel() {
                     </div>
                     <h4>{product.name}</h4>
                     <p className="price">₹{product.price.toFixed(2)}</p>
-                    {openProductId === product._id && (
-                      <div
-                        className="carousel-product-desc"
-                        style={{
-                          color: "#64748b",
-                          fontSize: "0.98rem",
-                          marginTop: 8,
-                          minHeight: 40,
-                          background: "#f8fafc",
-                          borderRadius: 8,
-                          padding: "0.75rem 1rem",
-                          boxShadow: "0 2px 8px rgba(0,0,0,0.04)"
-                        }}
-                      >
-                        {product.description || "No description available."}
-                      </div>
-                    )}
                   </div>
                 ))}
               </div>
@@ -184,7 +163,7 @@ function ProductCarousel() {
                     key={product._id}
                     className="pillora-carousel-card mobile-marquee"
                     style={{ cursor: 'pointer' }}
-                    onClick={() => handleCardClick(product._id)}
+                    onClick={() => setModalProduct(product)}
                   >
                     <div className="carousel-product-image">
                       <img
@@ -200,29 +179,61 @@ function ProductCarousel() {
                     </div>
                     <h4>{product.name}</h4>
                     <p className="price">₹{product.price.toFixed(2)}</p>
-                    {openProductId === product._id && (
-                      <div
-                        className="carousel-product-desc"
-                        style={{
-                          color: "#64748b",
-                          fontSize: "0.98rem",
-                          marginTop: 8,
-                          minHeight: 40,
-                          background: "#f8fafc",
-                          borderRadius: 8,
-                          padding: "0.75rem 1rem",
-                          boxShadow: "0 2px 8px rgba(0,0,0,0.04)"
-                        }}
-                      >
-                        {product.description || "No description available."}
-                      </div>
-                    )}
                   </div>
                 ))}
               </div>
             </div>
           )}
         </div>
+        {/* Product Details Modal */}
+        {modalProduct && (
+          <div className="modal-overlay" onClick={() => setModalProduct(null)}>
+            <div
+              className={`modal-container${window.innerWidth >= 992 ? ' product-modal-horizontal' : ''}`}
+              style={window.innerWidth < 992 ? { maxWidth: 420, width: '95%' } : undefined}
+              onClick={e => e.stopPropagation()}
+            >
+              <div className="modal-header" style={window.innerWidth < 992 ? { padding: '1.25rem 1.5rem', borderBottom: '1px solid #e2e8f0' } : { borderBottom: 'none', padding: '2rem 2.5rem 1rem 2.5rem', justifyContent: 'center' }}>
+                <div className="modal-title" style={{ width: '100%', textAlign: 'center' }}>{modalProduct.name}</div>
+                <button className="modal-close" onClick={() => setModalProduct(null)} style={{ position: 'absolute', right: 16, top: 16, background: 'none', border: 'none', fontSize: 20 }}>
+                  <i className="bi bi-x-lg"></i>
+                </button>
+              </div>
+              <div className="modal-content" style={window.innerWidth < 992 ? { padding: '1.5rem' } : { display: 'flex', flexDirection: 'column', gap: '2.5rem', padding: '2rem 2.5rem' }}>
+                <div style={{ display: 'flex', flexDirection: window.innerWidth < 992 ? 'column' : 'row', gap: '2.5rem', alignItems: 'flex-start' }}>
+                  <div className="product-modal-image" style={window.innerWidth < 992 ? { textAlign: 'center', marginBottom: '1rem' } : { minWidth: 240, maxWidth: 260, textAlign: 'center' }}>
+                    <img
+                      src={modalProduct.image.startsWith('http')
+                        ? modalProduct.image
+                        : `${API_BASE_URL}${modalProduct.image}`}
+                      alt={modalProduct.name}
+                      style={{
+                        maxWidth: '220px',
+                        maxHeight: '220px',
+                        objectFit: 'contain',
+                        borderRadius: '12px',
+                        background: '#f8fafc'
+                      }}
+                    />
+                  </div>
+                  <div style={window.innerWidth < 992 ? {} : { flex: 1, minWidth: 0 }}>
+                    <div className="product-category" style={{ marginBottom: 8 }}>{modalProduct.category}</div>
+                    <div className="product-price" style={{ marginBottom: 12 }}>₹{modalProduct.price.toFixed(2)}</div>
+                    <div style={{ marginBottom: 12 }}>
+                      <strong>Stock:</strong> {modalProduct.stock > 0 ? `${modalProduct.stock} available` : 'Out of stock'}
+                    </div>
+                    <div style={{ marginBottom: 16, textAlign: 'left' }}>
+                      <strong>Description:</strong>
+                      <div style={{ color: '#334155', marginTop: 4, textAlign: 'left' }}>
+                        {modalProduct.description}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </section>
   );
