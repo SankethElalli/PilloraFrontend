@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Home from './pages/Home';
@@ -21,6 +21,30 @@ import { AuthProvider } from './context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
 import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 
+// Tab title mapping
+const TAB_TITLES = {
+  '/': 'Pillora | Home',
+  '/products': 'Pillora | Products',
+  '/about': 'Pillora | About',
+  '/contact': 'Pillora | Contact',
+  '/cart': 'Pillora | Cart',
+  '/customer-login': 'Pillora | Customer Login',
+  '/vendor-login': 'Pillora | Vendor Login',
+  '/customer-dashboard': 'Pillora | Customer Dashboard',
+  '/vendor-dashboard': 'Pillora | Vendor Dashboard',
+  '/customer-register': 'Pillora | Customer Register',
+  '/vendor-register': 'Pillora | Vendor Register',
+  '/checkout': 'Pillora | Checkout'
+};
+
+// Wrapper to set document title
+function PageWithTitle({ title, children }) {
+  useEffect(() => {
+    document.title = title;
+  }, [title]);
+  return children;
+}
+
 function App() {
   const initialOptions = {
     "client-id": "test",
@@ -36,37 +60,79 @@ function App() {
             <div className="App">
               <Navbar />
               <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/products" element={<Products />} />
-                <Route path="/cart" element={<Cart />} />
-                <Route path="/about" element={<About />} />
-                <Route path="/contact" element={<Contact />} />
-                <Route path="/customer-login" element={<CustomerLogin />} />
-                <Route path="/vendor-login" element={<VendorLogin />} />
+                <Route path="/" element={
+                  <PageWithTitle title={TAB_TITLES['/']}>
+                    <Home />
+                  </PageWithTitle>
+                } />
+                <Route path="/products" element={
+                  <PageWithTitle title={TAB_TITLES['/products']}>
+                    <Products />
+                  </PageWithTitle>
+                } />
+                <Route path="/cart" element={
+                  <PageWithTitle title={TAB_TITLES['/cart']}>
+                    <Cart />
+                  </PageWithTitle>
+                } />
+                <Route path="/about" element={
+                  <PageWithTitle title={TAB_TITLES['/about']}>
+                    <About />
+                  </PageWithTitle>
+                } />
+                <Route path="/contact" element={
+                  <PageWithTitle title={TAB_TITLES['/contact']}>
+                    <Contact />
+                  </PageWithTitle>
+                } />
+                <Route path="/customer-login" element={
+                  <PageWithTitle title={TAB_TITLES['/customer-login']}>
+                    <CustomerLogin />
+                  </PageWithTitle>
+                } />
+                <Route path="/vendor-login" element={
+                  <PageWithTitle title={TAB_TITLES['/vendor-login']}>
+                    <VendorLogin />
+                  </PageWithTitle>
+                } />
                 <Route
                   path="/vendor-dashboard"
                   element={
-                    <ProtectedRoute>
-                      <VendorDashboard />
-                    </ProtectedRoute>
+                    <PageWithTitle title={TAB_TITLES['/vendor-dashboard']}>
+                      <ProtectedRoute>
+                        <VendorDashboard />
+                      </ProtectedRoute>
+                    </PageWithTitle>
                   }
                 />
                 <Route 
                   path="/customer-dashboard" 
                   element={
-                    <ProtectedRoute>
-                      <CustomerDashboard />
-                    </ProtectedRoute>
+                    <PageWithTitle title={TAB_TITLES['/customer-dashboard']}>
+                      <ProtectedRoute>
+                        <CustomerDashboard />
+                      </ProtectedRoute>
+                    </PageWithTitle>
                   } 
                 />
-                <Route path="/customer-register" element={<CustomerRegister />} />
-                <Route path="/vendor-register" element={<VendorRegister />} />
+                <Route path="/customer-register" element={
+                  <PageWithTitle title={TAB_TITLES['/customer-register']}>
+                    <CustomerRegister />
+                  </PageWithTitle>
+                } />
+                <Route path="/vendor-register" element={
+                  <PageWithTitle title={TAB_TITLES['/vendor-register']}>
+                    <VendorRegister />
+                  </PageWithTitle>
+                } />
                 <Route 
                   path="/checkout" 
                   element={
-                    <ProtectedRoute>
-                      <Checkout />
-                    </ProtectedRoute>
+                    <PageWithTitle title={TAB_TITLES['/checkout']}>
+                      <ProtectedRoute>
+                        <Checkout />
+                      </ProtectedRoute>
+                    </PageWithTitle>
                   } 
                 />
               </Routes>
