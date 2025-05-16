@@ -10,6 +10,7 @@ function ProductCarousel() {
   const [isFading, setIsFading] = useState(false);
   const [productsPerSlide, setProductsPerSlide] = useState(4);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 600);
+  const [openProductId, setOpenProductId] = useState(null);
   const touchStartX = useRef(null);
 
   useEffect(() => {
@@ -45,6 +46,10 @@ function ProductCarousel() {
     };
     fetchProducts();
   }, []);
+
+  const handleCardClick = (productId) => {
+    setOpenProductId((prev) => (prev === productId ? null : productId));
+  };
 
   const getVisibleProducts = () => {
     const start = currentIndex;
@@ -124,6 +129,8 @@ function ProductCarousel() {
                   <div
                     key={product._id}
                     className="pillora-carousel-card"
+                    style={{ cursor: 'pointer' }}
+                    onClick={() => handleCardClick(product._id)}
                   >
                     <div className="carousel-product-image">
                       <img
@@ -139,11 +146,23 @@ function ProductCarousel() {
                     </div>
                     <h4>{product.name}</h4>
                     <p className="price">₹{product.price.toFixed(2)}</p>
-                    <div className="carousel-product-desc" style={{ color: "#64748b", fontSize: "0.98rem", marginTop: 8, minHeight: 40, maxHeight: 48, overflow: "hidden", textOverflow: "ellipsis" }}>
-                      {product.description?.length > 80
-                        ? product.description.slice(0, 80) + "..."
-                        : product.description}
-                    </div>
+                    {openProductId === product._id && (
+                      <div
+                        className="carousel-product-desc"
+                        style={{
+                          color: "#64748b",
+                          fontSize: "0.98rem",
+                          marginTop: 8,
+                          minHeight: 40,
+                          background: "#f8fafc",
+                          borderRadius: 8,
+                          padding: "0.75rem 1rem",
+                          boxShadow: "0 2px 8px rgba(0,0,0,0.04)"
+                        }}
+                      >
+                        {product.description || "No description available."}
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>
@@ -164,6 +183,8 @@ function ProductCarousel() {
                   <div
                     key={product._id}
                     className="pillora-carousel-card mobile-marquee"
+                    style={{ cursor: 'pointer' }}
+                    onClick={() => handleCardClick(product._id)}
                   >
                     <div className="carousel-product-image">
                       <img
@@ -179,11 +200,23 @@ function ProductCarousel() {
                     </div>
                     <h4>{product.name}</h4>
                     <p className="price">₹{product.price.toFixed(2)}</p>
-                    <div className="carousel-product-desc" style={{ color: "#64748b", fontSize: "0.98rem", marginTop: 8, minHeight: 40, maxHeight: 48, overflow: "hidden", textOverflow: "ellipsis" }}>
-                      {product.description?.length > 80
-                        ? product.description.slice(0, 80) + "..."
-                        : product.description}
-                    </div>
+                    {openProductId === product._id && (
+                      <div
+                        className="carousel-product-desc"
+                        style={{
+                          color: "#64748b",
+                          fontSize: "0.98rem",
+                          marginTop: 8,
+                          minHeight: 40,
+                          background: "#f8fafc",
+                          borderRadius: 8,
+                          padding: "0.75rem 1rem",
+                          boxShadow: "0 2px 8px rgba(0,0,0,0.04)"
+                        }}
+                      >
+                        {product.description || "No description available."}
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>
