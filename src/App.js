@@ -28,12 +28,12 @@ const TAB_TITLES = {
   '/about': 'Pillora | About',
   '/contact': 'Pillora | Contact',
   '/cart': 'Pillora | Cart',
-  '/customer-login': 'Pillora | Customer Login',
-  '/vendor-login': 'Pillora | Vendor Login',
-  '/customer-dashboard': 'Pillora | Customer Dashboard',
-  '/vendor-dashboard': 'Pillora | Vendor Dashboard',
-  '/customer-register': 'Pillora | Customer Register',
-  '/vendor-register': 'Pillora | Vendor Register',
+  '/customer-login': 'Pillora | Login',
+  '/vendor-login': 'Pillora | Login',
+  '/customer-dashboard': 'Pillora | Dashboard',
+  '/vendor-dashboard': 'Pillora | Dashboard',
+  '/customer-register': 'Pillora | Register',
+  '/vendor-register': 'Pillora | Register',
   '/checkout': 'Pillora | Checkout'
 };
 
