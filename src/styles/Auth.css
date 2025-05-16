@@ -462,16 +462,43 @@ textarea.form-control {
 }
 
 @media (min-width: 768px) {
-  .login-wide-card {
-    flex-direction: row;
-    min-height: 480px;
-  }
-  .login-side-visual {
-    background: #497D74;
-    color: #fff;
-    justify-content: center;
-    align-items: center;
+  .auth-card {
     display: flex;
+    max-width: 900px;
+    width: 100%;
+    margin: 2rem auto;
+    overflow: hidden;
+  }
+
+  .auth-card .card-body {
+    display: flex;
+    flex-direction: row;
+    gap: 2rem;
+    padding: 2rem !important;
+  }
+
+  .auth-card .auth-form {
+    flex: 1;
+    max-width: 50%;
+  }
+
+  .auth-card .card-body::before {
+    content: '';
+    display: block;
+    width: 50%;
+    background: #497D74;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 0;
+  }
+
+  .auth-card .auth-form {
+    position: relative;
+    z-index: 1;
+    margin-left: 50%;
+    padding-left: 2rem;
   }
 }
 
