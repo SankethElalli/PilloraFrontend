@@ -45,6 +45,7 @@
   color: #2c3e50 !important;
   border-radius: 8px;
   transition: background 0.2s, color 0.2s;
+  /* Remove any transform or box-shadow for smooth hover */
 }
 
 .nav-link:hover,
