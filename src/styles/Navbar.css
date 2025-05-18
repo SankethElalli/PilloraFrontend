@@ -44,15 +44,13 @@
   padding: 0.6rem 1.2rem !important;
   color: #2c3e50 !important;
   border-radius: 8px;
-  transition: background 0.2s, color 0.2s;
-  /* Remove any transform or box-shadow for smooth hover */
+  transition: background-color 0.2s, color 0.2s;
 }
 
 .nav-link:hover,
 .nav-link:focus {
   color: var(--primary-color) !important;
-  background: rgba(13, 124, 102, 0.08);
-  /* No transform or box-shadow */
+  background-color: rgba(13, 124, 102, 0.08);
 }
 
 /* Actions */
