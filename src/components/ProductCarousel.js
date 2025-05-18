@@ -2,6 +2,7 @@ import React, { useEffect, useState, useCallback, useRef } from 'react';
 import axios from 'axios';
 import API_BASE_URL from '../api';
 import '../styles/ProductCarousel.css';
+import { useNavigate } from 'react-router-dom';
 
 function ProductCarousel() {
   const [products, setProducts] = useState([]);
@@ -12,6 +13,7 @@ function ProductCarousel() {
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 600);
   const [modalProduct, setModalProduct] = useState(null);
   const touchStartX = useRef(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     function handleResize() {
@@ -228,6 +230,15 @@ function ProductCarousel() {
                         {modalProduct.description}
                       </div>
                     </div>
+                    {/* Buy Now Button */}
+                    <button
+                      className="btn btn-primary w-100 mt-3"
+                      onClick={() => {
+                        navigate('/products', { state: { selectedProduct: modalProduct } });
+                      }}
+                    >
+                      Buy Now
+                    </button>
                   </div>
                 </div>
               </div>

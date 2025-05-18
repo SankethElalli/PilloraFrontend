@@ -13,7 +13,7 @@ import ProductReviews from '../components/ProductReviews';
 
 function Products() {
   const { addToCart } = useCart();
-  const { user } = useAuth(); // <-- Get user from AuthContext
+  const { user } = useAuth();
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState('');
@@ -39,6 +39,8 @@ function Products() {
     fetchProducts();
     if (location.state?.selectedProduct) {
       setSelectedProduct(location.state.selectedProduct);
+      // Remove state after using it so modal doesn't reopen on refresh
+      window.history.replaceState({}, document.title);
     }
   }, [user]);
 
