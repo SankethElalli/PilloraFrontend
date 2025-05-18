@@ -488,7 +488,6 @@ textarea.form-control {
 .navbar-nav .nav-link:focus {
   color: #000 !important;
   background: #f5ecd566 !important;
-  transition: color 0.4s cubic-bezier(0.4,0,0.2,1), background 0.4s cubic-bezier(0.4,0,0.2,1);
 }
 
 i.text-primary, .login-logo .text-primary {

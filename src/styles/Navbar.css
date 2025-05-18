@@ -45,14 +45,13 @@
   color: #2c3e50 !important;
   border-radius: 8px;
   transition: background 0.2s, color 0.2s;
-  /* Remove transform/box-shadow for smoothness */
 }
 
 .nav-link:hover,
 .nav-link:focus {
   color: var(--primary-color) !important;
   background: rgba(13, 124, 102, 0.08);
-  /* Remove transform/box-shadow to prevent size jump */
+  /* No transform or box-shadow */
 }
 
 /* Actions */
