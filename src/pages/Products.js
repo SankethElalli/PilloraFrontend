@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import axios from 'axios';
 import { useCart } from '../context/CartContext';
 import '../styles/Products.css';
@@ -27,17 +27,20 @@ function Products() {
   const location = useLocation();
   const [showSnackbar, setShowSnackbar] = useState(false);
   const [snackbarText, setSnackbarText] = useState('');
-  const [page, setPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
-  const PAGE_SIZE = 12;
+  const [debouncedSearch, setDebouncedSearch] = useState(searchQuery);
+
+  // Debounce search input for better performance
+  useEffect(() => {
+    const handler = setTimeout(() => setDebouncedSearch(searchQuery), 200);
+    return () => clearTimeout(handler);
+  }, [searchQuery]);
 
   useEffect(() => {
     fetchProducts();
     if (location.state?.selectedProduct) {
       setSelectedProduct(location.state.selectedProduct);
     }
-  // eslint-disable-next-line
-  }, [user, page, selectedCategory, searchQuery, sortBy]);
+  }, [user]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -63,23 +66,41 @@ function Products() {
         const token = localStorage.getItem('token');
         config.headers = { Authorization: `Bearer ${token}` };
       }
-      // Add query params for pagination, search, filter, sort
-      const params = new URLSearchParams();
-      params.append('page', page);
-      params.append('limit', PAGE_SIZE);
-      if (selectedCategory) params.append('category', selectedCategory);
-      if (searchQuery) params.append('search', searchQuery);
-      if (sortBy) params.append('sort', sortBy);
-
-      const response = await axios.get(`${API_BASE_URL}/api/products?${params.toString()}`, config);
-      setProducts(response.data.products || response.data); // support both array and {products, totalPages}
-      setTotalPages(response.data.totalPages || 1);
+      const response = await axios.get(`${API_BASE_URL}/api/products`, config);
+      setProducts(response.data);
     } catch (error) {
       console.error('Error fetching products:', error);
     } finally {
       setLoading(false);
     }
   };
+
+  // Optimize filtering and sorting with useMemo
+  const filteredProducts = useMemo(() => {
+    let result = products;
+    if (selectedCategory) {
+      result = result.filter(product => product.category === selectedCategory);
+    }
+    if (debouncedSearch) {
+      result = result.filter(product =>
+        product.name.toLowerCase().includes(debouncedSearch.toLowerCase())
+      );
+    }
+    switch (sortBy) {
+      case 'name':
+        result = [...result].sort((a, b) => a.name.localeCompare(b.name));
+        break;
+      case 'price-low':
+        result = [...result].sort((a, b) => a.price - b.price);
+        break;
+      case 'price-high':
+        result = [...result].sort((a, b) => b.price - a.price);
+        break;
+      default:
+        break;
+    }
+    return result;
+  }, [products, selectedCategory, debouncedSearch, sortBy]);
 
   const handleSearchChange = (e) => {
     setSearchQuery(e.target.value);
@@ -224,7 +245,7 @@ function Products() {
               </div>
             </div>
           ) : (
-            products.map(product => (
+            filteredProducts.map(product => (
               <div
                 key={product._id}
                 className="product-item"
@@ -241,7 +262,6 @@ function Products() {
                       : `${API_BASE_URL}${product.image}`} 
                     alt={product.name}
                     className="product-img"
-                    loading="lazy"
                     onError={(e) => {
                       e.target.onerror = null;
                       e.target.src = '/default-product.png';
@@ -271,28 +291,6 @@ function Products() {
             ))
           )}
         </div>
-        {/* Pagination controls */}
-        {!loading && totalPages > 1 && (
-          <div style={{ display: 'flex', justifyContent: 'center', gap: 16, marginTop: 24 }}>
-            <button
-              className="btn btn-outline-primary"
-              disabled={page === 1}
-              onClick={() => setPage(page - 1)}
-            >
-              Previous
-            </button>
-            <span style={{ alignSelf: 'center' }}>
-              Page {page} of {totalPages}
-            </span>
-            <button
-              className="btn btn-outline-primary"
-              disabled={page === totalPages}
-              onClick={() => setPage(page + 1)}
-            >
-              Next
-            </button>
-          </div>
-        )}
       </div>
 
       {/* Product Details Modal */}
