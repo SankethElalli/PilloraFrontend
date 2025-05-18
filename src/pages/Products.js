@@ -27,13 +27,17 @@ function Products() {
   const location = useLocation();
   const [showSnackbar, setShowSnackbar] = useState(false);
   const [snackbarText, setSnackbarText] = useState('');
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const PAGE_SIZE = 12;
 
   useEffect(() => {
     fetchProducts();
     if (location.state?.selectedProduct) {
       setSelectedProduct(location.state.selectedProduct);
     }
-  }, [user]);
+  // eslint-disable-next-line
+  }, [user, page, selectedCategory, searchQuery, sortBy]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -59,8 +63,17 @@ function Products() {
         const token = localStorage.getItem('token');
         config.headers = { Authorization: `Bearer ${token}` };
       }
-      const response = await axios.get(`${API_BASE_URL}/api/products`, config);
-      setProducts(response.data);
+      // Add query params for pagination, search, filter, sort
+      const params = new URLSearchParams();
+      params.append('page', page);
+      params.append('limit', PAGE_SIZE);
+      if (selectedCategory) params.append('category', selectedCategory);
+      if (searchQuery) params.append('search', searchQuery);
+      if (sortBy) params.append('sort', sortBy);
+
+      const response = await axios.get(`${API_BASE_URL}/api/products?${params.toString()}`, config);
+      setProducts(response.data.products || response.data); // support both array and {products, totalPages}
+      setTotalPages(response.data.totalPages || 1);
     } catch (error) {
       console.error('Error fetching products:', error);
     } finally {
@@ -75,29 +88,6 @@ function Products() {
   const handleSortChange = (e) => {
     setSortBy(e.target.value);
   };
-
-  const sortProducts = (products) => {
-    return [...products].sort((a, b) => {
-      switch (sortBy) {
-        case 'name':
-          return a.name.localeCompare(b.name);
-        case 'price-low':
-          return a.price - b.price;
-        case 'price-high':
-          return b.price - a.price;
-        default:
-          return 0;
-      }
-    });
-  };
-
-  const filteredProducts = sortProducts(
-    products.filter(product => {
-      const matchesCategory = selectedCategory ? product.category === selectedCategory : true;
-      const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase());
-      return matchesCategory && matchesSearch;
-    })
-  );
 
   const handleCategoryChange = (e) => {
     setSelectedCategory(e.target.value);
@@ -234,7 +224,7 @@ function Products() {
               </div>
             </div>
           ) : (
-            filteredProducts.map(product => (
+            products.map(product => (
               <div
                 key={product._id}
                 className="product-item"
@@ -251,6 +241,7 @@ function Products() {
                       : `${API_BASE_URL}${product.image}`} 
                     alt={product.name}
                     className="product-img"
+                    loading="lazy"
                     onError={(e) => {
                       e.target.onerror = null;
                       e.target.src = '/default-product.png';
@@ -280,6 +271,28 @@ function Products() {
             ))
           )}
         </div>
+        {/* Pagination controls */}
+        {!loading && totalPages > 1 && (
+          <div style={{ display: 'flex', justifyContent: 'center', gap: 16, marginTop: 24 }}>
+            <button
+              className="btn btn-outline-primary"
+              disabled={page === 1}
+              onClick={() => setPage(page - 1)}
+            >
+              Previous
+            </button>
+            <span style={{ alignSelf: 'center' }}>
+              Page {page} of {totalPages}
+            </span>
+            <button
+              className="btn btn-outline-primary"
+              disabled={page === totalPages}
+              onClick={() => setPage(page + 1)}
+            >
+              Next
+            </button>
+          </div>
+        )}
       </div>
 
       {/* Product Details Modal */}
