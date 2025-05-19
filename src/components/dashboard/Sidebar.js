@@ -20,7 +20,8 @@ function Sidebar({ type = 'vendor', onSectionChange, menuItems, className, curre
   const defaultMenuItems = type === 'vendor' ? [
     { title: 'Products', icon: 'bi bi-box-seam', id: 'products' },
     { title: 'Orders', icon: 'bi bi-cart3', id: 'orders' },
-    { title: 'Prescriptions', icon: 'bi bi-file-medical', id: 'prescriptions' }
+    { title: 'Prescriptions', icon: 'bi bi-file-medical', id: 'prescriptions' },
+    { title: 'Manage Media', icon: 'bi bi-images', id: 'manage-media' }
   ] : menuItems;
 
   const isActive = (id) => currentSection === id;
