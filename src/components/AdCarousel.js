@@ -30,14 +30,19 @@ export default function AdCarousel() {
     axios.get(`${API_BASE_URL}/api/vendors/ads/public`)
       .then(res => {
         if (Array.isArray(res.data) && res.data.length > 0) {
-          setAds(res.data.map(ad => ({
-            image: ad.imageUrl || '/ads/ad1.jpg', // Use imageUrl from backend, fallback if missing
+          const mappedAds = res.data.map(ad => ({
+            image: ad.imageUrl && ad.imageUrl.startsWith('http')
+              ? ad.imageUrl
+              : (ad.imageUrl ? `${API_BASE_URL}${ad.imageUrl}` : '/ads/ad1.jpg'),
             link: ad.link || '#',
             alt: 'Vendor Ad'
-          })));
+          }));
+          console.log('Fetched ads:', mappedAds); // Debug log
+          setAds(mappedAds);
         }
       })
-      .catch(() => {
+      .catch((err) => {
+        console.error('Ad fetch error:', err);
         setAds(defaultAds);
       });
   }, []);
