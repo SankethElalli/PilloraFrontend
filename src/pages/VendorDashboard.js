@@ -11,6 +11,7 @@ import '../styles/Dashboard.css';
 import '../styles/Notification.css';
 import API_BASE_URL from '../api';
 import { useLocation } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
 function VendorDashboard() {
   const [showModal, setShowModal] = useState(false);
@@ -27,7 +28,12 @@ function VendorDashboard() {
   const [showSnackbar, setShowSnackbar] = useState(false);
   const [snackbarText, setSnackbarText] = useState('');
   const [snackbarType, setSnackbarType] = useState('success');
+  const [ads, setAds] = useState([]);
+  const [adImageUrl, setAdImageUrl] = useState('');
+  const [adImageFile, setAdImageFile] = useState(null);
+  const [adImageUploading, setAdImageUploading] = useState(false);
   const location = useLocation();
+  const { user } = useAuth();
 
   const fetchProducts = useCallback(async () => {
     try {
@@ -75,6 +81,21 @@ function VendorDashboard() {
     }
   }, []);
 
+  const fetchAds = useCallback(async () => {
+    try {
+      setIsLoading(true);
+      const token = localStorage.getItem('token');
+      const res = await axios.get(`${API_BASE_URL}/api/vendors/ads`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setAds(res.data || []);
+      setIsLoading(false);
+    } catch (err) {
+      setIsLoading(false);
+      setAds([]);
+    }
+  }, []);
+
   const loadSectionData = useCallback((section) => {
     switch(section) {
       case 'products':
@@ -86,16 +107,23 @@ function VendorDashboard() {
       case 'prescriptions':
         fetchPrescriptions();
         break;
+      case 'manage-media':
+        fetchAds();
+        break;
       default:
         fetchProducts();
     }
-  }, [fetchProducts, fetchOrders, fetchPrescriptions]);
+  }, [fetchProducts, fetchOrders, fetchPrescriptions, fetchAds]);
 
   const handleSectionChange = useCallback((section) => {
     setActiveSection(section);
-    loadSectionData(section);
+    if (section === 'manage-media') {
+      fetchAds();
+    } else {
+      loadSectionData(section);
+    }
     window.history.pushState(null, '', `/vendor-dashboard#${section}`);
-  }, [loadSectionData]);
+  }, [loadSectionData, fetchAds]);
 
   useEffect(() => {
     const hash = window.location.hash.replace('#', '') || 'products';
@@ -240,6 +268,71 @@ function VendorDashboard() {
     setSidebarOpen(false);
   };
 
+  // Upload ad image file to server and get URL
+  const handleAdImageUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    setAdImageUploading(true);
+    try {
+      const formData = new FormData();
+      formData.append('image', file);
+      const token = localStorage.getItem('token');
+      const res = await axios.post(`${API_BASE_URL}/api/vendors/ads/upload`, formData, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setAdImageUrl(res.data.url);
+      setSnackbarText('Image uploaded successfully!');
+      setSnackbarType('success');
+      setShowSnackbar(true);
+      setTimeout(() => setShowSnackbar(false), 2000);
+    } catch (err) {
+      setSnackbarText('Failed to upload image');
+      setSnackbarType('error');
+      setShowSnackbar(true);
+      setTimeout(() => setShowSnackbar(false), 2000);
+    }
+    setAdImageUploading(false);
+  };
+
+  // Add ad (image url or link)
+  const handleAddAd = async (e) => {
+    e.preventDefault();
+    if (!adImageUrl) return;
+    try {
+      const token = localStorage.getItem('token');
+      await axios.post(`${API_BASE_URL}/api/vendors/ads`, { imageUrl: adImageUrl }, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setAdImageUrl('');
+      fetchAds();
+      setSnackbarText('Ad added!');
+      setSnackbarType('success');
+      setShowSnackbar(true);
+      setTimeout(() => setShowSnackbar(false), 2000);
+    } catch (err) {
+      setSnackbarText('Failed to add ad');
+      setSnackbarType('error');
+      setShowSnackbar(true);
+      setTimeout(() => setShowSnackbar(false), 2000);
+    }
+  };
+
+  // Remove ad
+  const handleRemoveAd = async (adId) => {
+    try {
+      const token = localStorage.getItem('token');
+      await axios.delete(`${API_BASE_URL}/api/vendors/ads/${adId}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      fetchAds();
+    } catch (err) {
+      setSnackbarText('Failed to remove ad');
+      setSnackbarType('error');
+      setShowSnackbar(true);
+      setTimeout(() => setShowSnackbar(false), 2000);
+    }
+  };
+
   const renderContent = () => {
     switch (activeSection) {
       case 'products':
@@ -343,6 +436,61 @@ function VendorDashboard() {
               <PrescriptionList prescriptions={prescriptions} isVendor={true} />
             </div>
           </>
+        );
+      case 'manage-media':
+        return (
+          <div className="section-container">
+            <div className="dashboard-header">
+              <h1 className="text-2xl font-semibold text-gray-800">Manage Media</h1>
+            </div>
+            <div className="dashboard-content">
+              <form onSubmit={handleAddAd} style={{ marginBottom: 24 }}>
+                <div className="mb-3">
+                  <label className="form-label">Image Link (URL)</label>
+                  <input
+                    type="url"
+                    className="form-control"
+                    placeholder="https://example.com/your-image.jpg"
+                    value={adImageUrl}
+                    onChange={e => setAdImageUrl(e.target.value)}
+                    disabled={adImageUploading}
+                  />
+                </div>
+                <div className="mb-3">
+                  <label className="form-label">Or Upload Image</label>
+                  <input
+                    type="file"
+                    className="form-control"
+                    accept="image/*"
+                    onChange={handleAdImageUpload}
+                    disabled={adImageUploading}
+                  />
+                </div>
+                <button type="submit" className="btn btn-primary" disabled={adImageUploading || !adImageUrl}>
+                  {adImageUploading ? 'Uploading...' : 'Add Ad'}
+                </button>
+              </form>
+              <div>
+                <h5>Your Ads</h5>
+                <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
+                  {ads.length === 0 && <div>No ads yet.</div>}
+                  {ads.map(ad => (
+                    <div key={ad._id} style={{ border: '1px solid #e2e8f0', borderRadius: 8, padding: 8, position: 'relative' }}>
+                      <img src={ad.imageUrl} alt="ad" style={{ maxWidth: 180, maxHeight: 100, borderRadius: 6 }} />
+                      <button
+                        className="btn btn-sm btn-danger"
+                        style={{ position: 'absolute', top: 4, right: 4 }}
+                        onClick={() => handleRemoveAd(ad._id)}
+                        type="button"
+                      >
+                        <i className="bi bi-trash"></i>
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
         );
       default:
         return null;

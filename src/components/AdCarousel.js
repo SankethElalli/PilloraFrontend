@@ -1,7 +1,9 @@
 import React from 'react';
 import '../styles/ProductCarousel.css';
+import axios from 'axios';
+import API_BASE_URL from '../api';
 
-const ads = [
+const defaultAds = [
   {
     image: '/ads/ad1.jpg',
     link: 'https://example.com/ad1',
@@ -20,14 +22,32 @@ const ads = [
 ];
 
 export default function AdCarousel() {
+  const [ads, setAds] = React.useState(defaultAds);
   const [current, setCurrent] = React.useState(0);
+
+  React.useEffect(() => {
+    // Fetch vendor ads from backend for homepage
+    axios.get(`${API_BASE_URL}/api/vendors/ads/public`)
+      .then(res => {
+        if (Array.isArray(res.data) && res.data.length > 0) {
+          setAds(res.data.map(ad => ({
+            image: ad.imageUrl,
+            link: ad.link || '#',
+            alt: 'Vendor Ad'
+          })));
+        }
+      })
+      .catch(() => {
+        setAds(defaultAds);
+      });
+  }, []);
 
   React.useEffect(() => {
     const timer = setInterval(() => {
       setCurrent((prev) => (prev + 1) % ads.length);
     }, 4000);
     return () => clearInterval(timer);
-  }, []);
+  }, [ads.length]);
 
   return (
     <section className="product-carousel-section py-3" style={{ marginBottom: 0 }}>
