@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import API_BASE_URL from '../../api';
 
 function ProductForm({ onSubmit, onCancel, product }) {
@@ -12,7 +11,6 @@ function ProductForm({ onSubmit, onCancel, product }) {
     image: '',
     adImageUrl: '' // Optional ad image URL
   });
-  const [adImageUploading, setAdImageUploading] = useState(false);
 
   useEffect(() => {
     if (product) {
@@ -43,27 +41,6 @@ function ProductForm({ onSubmit, onCancel, product }) {
       ...formData,
       [e.target.name]: e.target.value
     });
-  };
-
-  // Handle ad image upload
-  const handleAdImageUpload = async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-    setAdImageUploading(true);
-    try {
-      const form = new FormData();
-      form.append('image', file);
-      const token = localStorage.getItem('token');
-      const res = await axios.post(
-        `${API_BASE_URL}/api/vendors/ads/upload`,
-        form,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      setFormData(prev => ({ ...prev, adImageUrl: res.data.url }));
-    } catch (err) {
-      // Optionally show error
-    }
-    setAdImageUploading(false);
   };
 
   return (
@@ -152,7 +129,7 @@ function ProductForm({ onSubmit, onCancel, product }) {
       </div>
 
       <div className="form-group">
-        <label className="form-label">Image URL</label>
+        <label className="form-label">Product Image URL</label>
         <input
           type="url"
           name="image"
@@ -162,18 +139,28 @@ function ProductForm({ onSubmit, onCancel, product }) {
           onChange={handleChange}
           required
         />
+        {formData.image && (
+          <div style={{ marginTop: 8 }}>
+            <img
+              src={formData.image}
+              alt="Product Preview"
+              style={{ maxWidth: 120, borderRadius: 6, border: '1px solid #e2e8f0' }}
+            />
+          </div>
+        )}
       </div>
-      {/* Optional Ad Image Upload */}
+      {/* Optional Ad Image URL */}
       <div className="form-group">
         <label className="form-label">
-          Upload Ad Image <span className="text-muted">(Optional)</span>
+          Ad Image URL <span className="text-muted">(Optional)</span>
         </label>
         <input
-          type="file"
+          type="url"
+          name="adImageUrl"
           className="form-control"
-          accept="image/*"
-          onChange={handleAdImageUpload}
-          disabled={adImageUploading}
+          placeholder="https://"
+          value={formData.adImageUrl}
+          onChange={handleChange}
         />
         {formData.adImageUrl && (
           <div style={{ marginTop: 8 }}>
