@@ -18,6 +18,13 @@ function ProductList({ products, onEdit, onDelete }) {
             <div className="product-header">
               <div className="product-image-container">
                 <img src={product.image} alt={product.name} />
+                {product.adImageUrl && (
+                  <img
+                    src={product.adImageUrl}
+                    alt="Ad"
+                    style={{ maxWidth: 40, maxHeight: 40, marginLeft: 8, borderRadius: 4, border: '1px solid #e2e8f0' }}
+                  />
+                )}
               </div>
               <div className="product-info">
                 <h3 className="product-name">{product.name}</h3>
