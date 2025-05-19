@@ -31,7 +31,7 @@ export default function AdCarousel() {
       .then(res => {
         if (Array.isArray(res.data) && res.data.length > 0) {
           setAds(res.data.map(ad => ({
-            image: ad.imageUrl, // Use imageUrl from backend
+            image: ad.imageUrl || '/ads/ad1.jpg', // Use imageUrl from backend, fallback if missing
             link: ad.link || '#',
             alt: 'Vendor Ad'
           })));
