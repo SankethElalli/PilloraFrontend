@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import API_BASE_URL from '../../api';
 
 function ProductForm({ onSubmit, onCancel, product }) {
   const [formData, setFormData] = useState({
@@ -8,8 +7,7 @@ function ProductForm({ onSubmit, onCancel, product }) {
     price: '',
     stock: '',
     category: '',
-    image: '',
-    adImageUrl: '' // Optional ad image URL
+    image: ''
   });
 
   useEffect(() => {
@@ -20,15 +18,13 @@ function ProductForm({ onSubmit, onCancel, product }) {
         price: product.price || '',
         stock: product.stock || '',
         category: product.category || '',
-        image: product.image || '',
-        adImageUrl: product.adImageUrl || ''
+        image: product.image || ''
       });
     }
   }, [product]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // adImageUrl is optional
     if (product && product._id) {
       onSubmit({ ...formData, _id: product._id });
     } else {
@@ -129,7 +125,7 @@ function ProductForm({ onSubmit, onCancel, product }) {
       </div>
 
       <div className="form-group">
-        <label className="form-label">Product Image URL</label>
+        <label className="form-label">Image URL</label>
         <input
           type="url"
           name="image"
@@ -139,38 +135,6 @@ function ProductForm({ onSubmit, onCancel, product }) {
           onChange={handleChange}
           required
         />
-        {formData.image && (
-          <div style={{ marginTop: 8 }}>
-            <img
-              src={formData.image}
-              alt="Product Preview"
-              style={{ maxWidth: 120, borderRadius: 6, border: '1px solid #e2e8f0' }}
-            />
-          </div>
-        )}
-      </div>
-      {/* Optional Ad Image URL */}
-      <div className="form-group">
-        <label className="form-label">
-          Ad Image URL <span className="text-muted">(Optional)</span>
-        </label>
-        <input
-          type="url"
-          name="adImageUrl"
-          className="form-control"
-          placeholder="https://"
-          value={formData.adImageUrl}
-          onChange={handleChange}
-        />
-        {formData.adImageUrl && (
-          <div style={{ marginTop: 8 }}>
-            <img
-              src={formData.adImageUrl}
-              alt="Ad Preview"
-              style={{ maxWidth: 120, borderRadius: 6, border: '1px solid #e2e8f0' }}
-            />
-          </div>
-        )}
       </div>
 
       <div className="form-actions">

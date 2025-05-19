@@ -11,7 +11,6 @@ import '../styles/Dashboard.css';
 import '../styles/Notification.css';
 import API_BASE_URL from '../api';
 import { useLocation } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
 
 function VendorDashboard() {
   const [showModal, setShowModal] = useState(false);
@@ -29,7 +28,6 @@ function VendorDashboard() {
   const [snackbarText, setSnackbarText] = useState('');
   const [snackbarType, setSnackbarType] = useState('success');
   const location = useLocation();
-  const { user } = useAuth();
 
   const fetchProducts = useCallback(async () => {
     try {
