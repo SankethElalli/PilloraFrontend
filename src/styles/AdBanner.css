@@ -21,13 +21,20 @@
   width: 100%;
   height: 100%;
   opacity: 0;
-  transition: opacity 0.5s ease-in-out;
-  cursor: pointer;
+  transform: translateX(100%);
+  transition: transform 0.6s cubic-bezier(0.45, 0, 0.55, 1), opacity 0.4s ease;
+  will-change: transform, opacity;
 }
 
 .ad-banner-slide.active {
   opacity: 1;
+  transform: translateX(0);
   z-index: 1;
+}
+
+.ad-banner-slide.previous {
+  transform: translateX(-100%);
+  opacity: 0;
 }
 
 .ad-banner-slide img {
@@ -36,28 +43,44 @@
   object-fit: cover;
 }
 
+/* Optional: Add a loading state for banners */
+.ad-banner-slide.loading {
+  opacity: 0.5;
+}
+
+/* Navigation buttons for multiple banners */
 .ad-banner-dots {
   position: absolute;
   bottom: clamp(0.5rem, 2vw, 1rem);
-  right: clamp(0.5rem, 2vw, 1rem);
+  left: 50%;
+  transform: translateX(-50%);
   display: flex;
   gap: clamp(0.25rem, 1vw, 0.5rem);
   z-index: 2;
+  padding: 0.5rem;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 20px;
 }
 
 .ad-banner-dot {
-  width: clamp(6px, 1.5vw, 10px);
-  height: clamp(6px, 1.5vw, 10px);
+  width: clamp(6px, 1.5vw, 8px);
+  height: clamp(6px, 1.5vw, 8px);
   border-radius: 50%;
   border: none;
   background: rgba(255, 255, 255, 0.5);
   cursor: pointer;
   padding: 0;
-  transition: background 0.2s;
+  transition: all 0.3s ease;
+}
+
+.ad-banner-dot:hover {
+  transform: scale(1.2);
+  background: rgba(255, 255, 255, 0.7);
 }
 
 .ad-banner-dot.active {
   background: white;
+  transform: scale(1.2);
 }
 
 @media (max-width: 1024px) {
