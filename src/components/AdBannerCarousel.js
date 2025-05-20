@@ -74,15 +74,41 @@ function AdBannerCarousel() {
         ))}
       </div>
       {bannerProducts.length > 1 && (
-        <div className="ad-banner-dots">
-          {bannerProducts.map((_, index) => (
-            <button
-              key={index}
-              className={`ad-banner-dot${index === currentIndex ? ' active' : ''}`}
-              onClick={() => setCurrentIndex(index)}
-            />
-          ))}
-        </div>
+        <>
+          <div className="ad-banner-nav">
+            <button 
+              className="ad-banner-nav-button"
+              onClick={(e) => {
+                e.stopPropagation();
+                setCurrentIndex(current => 
+                  current === 0 ? bannerProducts.length - 1 : current - 1
+                );
+              }}
+            >
+              ‹
+            </button>
+            <button 
+              className="ad-banner-nav-button"
+              onClick={(e) => {
+                e.stopPropagation();
+                setCurrentIndex(current => 
+                  current === bannerProducts.length - 1 ? 0 : current + 1
+                );
+              }}
+            >
+              ›
+            </button>
+          </div>
+          <div className="ad-banner-dots">
+            {bannerProducts.map((_, index) => (
+              <button
+                key={index}
+                className={`ad-banner-dot${index === currentIndex ? ' active' : ''}`}
+                onClick={() => setCurrentIndex(index)}
+              />
+            ))}
+          </div>
+        </>
       )}
     </div>
   );
