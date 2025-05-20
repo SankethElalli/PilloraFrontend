@@ -50,6 +50,18 @@ function AdBannerCarousel() {
     }));
   }, []);
 
+  const handleNavigation = (direction) => {
+    if (direction === 'left') {
+      setCurrentIndex(current => {
+        const newIndex = current === 0 ? bannerProducts.length - 1 : current - 1;
+        setIsResetting(newIndex === 0);
+        return newIndex;
+      });
+    } else {
+      nextSlide();
+    }
+  };
+
   if (loading || bannerProducts.length === 0) {
     return null;
   }
