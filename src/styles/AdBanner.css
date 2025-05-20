@@ -25,14 +25,12 @@
   left: 0;
   width: 100%;
   height: 100%;
+  opacity: 0;
+  transform: translateX(100%);
+  transition: all 0.5s ease;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: transparent;
-  opacity: 0;
-  transform: translateX(100%); /* Default: slides come from right */
-  transition: transform 0.6s cubic-bezier(0.45, 0, 0.55, 1), opacity 0.4s ease;
-  will-change: transform, opacity;
 }
 
 .ad-banner-slide.slide-left {
@@ -47,15 +45,6 @@
   opacity: 1;
   transform: translateX(0);
   z-index: 1;
-}
-
-.ad-banner-slide.reset-from-left {
-  transform: translateX(-100%); /* First slide comes from left when resetting */
-}
-
-.ad-banner-slide.previous {
-  transform: translateX(-100%);
-  opacity: 0;
 }
 
 .ad-banner-slide img {

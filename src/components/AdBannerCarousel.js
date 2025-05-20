@@ -9,7 +9,7 @@ function AdBannerCarousel() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [loading, setLoading] = useState(true);
   const [imageLoaded, setImageLoaded] = useState({});
-  const [isResetting, setIsResetting] = useState(false);
+  const [slideDirection, setSlideDirection] = useState('right');
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -27,14 +27,18 @@ function AdBannerCarousel() {
   }, []);
 
   const nextSlide = useCallback(() => {
-    if (currentIndex === bannerProducts.length - 1) {
-      setIsResetting(true);
-      setCurrentIndex(0);
-    } else {
-      setIsResetting(false);
-      setCurrentIndex(current => current + 1);
-    }
-  }, [currentIndex, bannerProducts.length]);
+    setSlideDirection('right');
+    setCurrentIndex(current => 
+      current === bannerProducts.length - 1 ? 0 : current + 1
+    );
+  }, [bannerProducts.length]);
+
+  const prevSlide = () => {
+    setSlideDirection('left');
+    setCurrentIndex(current => 
+      current === 0 ? bannerProducts.length - 1 : current - 1
+    );
+  };
 
   useEffect(() => {
     if (bannerProducts.length > 1) {
@@ -50,18 +54,6 @@ function AdBannerCarousel() {
     }));
   }, []);
 
-  const handleNavigation = (direction) => {
-    if (direction === 'left') {
-      setCurrentIndex(current => {
-        const newIndex = current === 0 ? bannerProducts.length - 1 : current - 1;
-        setIsResetting(newIndex === 0);
-        return newIndex;
-      });
-    } else {
-      nextSlide();
-    }
-  };
-
   if (loading || bannerProducts.length === 0) {
     return null;
   }
@@ -72,9 +64,7 @@ function AdBannerCarousel() {
         {bannerProducts.map((product, index) => (
           <div
             key={product._id}
-            className={`ad-banner-slide${index === currentIndex ? ' active' : ''}${
-              !imageLoaded[product._id] ? ' loading' : ''
-            }${isResetting ? ' reset-from-left' : ''}`}
+            className={`ad-banner-slide${index === currentIndex ? ' active' : ''} slide-${slideDirection}`}
             onClick={() => navigate('/products', { state: { selectedProduct: product } })}
           >
             <img
@@ -96,7 +86,7 @@ function AdBannerCarousel() {
             className="ad-banner-nav-button"
             onClick={(e) => {
               e.stopPropagation();
-              handleNavigation('left');
+              prevSlide();
             }}
           >
             ‹
@@ -105,7 +95,7 @@ function AdBannerCarousel() {
             className="ad-banner-nav-button"
             onClick={(e) => {
               e.stopPropagation();
-              handleNavigation('right');
+              nextSlide();
             }}
           >
             ›
