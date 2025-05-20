@@ -10,6 +10,8 @@ function AdBannerCarousel() {
   const [loading, setLoading] = useState(true);
   const [imageLoaded, setImageLoaded] = useState({});
   const [isResetting, setIsResetting] = useState(false);
+  const [slideDirection, setSlideDirection] = useState('left');
+  const [isUserNavigating, setIsUserNavigating] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -27,16 +29,22 @@ function AdBannerCarousel() {
   }, []);
 
   const nextSlide = useCallback(() => {
-    if (currentIndex === bannerProducts.length - 1) {
-      setIsResetting(true);
-      setCurrentIndex(0);
-    } else {
-      setIsResetting(false);
-      setCurrentIndex(current => current + 1);
+    if (!isUserNavigating) {
+      if (currentIndex === bannerProducts.length - 1) {
+        setSlideDirection('right');
+      } else {
+        setSlideDirection('left');
+      }
+      setCurrentIndex(current => 
+        current === bannerProducts.length - 1 ? 0 : current + 1
+      );
     }
-  }, [currentIndex, bannerProducts.length]);
+  }, [currentIndex, bannerProducts.length, isUserNavigating]);
 
   const handleNavigation = (direction) => {
+    setIsUserNavigating(true);
+    setSlideDirection(direction);
+    
     if (direction === 'left') {
       setCurrentIndex(current => 
         current === 0 ? bannerProducts.length - 1 : current - 1
@@ -46,6 +54,11 @@ function AdBannerCarousel() {
         current === bannerProducts.length - 1 ? 0 : current + 1
       );
     }
+
+    // Reset user navigation flag after animation
+    setTimeout(() => {
+      setIsUserNavigating(false);
+    }, 600);
   };
 
   useEffect(() => {
@@ -74,7 +87,7 @@ function AdBannerCarousel() {
             key={product._id}
             className={`ad-banner-slide${index === currentIndex ? ' active' : ''}${
               !imageLoaded[product._id] ? ' loading' : ''
-            }${isResetting ? ' reset-from-right' : ''}`}
+            } slide-${slideDirection}`}
             onClick={() => navigate('/products', { state: { selectedProduct: product } })}
           >
             <img
