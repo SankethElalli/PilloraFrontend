@@ -110,6 +110,7 @@
 .features {
   background-color: #f8f9fa;
   padding: 6rem 0;
+  margin-top: 4rem; /* Add space after ad banner */
 }
 
 .features .container {
@@ -402,6 +403,7 @@
   
   .features {
     padding: 4rem 0;
+    margin-top: 2rem; /* Adjust space for mobile */
   }
 
   .features h2 {

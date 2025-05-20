@@ -34,45 +34,48 @@ function Home() {
       </section>
 
       <ProductCarousel />
-      <AdBannerCarousel />
+      
+      <div className="banner-features-wrapper">
+        <AdBannerCarousel />
 
-      <section className="features py-5 bg-light">
-        <div className="container">
-          <div className="text-center mb-5">
-            <h2 className="display-5 fw-bold">Why Choose Us</h2>
-            <p className="lead text-muted">Experience the best in online pharmacy services</p>
+        <section className="features py-5 bg-light">
+          <div className="container">
+            <div className="text-center mb-5">
+              <h2 className="display-5 fw-bold">Why Choose Us</h2>
+              <p className="lead text-muted">Experience the best in online pharmacy services</p>
+            </div>
+            <div className="row g-4">
+              <div className="col-md-4">
+                <div className="feature-card">
+                  <div className="icon-wrapper mb-4">
+                    <i className="bi bi-truck"></i>
+                  </div>
+                  <h4 className="mb-3">Fast Delivery</h4>
+                  <p className="text-muted">Get your medicines delivered within 24 hours with our express delivery service.</p>
+                </div>
+              </div>
+              <div className="col-md-4">
+                <div className="feature-card">
+                  <div className="icon-wrapper mb-4">
+                    <i className="bi bi-shield-check"></i>
+                  </div>
+                  <h4 className="mb-3">Genuine Products</h4>
+                  <p className="text-muted">100% authentic medicines sourced directly from authorized manufacturers.</p>
+                </div>
+              </div>
+              <div className="col-md-4">
+                <div className="feature-card">
+                  <div className="icon-wrapper mb-4">
+                    <i className="bi bi-headset"></i>
+                  </div>
+                  <h4 className="mb-3">24/7 Support</h4>
+                  <p className="text-muted">Our dedicated team is always here to help you with any queries.</p>
+                </div>
+              </div>
+            </div>
           </div>
-          <div className="row g-4">
-            <div className="col-md-4">
-              <div className="feature-card">
-                <div className="icon-wrapper mb-4">
-                  <i className="bi bi-truck"></i>
-                </div>
-                <h4 className="mb-3">Fast Delivery</h4>
-                <p className="text-muted">Get your medicines delivered within 24 hours with our express delivery service.</p>
-              </div>
-            </div>
-            <div className="col-md-4">
-              <div className="feature-card">
-                <div className="icon-wrapper mb-4">
-                  <i className="bi bi-shield-check"></i>
-                </div>
-                <h4 className="mb-3">Genuine Products</h4>
-                <p className="text-muted">100% authentic medicines sourced directly from authorized manufacturers.</p>
-              </div>
-            </div>
-            <div className="col-md-4">
-              <div className="feature-card">
-                <div className="icon-wrapper mb-4">
-                  <i className="bi bi-headset"></i>
-                </div>
-                <h4 className="mb-3">24/7 Support</h4>
-                <p className="text-muted">Our dedicated team is always here to help you with any queries.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+        </section>
+      </div>
     </div>
   );
 }
