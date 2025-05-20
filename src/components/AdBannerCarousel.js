@@ -99,15 +99,6 @@ function AdBannerCarousel() {
               ›
             </button>
           </div>
-          <div className="ad-banner-dots">
-            {bannerProducts.map((_, index) => (
-              <button
-                key={index}
-                className={`ad-banner-dot${index === currentIndex ? ' active' : ''}`}
-                onClick={() => setCurrentIndex(index)}
-              />
-            ))}
-          </div>
         </>
       )}
     </div>
