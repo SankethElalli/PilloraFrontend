@@ -7,7 +7,9 @@ function ProductForm({ onSubmit, onCancel, product }) {
     price: '',
     stock: '',
     category: '',
-    image: ''
+    image: '',
+    adBanner: '',
+    showInBanner: false
   });
 
   useEffect(() => {
@@ -18,7 +20,9 @@ function ProductForm({ onSubmit, onCancel, product }) {
         price: product.price || '',
         stock: product.stock || '',
         category: product.category || '',
-        image: product.image || ''
+        image: product.image || '',
+        adBanner: product.adBanner || '',
+        showInBanner: product.showInBanner || false
       });
     }
   }, [product]);
@@ -135,6 +139,43 @@ function ProductForm({ onSubmit, onCancel, product }) {
           onChange={handleChange}
           required
         />
+      </div>
+
+      <div className="ad-banner-section mt-4">
+        <h5 className="section-title">Promotional Banner (Optional)</h5>
+        <div className="form-check mb-3">
+          <input
+            type="checkbox"
+            className="form-check-input"
+            id="showInBanner"
+            name="showInBanner"
+            checked={formData.showInBanner}
+            onChange={(e) => setFormData({
+              ...formData,
+              showInBanner: e.target.checked
+            })}
+          />
+          <label className="form-check-label" htmlFor="showInBanner">
+            Show this product in homepage banner
+          </label>
+        </div>
+
+        {formData.showInBanner && (
+          <div className="form-group">
+            <label className="form-label">Banner Image URL</label>
+            <input
+              type="url"
+              name="adBanner"
+              className="form-control"
+              placeholder="https:// (Recommended size: 1200x400px)"
+              value={formData.adBanner}
+              onChange={handleChange}
+            />
+            <small className="text-muted">
+              For best results, use a high-resolution image with dimensions 1200x400 pixels
+            </small>
+          </div>
+        )}
       </div>
 
       <div className="form-actions">
