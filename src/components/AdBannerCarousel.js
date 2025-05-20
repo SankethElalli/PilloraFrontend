@@ -9,6 +9,7 @@ function AdBannerCarousel() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [loading, setLoading] = useState(true);
   const [imageLoaded, setImageLoaded] = useState({});
+  const [slideDirection, setSlideDirection] = useState('left');
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -26,10 +27,25 @@ function AdBannerCarousel() {
   }, []);
 
   const nextSlide = useCallback(() => {
-    setCurrentIndex(current => 
-      current === bannerProducts.length - 1 ? 0 : current + 1
-    );
+    setCurrentIndex(current => {
+      const nextIndex = current === bannerProducts.length - 1 ? 0 : current + 1;
+      setSlideDirection('left');
+      return nextIndex;
+    });
   }, [bannerProducts.length]);
+
+  const handleNavigation = (direction) => {
+    setSlideDirection(direction);
+    if (direction === 'left') {
+      setCurrentIndex(current => 
+        current === 0 ? bannerProducts.length - 1 : current - 1
+      );
+    } else {
+      setCurrentIndex(current => 
+        current === bannerProducts.length - 1 ? 0 : current + 1
+      );
+    }
+  };
 
   useEffect(() => {
     if (bannerProducts.length > 1) {
@@ -57,7 +73,7 @@ function AdBannerCarousel() {
             key={product._id}
             className={`ad-banner-slide${index === currentIndex ? ' active' : ''}${
               !imageLoaded[product._id] ? ' loading' : ''
-            }`}
+            } slide-${slideDirection}`}
             onClick={() => navigate('/products', { state: { selectedProduct: product } })}
           >
             <img
@@ -74,32 +90,26 @@ function AdBannerCarousel() {
         ))}
       </div>
       {bannerProducts.length > 1 && (
-        <>
-          <div className="ad-banner-nav">
-            <button 
-              className="ad-banner-nav-button"
-              onClick={(e) => {
-                e.stopPropagation();
-                setCurrentIndex(current => 
-                  current === 0 ? bannerProducts.length - 1 : current - 1
-                );
-              }}
-            >
-              ‹
-            </button>
-            <button 
-              className="ad-banner-nav-button"
-              onClick={(e) => {
-                e.stopPropagation();
-                setCurrentIndex(current => 
-                  current === bannerProducts.length - 1 ? 0 : current + 1
-                );
-              }}
-            >
-              ›
-            </button>
-          </div>
-        </>
+        <div className="ad-banner-nav">
+          <button 
+            className="ad-banner-nav-button"
+            onClick={(e) => {
+              e.stopPropagation();
+              handleNavigation('left');
+            }}
+          >
+            ‹
+          </button>
+          <button 
+            className="ad-banner-nav-button"
+            onClick={(e) => {
+              e.stopPropagation();
+              handleNavigation('right');
+            }}
+          >
+            ›
+          </button>
+        </div>
       )}
     </div>
   );

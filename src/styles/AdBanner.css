@@ -30,9 +30,17 @@
   justify-content: center;
   background: transparent;
   opacity: 0;
-  transform: translateX(100%);
+  transform: translateX(0);
   transition: transform 0.6s cubic-bezier(0.45, 0, 0.55, 1), opacity 0.4s ease;
   will-change: transform, opacity;
+}
+
+.ad-banner-slide.slide-left {
+  transform: translateX(-100%);
+}
+
+.ad-banner-slide.slide-right {
+  transform: translateX(100%);
 }
 
 .ad-banner-slide.active {
