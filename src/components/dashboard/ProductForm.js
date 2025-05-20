@@ -29,6 +29,13 @@ function ProductForm({ onSubmit, onCancel, product }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    
+    // Validate that adBanner is provided if showInBanner is true
+    if (formData.showInBanner && !formData.adBanner) {
+      alert('Please provide a banner image URL when enabling show in banner');
+      return;
+    }
+    
     if (product && product._id) {
       onSubmit({ ...formData, _id: product._id });
     } else {
