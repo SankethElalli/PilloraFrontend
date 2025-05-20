@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import '../styles/Home.css';
 import ProductCarousel from '../components/ProductCarousel';
+import AdBannerCarousel from '../components/AdBannerCarousel';
 
 function Home() {
   return (
@@ -32,6 +33,7 @@ function Home() {
         </div>
       </section>
 
+      <AdBannerCarousel />
       <ProductCarousel />
 
       <section className="features py-5 bg-light">
