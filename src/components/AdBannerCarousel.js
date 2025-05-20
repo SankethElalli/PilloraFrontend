@@ -8,6 +8,7 @@ function AdBannerCarousel() {
   const [bannerProducts, setBannerProducts] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [imageLoaded, setImageLoaded] = useState({});
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -37,6 +38,13 @@ function AdBannerCarousel() {
     }
   }, [bannerProducts.length, nextSlide]);
 
+  const handleImageLoad = useCallback((productId) => {
+    setImageLoaded(prev => ({
+      ...prev,
+      [productId]: true
+    }));
+  }, []);
+
   if (loading || bannerProducts.length === 0) {
     return null;
   }
@@ -47,15 +55,19 @@ function AdBannerCarousel() {
         {bannerProducts.map((product, index) => (
           <div
             key={product._id}
-            className={`ad-banner-slide${index === currentIndex ? ' active' : ''}`}
+            className={`ad-banner-slide${index === currentIndex ? ' active' : ''}${
+              !imageLoaded[product._id] ? ' loading' : ''
+            }`}
             onClick={() => navigate('/products', { state: { selectedProduct: product } })}
           >
             <img
               src={product.adBanner}
               alt={product.name}
+              onLoad={() => handleImageLoad(product._id)}
               onError={(e) => {
                 e.target.onerror = null;
                 e.target.src = '/default-banner.jpg';
+                handleImageLoad(product._id);
               }}
             />
           </div>
