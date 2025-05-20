@@ -33,8 +33,8 @@ function Home() {
         </div>
       </section>
 
-      <AdBannerCarousel />
       <ProductCarousel />
+      <AdBannerCarousel />
 
       <section className="features py-5 bg-light">
         <div className="container">

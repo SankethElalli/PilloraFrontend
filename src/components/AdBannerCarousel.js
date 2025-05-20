@@ -58,11 +58,6 @@ function AdBannerCarousel() {
                 e.target.src = '/default-banner.jpg';
               }}
             />
-            <div className="ad-banner-content">
-              <h3>{product.name}</h3>
-              <p>₹{product.price.toFixed(2)}</p>
-              <button className="ad-banner-btn">Shop Now</button>
-            </div>
           </div>
         ))}
       </div>
