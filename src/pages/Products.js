@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useMemo } from 'react';
+import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import axios from 'axios';
 import { useCart } from '../context/CartContext';
 import '../styles/Products.css';
@@ -28,6 +28,8 @@ function Products() {
   const [showSnackbar, setShowSnackbar] = useState(false);
   const [snackbarText, setSnackbarText] = useState('');
   const [debouncedSearch, setDebouncedSearch] = useState(searchQuery);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
 
   // Debounce search input for better performance
   useEffect(() => {
@@ -60,7 +62,7 @@ function Products() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const fetchProducts = async () => {
+  const fetchProducts = useCallback(async (pageNum = 1) => {
     try {
       setLoading(true);
       let config = {};
@@ -68,14 +70,29 @@ function Products() {
         const token = localStorage.getItem('token');
         config.headers = { Authorization: `Bearer ${token}` };
       }
-      const response = await axios.get(`${API_BASE_URL}/api/products`, config);
-      setProducts(response.data);
+      const response = await axios.get(`${API_BASE_URL}/api/products?page=${pageNum}&limit=12`, config);
+      if (pageNum === 1) {
+        setProducts(response.data.products);
+      } else {
+        setProducts(prev => [...prev, ...response.data.products]);
+      }
+      setHasMore(response.data.hasMore);
+      setLoading(false);
     } catch (error) {
       console.error('Error fetching products:', error);
-    } finally {
       setLoading(false);
     }
-  };
+  }, [user]);
+
+  useEffect(() => {
+    fetchProducts(page);
+  }, [page, fetchProducts]);
+
+  useEffect(() => {
+    setProducts([]);
+    setPage(1);
+    setHasMore(true);
+  }, [selectedCategory, debouncedSearch, sortBy]);
 
   // Optimize filtering and sorting with useMemo
   const filteredProducts = useMemo(() => {
@@ -130,6 +147,22 @@ function Products() {
   const handleCloseModal = () => {
     setSelectedProduct(null);
   };
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (
+        window.innerHeight + document.documentElement.scrollTop
+        === document.documentElement.offsetHeight
+      ) {
+        if (hasMore && !loading) {
+          setPage(prev => prev + 1);
+        }
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [hasMore, loading]);
 
   return (
     <div>
@@ -237,8 +270,8 @@ function Products() {
 
       <div className="container mb-5">
         <div className="products-grid">
-          {loading ? (
-            <div className="loader-container">
+          {loading && (
+            <div className="loader-container" style={{ position: 'relative', minHeight: '100px' }}>
               <div className="loader-ring">
                 <div></div>
                 <div></div>
@@ -246,52 +279,61 @@ function Products() {
                 <div></div>
               </div>
             </div>
-          ) : (
-            filteredProducts.map(product => (
-              <div
-                key={product._id}
-                className="product-item"
-                onClick={() => handleProductClick(product)}
-                style={{ cursor: 'pointer' }}
-              >
-                {product.stock < 5 && (
-                  <span className="product-badge">Low Stock</span>
-                )}
-                <div className="product-image-container">
-                  <img 
-                    src={product.image.startsWith('http') 
-                      ? product.image 
-                      : `${API_BASE_URL}${product.image}`} 
-                    alt={product.name}
-                    className="product-img"
-                    onError={(e) => {
-                      e.target.onerror = null;
-                      e.target.src = '/default-product.png';
-                    }}
-                  />
-                </div>
-                <div className="product-details">
-                  <div className="product-category">{product.category}</div>
-                  <div className="product-name" title={product.name}>
-                    {product.name}
-                  </div>
-                  <div className="product-price">₹{product.price.toFixed(2)}</div>
-                  <div className="product-vendor" style={{ fontSize: '0.9em', color: '#64748b', marginTop: 4 }}>
-                    Sold by: {product.vendorId?.businessName || 'Unknown Vendor'}
-                  </div>
-                  <button 
-                    className="add-to-cart-btn"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleAddToCart(product);
-                    }}
-                  >
-                    Add to Cart
-                  </button>
-                </div>
-              </div>
-            ))
           )}
+          {filteredProducts.map(product => (
+            <div
+              key={product._id}
+              className="product-item"
+              onClick={() => handleProductClick(product)}
+              style={{ cursor: 'pointer' }}
+            >
+              {product.stock < 5 && (
+                <span className="product-badge">Low Stock</span>
+              )}
+              <div className="product-image-container">
+                <img 
+                  src={product.image.startsWith('http') 
+                    ? product.image 
+                    : `${API_BASE_URL}${product.image}`}
+                  alt={product.name}
+                  className="product-img"
+                  loading="lazy"
+                  srcSet={`${product.image.startsWith('http') 
+                    ? product.image 
+                    : `${API_BASE_URL}${product.image}`} 1x,
+                    ${product.image.startsWith('http') 
+                    ? product.image.replace('.jpg', '@2x.jpg') 
+                    : `${API_BASE_URL}${product.image.replace('.jpg', '@2x.jpg')}`} 2x`}
+                  onLoad={(e) => {
+                    e.target.classList.add('loaded');
+                  }}
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src = '/default-product.png';
+                  }}
+                />
+              </div>
+              <div className="product-details">
+                <div className="product-category">{product.category}</div>
+                <div className="product-name" title={product.name}>
+                  {product.name}
+                </div>
+                <div className="product-price">₹{product.price.toFixed(2)}</div>
+                <div className="product-vendor" style={{ fontSize: '0.9em', color: '#64748b', marginTop: 4 }}>
+                  Sold by: {product.vendorId?.businessName || 'Unknown Vendor'}
+                </div>
+                <button 
+                  className="add-to-cart-btn"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleAddToCart(product);
+                  }}
+                >
+                  Add to Cart
+                </button>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
 
