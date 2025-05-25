@@ -1,6 +1,6 @@
 {
-  "name": "frontend",
-  "version": "0.1.0",
+  "name": "pillora-frontend",
+  "version": "1.0.0",
   "private": true,
   "dependencies": {
     "@mui/icons-material": "^5.14.19",
@@ -13,6 +13,11 @@
     "axios": "^1.8.4",
     "bootstrap": "^5.3.5",
     "bootstrap-icons": "^1.11.3",
+    "chart.js": "^3.6.0",
+    "jquery": "^3.6.0",
+    "lodash": "^4.17.21",
+    "memory-cache": "^0.2.0",
+    "popper.js": "^1.16.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.20.1",
