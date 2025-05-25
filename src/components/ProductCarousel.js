@@ -38,7 +38,8 @@ function ProductCarousel() {
     const fetchProducts = async () => {
       try {
         const response = await axios.get(`${API_BASE_URL}/api/products`);
-        const shuffled = [...response.data].sort(() => Math.random() - 0.5);
+        const products = Array.isArray(response.data) ? response.data : [];
+        const shuffled = [...products].sort(() => Math.random() - 0.5);
         setProducts(shuffled);
         setLoading(false);
       } catch (error) {

@@ -58,10 +58,12 @@ function AdBannerCarousel() {
     return null;
   }
 
+  const bannersArray = Array.isArray(bannerProducts) ? bannerProducts : [];
+
   return (
     <div className="ad-banner-container">
       <div className="ad-banner-track">
-        {bannerProducts.map((product, index) => (
+        {bannersArray.map((product, index) => (
           <div
             key={product._id}
             className={`ad-banner-slide${index === currentIndex ? ' active' : ''} slide-${slideDirection}`}
